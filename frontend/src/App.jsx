@@ -10,6 +10,7 @@ import Search from './pages/Search';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Cart from './pages/Cart';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import AdminDashboard from './pages/AdminDashboard';
@@ -50,6 +51,7 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="cart" element={<Cart />} />
         <Route
           path="dashboard"
           element={

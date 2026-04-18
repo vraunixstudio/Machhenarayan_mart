@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import App from './App';
 import theme from './theme/theme';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,16 +16,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthProvider>
-          <App />
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              duration: 3000,
-              style: {
-                fontFamily: 'Inter, sans-serif'
-              }
-            }}
-          />
+          <CartProvider>
+            <App />
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  fontFamily: 'Inter, sans-serif'
+                }
+              }}
+            />
+          </CartProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

@@ -15,7 +15,8 @@ import {
   ListItem,
   ListItemText,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Badge
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -25,13 +26,16 @@ import {
   Person,
   ExitToApp,
   AdminPanelSettings,
-  Close as CloseIcon
+  Close as CloseIcon,
+  ShoppingCart
 } from '@mui/icons-material';
 import { alpha } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
+  const { cartCount } = useCart();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
@@ -129,6 +133,11 @@ const Header = () => {
           )}
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton component={Link} to="/cart" sx={{ mr: 1 }}>
+              <Badge badgeContent={cartCount} color="secondary">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
             <Box
               component="form"
               onSubmit={handleSearch}

@@ -10,20 +10,28 @@ import {
   CardContent,
   Button,
   Skeleton,
-  Chip
+  Chip,
+  IconButton
 } from '@mui/material';
 import {
   ShoppingBasket,
   CheckCircle,
-  Cancel
+  Cancel,
+  Add,
+  Remove,
+  ShoppingCart
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { productAPI } from '../services/api';
+import { useCart } from '../context/CartContext';
+import toast from 'react-hot-toast';
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -145,6 +153,31 @@ const ProductDetail = () => {
                 icon={<ShoppingBasket />}
                 sx={{ mb: 2 }}
               />
+            )}
+
+            {product.inStock && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', border: 1, borderColor: 'divider', borderRadius: 1 }}>
+                  <IconButton onClick={() => setQuantity(Math.max(1, quantity - 1))} size="small">
+                    <Remove />
+                  </IconButton>
+                  <Typography sx={{ px: 2, minWidth: 40, textAlign: 'center' }}>{quantity}</Typography>
+                  <IconButton onClick={() => setQuantity(quantity + 1)} size="small">
+                    <Add />
+                  </IconButton>
+                </Box>
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<ShoppingCart />}
+                  onClick={() => {
+                    addToCart(product, quantity);
+                    toast.success(`Added ${quantity} ${product.name} to cart!`);
+                  }}
+                >
+                  Add to Cart
+                </Button>
+              </Box>
             )}
 
             {!product.inStock && (
