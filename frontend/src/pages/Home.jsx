@@ -17,13 +17,13 @@ import {
   ChevronRight,
   Category,
   LocalFlorist,
-  Egg,
-  BakeryDining,
-  SetMeal,
-  Liquor,
-  Cookie,
-  Grain,
-  Spa
+  LocalDrink,
+  Restaurant,
+  Pool,
+  LocalPizza,
+  Grass,
+  Spa,
+  MoreVert
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { bannerAPI, productAPI, categoryAPI } from '../services/api';
@@ -31,13 +31,13 @@ import { bannerAPI, productAPI, categoryAPI } from '../services/api';
 const categoryIcons = {
   'Fruits': <Category />,
   'Vegetables': <LocalFlorist />,
-  'Dairy': <Egg />,
-  'Bakery': <BakeryDining />,
-  'Meat & Poultry': <SetMeal />,
-  'Fish & Seafood': <SetMeal />,
-  'Beverages': <Liquor />,
-  'Snacks': <Cookie />,
-  'Grains & Pulses': <Grain />,
+  'Dairy': <LocalDrink />,
+  'Bakery': <LocalPizza />,
+  'Meat & Poultry': <Restaurant />,
+  'Fish & Seafood': <Pool />,
+  'Beverages': <LocalDrink />,
+  'Snacks': <LocalPizza />,
+  'Grains & Pulses': <Grass />,
   'Spices & Condiments': <Spa />
 };
 
