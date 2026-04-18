@@ -4,6 +4,7 @@ require('dotenv').config({ path: path.join(__dirname, 'backend', '.env') });
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const { handleRequest } = require('@vercel/express');
 
 const authRoutes = require('./backend/routes/auth');
 const userRoutes = require('./backend/routes/users');
@@ -45,4 +46,4 @@ if (MONGODB_URI) {
     .catch(err => console.error('MongoDB connection error:', err));
 }
 
-module.exports = app;
+module.exports = handleRequest(app);
