@@ -1,14 +1,16 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, 'backend', '.env') });
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const authRoutes = require('../backend/routes/auth');
-const userRoutes = require('../backend/routes/users');
-const categoryRoutes = require('../backend/routes/categories');
-const productRoutes = require('../backend/routes/products');
-const bannerRoutes = require('../backend/routes/banners');
-const uploadRoutes = require('../backend/routes/upload');
+const authRoutes = require('./backend/routes/auth');
+const userRoutes = require('./backend/routes/users');
+const categoryRoutes = require('./backend/routes/categories');
+const productRoutes = require('./backend/routes/products');
+const bannerRoutes = require('./backend/routes/banners');
+const uploadRoutes = require('./backend/routes/upload');
 
 const app = express();
 
@@ -16,14 +18,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/banners', bannerRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/auth', authRoutes);
+app.use('/users', userRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/products', productRoutes);
+app.use('/banners', bannerRoutes);
+app.use('/upload', uploadRoutes);
 
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
