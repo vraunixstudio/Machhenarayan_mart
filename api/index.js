@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const { handleRequest } = require('@vercel/express');
 
 const app = express();
 
@@ -13,10 +13,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 const categories = [
   { _id: '1', name: 'Fruits', slug: 'fruits', description: 'Fresh fruits', isActive: true },
@@ -70,7 +66,10 @@ const banners = [
   { _id: '3', title: 'Daily Essentials', subtitle: 'Everything you need', image: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800', position: 'hero', isActive: true, order: 3 }
 ];
 
-// Categories
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 app.get('/api/categories', (req, res) => {
   res.json({ success: true, count: categories.length, categories: categories.filter(c => c.isActive) });
 });
@@ -87,7 +86,6 @@ app.get('/api/categories/slug/:slug', (req, res) => {
   res.json({ success: true, category: cat });
 });
 
-// Products
 app.get('/api/products', (req, res) => {
   const { category, search, featured, sort, page = 1, limit = 20 } = req.query;
   let filtered = [...products];
@@ -115,7 +113,7 @@ app.get('/api/products/featured', (req, res) => {
 });
 
 app.get('/api/products/search', (req, res) => {
-  const { q, category, minPrice, maxPrice } = req.query;
+  const { q, category } = req.query;
   let filtered = [...products];
   
   if (q) {
@@ -141,7 +139,6 @@ app.get('/api/products/slug/:slug', (req, res) => {
   res.json({ success: true, product });
 });
 
-// Banners
 app.get('/api/banners', (req, res) => {
   res.json({ success: true, count: banners.length, banners });
 });
@@ -151,7 +148,6 @@ app.get('/api/banners/active', (req, res) => {
   res.json({ success: true, count: active.length, banners: active });
 });
 
-// Auth (mock)
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   if (email === 'admin@machhenarayanmart.com' && password === 'Admin@123') {
@@ -188,4 +184,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-module.exports = app;
+module.exports = handleRequest(app);
