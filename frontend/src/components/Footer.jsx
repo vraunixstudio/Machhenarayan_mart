@@ -40,18 +40,21 @@ const Footer = () => {
               Quick Links
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link to="/" style={{ color: 'white', opacity: 0.8 }}>
-                Home
-              </Link>
-              <Link to="/categories" style={{ color: 'white', opacity: 0.8 }}>
-                Categories
-              </Link>
-              <Link to="/about" style={{ color: 'white', opacity: 0.8 }}>
-                About
-              </Link>
-              <Link to="/contact" style={{ color: 'white', opacity: 0.8 }}>
-                Contact
-              </Link>
+              <Link to="/" style={{ color: 'white', opacity: 0.8 }}>Home</Link>
+              <Link to="/categories" style={{ color: 'white', opacity: 0.8 }}>Categories</Link>
+              <Link to="/faq" style={{ color: 'white', opacity: 0.8 }}>FAQ</Link>
+              <Link to="/about" style={{ color: 'white', opacity: 0.8 }}>About</Link>
+              <Link to="/contact" style={{ color: 'white', opacity: 0.8 }}>Contact</Link>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+              Policies
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Link to="/terms" style={{ color: 'white', opacity: 0.8 }}>Terms</Link>
+              <Link to="/return-policy" style={{ color: 'white', opacity: 0.8 }}>Return Policy</Link>
             </Box>
           </Grid>
 

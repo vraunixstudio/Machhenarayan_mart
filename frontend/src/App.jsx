@@ -11,8 +11,13 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist';
+import OrderHistory from './pages/OrderHistory';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import ReturnPolicy from './pages/ReturnPolicy';
+import Terms from './pages/Terms';
 import AdminDashboard from './pages/AdminDashboard';
 import ManageProducts from './pages/ManageProducts';
 import ManageCategories from './pages/ManageCategories';
@@ -52,6 +57,11 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="wishlist" element={<Wishlist />} />
+        <Route path="orders" element={<OrderHistory />} />
+        <Route path="faq" element={<FAQ />} />
+        <Route path="return-policy" element={<ReturnPolicy />} />
+        <Route path="terms" element={<Terms />} />
         <Route
           path="dashboard"
           element={
