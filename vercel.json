@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd backend && npm install && cd ../frontend && npm install",
+  "outputDirectory": "frontend/dist",
+  "framework": "react",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/server.js"
+    }
+  ],
+  "installCommand": "npm install"
+}
