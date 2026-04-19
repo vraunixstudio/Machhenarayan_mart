@@ -100,20 +100,12 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-let isConnected = false;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-async function connectDB() {
-  if (MONGODB_URI && !isConnected) {
-    try {
-      await mongoose.connect(MONGODB_URI);
-      isConnected = true;
-      console.log('MongoDB connected!');
-    } catch (err) {
-      console.error('MongoDB error:', err.message);
-    }
-  }
+if (MONGODB_URI) {
+  mongoose.connect(MONGODB_URI)
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB error:', err.message));
 }
-connectDB();
 
 module.exports = app;
