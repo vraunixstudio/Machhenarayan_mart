@@ -72,6 +72,12 @@ router.put('/:id/status', protect, admin, async (req, res) => {
     const updatedOrder = await order.save();
 
     res.json({ success: true, order: updatedOrder });
+  } catch (error) {
+    console.error('Update order status error:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
 // @route   DELETE /api/orders/:id
 // @desc    Delete an order
 // @access  Private/Admin
