@@ -5,11 +5,11 @@ const { protect, admin } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', productController.getProducts);
 router.get('/featured', productController.getFeaturedProducts);
 router.get('/search', productController.searchProducts);
-router.get('/:id', productController.getProduct);
 router.get('/slug/:slug', productController.getProductBySlug);
+router.get('/:id', productController.getProduct);
+router.get('/', productController.getProducts);
 
 router.post('/', protect, admin, [
   body('name').trim().notEmpty().withMessage('Product name is required'),

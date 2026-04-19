@@ -5,10 +5,10 @@ const { protect, admin } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', categoryController.getCategories);
 router.get('/all', categoryController.getCategories);
-router.get('/:id', categoryController.getCategory);
 router.get('/slug/:slug', categoryController.getCategoryBySlug);
+router.get('/:id', categoryController.getCategory);
+router.get('/', categoryController.getCategories);
 
 router.post('/', protect, admin, [
   body('name').trim().notEmpty().withMessage('Category name is required')

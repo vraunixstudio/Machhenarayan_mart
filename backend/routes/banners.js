@@ -5,8 +5,8 @@ const { protect, admin } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', bannerController.getBanners);
 router.get('/active', bannerController.getActiveBanners);
+router.get('/', bannerController.getBanners);
 router.get('/:id', bannerController.getBanner);
 
 router.post('/', protect, admin, [
