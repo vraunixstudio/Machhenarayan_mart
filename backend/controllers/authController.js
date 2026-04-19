@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'machhenarayan-mart-secret-key-2024';
+const JWT_EXPIRE = process.env.JWT_EXPIRE || '24h';
+
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || '24h'
+  return jwt.sign({ id }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRE
   });
 };
 
