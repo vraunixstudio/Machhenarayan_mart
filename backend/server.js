@@ -120,4 +120,8 @@ if (MONGODB_URI) {
     .catch(err => console.error('MongoDB error:', err.message));
 }
 
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 module.exports = app;
