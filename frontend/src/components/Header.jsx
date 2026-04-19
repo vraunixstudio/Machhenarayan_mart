@@ -123,7 +123,7 @@ const Header = () => {
         >
           {/* Logo */}
           <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-            <img src="/text logo.png" alt="Machhenarayan Mart" style={{ height: '40px', objectFit: 'contain' }} />
+            <img src="/text logo.png" alt="Machhenarayan Mart" style={{ height: '40px', objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3)) brightness(1.1)' }} />
           </Box>
 
           {/* Desktop Navigation Pills */}

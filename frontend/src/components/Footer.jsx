@@ -32,7 +32,7 @@ const Footer = () => {
           {/* Brand */}
           <Box sx={{ gridColumn: { xs: 'span 2', md: 'span 1' } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <img src="/text logo.png" alt="Machhenarayan Mart" style={{ height: '48px', objectFit: 'contain' }} />
+              <img src="/text logo.png" alt="Machhenarayan Mart" style={{ height: '48px', objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3)) brightness(1.1)' }} />
             </Box>
             <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8125rem', lineHeight: 1.6, mb: 3 }}>
               Your trusted destination for fresh groceries and quality essentials.
