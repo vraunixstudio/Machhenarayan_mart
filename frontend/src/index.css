@@ -6,7 +6,13 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 14px; /* Reduced from 16px for a perfectly sized, smaller UI */
+  font-size: 12px; /* Very compact mobile-first base size */
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 14px;
+  }
 }
 
 body {
@@ -171,7 +177,13 @@ img {
 
 /* Section spacing */
 .section-spacing {
-  padding: 3rem 0;
+  padding: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding: 2.5rem 0;
+  }
 }
 
 /* Container max-width adjustments */
