@@ -30,7 +30,8 @@ app.use('/api/upload', uploadRoutes);
 
 app.get('/api/health', (req, res) => {
   const dbState = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-  res.json({ status: 'ok', db: dbState, timestamp: new Date().toISOString() });
+  const uriSet = !!process.env.MONGODB_URI;
+  res.json({ status: 'ok', db: dbState, uriSet, timestamp: new Date().toISOString() });
 });
 
 app.post('/api/seed', async (req, res) => {
