@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Box, Container, Typography, Grid, Button, Skeleton, IconButton, Chip, Card, CardContent
+  Box, Container, Typography, Grid, Button, Skeleton, IconButton, Chip, Card, CardContent, Avatar, AvatarGroup
 } from '@mui/material';
-import { ChevronLeft, ChevronRight, KeyboardArrowRight } from '@mui/icons-material';
-import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, KeyboardArrowRight, LocalShipping, Verified } from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
 import { bannerAPI, productAPI, categoryAPI } from '../services/api';
 import ProductCard from '../components/ProductCard';
 import CategoryCard from '../components/CategoryCard';
@@ -52,90 +52,152 @@ const Home = () => {
   const currentTitle = banners[currentBanner]?.title;
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
-      {/* Hero Banner */}
-      <Box sx={{ height: { xs: 300, md: 450 }, position: 'relative', overflow: 'hidden', backgroundColor: '#135788' }}>
-        {loading ? (
-          <Skeleton variant="rectangular" height="100%" />
-        ) : banners.length > 0 ? (
-          <Box sx={{ height: '100%', position: 'relative' }}>
-            <motion.div
-              key={currentBanner}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              style={{ height: '100%', width: '100%' }}
-            >
-              <Box component="img" src={banners[currentBanner].image} alt={banners[currentBanner].title}
-                sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              
-              {/* Text Overlay */}
-              {(banners[currentBanner].title || banners[currentBanner].subtitle) && (
-                <Box sx={{
-                  position: 'absolute', inset: 0,
-                  background: 'linear-gradient(to right, rgba(13,27,46,0.7) 0%, rgba(13,27,46,0) 60%)',
-                  display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                  px: { xs: 4, md: 8 }, color: '#fff'
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#fff' }}>
+      {/* ===== HERO REDESIGN - SPLIT LAYOUT ===== */}
+      <Box sx={{ 
+        position: 'relative', overflow: 'hidden', 
+        pt: { xs: 4, md: 10 }, pb: { xs: 8, md: 12 }, 
+        backgroundColor: '#fafafa' 
+      }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={6} alignItems="center">
+            {/* Left Column - Content */}
+            <Grid item xs={12} md={6}>
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <Typography variant="h1" sx={{ 
+                  fontWeight: 900, fontSize: { xs: '2.5rem', md: '4rem' }, 
+                  color: '#1a1a2e', lineHeight: 1.1, mb: 3 
                 }}>
-                  <motion.div initial={{ x: -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.3, duration: 0.8 }}>
-                    <Typography variant="h1" sx={{ 
-                      color: '#fff', mb: 2, fontWeight: 900,
-                      fontSize: { xs: '1.8rem', md: '3.5rem' }, maxWidth: 600,
-                      lineHeight: 1.1, textShadow: '0 2px 10px rgba(0,0,0,0.3)'
-                    }}>
-                      {banners[currentBanner].title}
-                    </Typography>
-                    <Typography sx={{ 
-                      color: 'rgba(255,255,255,0.9)', fontSize: { xs: '0.9rem', md: '1.15rem' }, 
-                      maxWidth: 450, fontWeight: 500,
-                      textShadow: '0 1px 5px rgba(0,0,0,0.2)'
-                    }}>
-                      {banners[currentBanner].subtitle}
-                    </Typography>
-                    {banners[currentBanner].link && (
-                      <Button variant="contained" component={Link} to={banners[currentBanner].link}
-                        sx={{ 
-                          mt: 4, bgcolor: '#cf7c1e', color: '#fff', borderRadius: '24px', px: 4, py: 1.2,
-                          fontWeight: 700, fontSize: '0.9rem', '&:hover': { bgcolor: '#b06a1a' }
-                        }}>
-                        Shop Now
-                      </Button>
-                    )}
-                  </motion.div>
-                </Box>
-              )}
-            </motion.div>
-
-            {banners.length > 1 && (
-              <>
-                <IconButton onClick={handlePrevBanner} 
-                  sx={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(255,255,255,0.2)', color: '#fff', '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }, zIndex: 10 }}>
-                  <ChevronLeft />
-                </IconButton>
-                <IconButton onClick={handleNextBanner} 
-                  sx={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(255,255,255,0.2)', color: '#fff', '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }, zIndex: 10 }}>
-                  <ChevronRight />
-                </IconButton>
+                  Freshness and <Box component="span" sx={{ color: '#135788' }}>Quality</Box> right at your side
+                </Typography>
+                <Typography sx={{ color: '#64748b', fontSize: '1.1rem', mb: 5, maxWidth: 500, lineHeight: 1.6 }}>
+                  Machhenarayan Mart brings you the finest selection of local produce and daily essentials, curated with care for your family.
+                </Typography>
                 
-                {/* Dots indicator */}
-                <Box sx={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 1.5, zIndex: 10 }}>
-                  {banners.map((_, idx) => (
-                    <Box key={idx} onClick={() => setCurrentBanner(idx)}
-                      sx={{ 
-                        width: idx === currentBanner ? 24 : 8, height: 8, borderRadius: 4,
-                        bgcolor: idx === currentBanner ? '#cf7c1e' : 'rgba(255,255,255,0.5)',
-                        cursor: 'pointer', transition: 'all 0.3s ease'
-                      }} />
-                  ))}
+                <Box sx={{ display: 'flex', gap: 2, mb: 8, flexWrap: 'wrap' }}>
+                  <Button variant="contained" component={Link} to="/shop" 
+                    sx={{ 
+                      backgroundColor: '#135788', borderRadius: '30px', px: 5, py: 1.8, 
+                      fontWeight: 700, fontSize: '1rem',
+                      boxShadow: '0 10px 30px rgba(19,87,136,0.3)',
+                      '&:hover': { backgroundColor: '#0e4268', transform: 'translateY(-2px)' }
+                    }}>
+                    Product Catalogue
+                  </Button>
                 </Box>
-              </>
-            )}
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', bgcolor: '#135788', color: 'white' }}>
-            <Typography variant="h3" sx={{ fontWeight: 800 }}>Machhenarayan Mart</Typography>
-          </Box>
-        )}
+
+                {/* Trust Signal Cards */}
+                <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+                  <Box sx={{ 
+                    p: 2.5, borderRadius: '20px', backgroundColor: '#fff', 
+                    border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 2,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.03)', flex: '1 1 200px'
+                  }}>
+                    <Box sx={{ width: 44, height: 44, borderRadius: '12px', backgroundColor: 'rgba(207,124,30,0.1)', color: '#cf7c1e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <LocalShipping />
+                    </Box>
+                    <Box>
+                      <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#1a1a2e' }}>Fast Delivery</Typography>
+                      <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Across the community</Typography>
+                    </Box>
+                  </Box>
+                  <Box sx={{ 
+                    p: 2.5, borderRadius: '20px', backgroundColor: '#fff', 
+                    border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 2,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.03)', flex: '1 1 200px'
+                  }}>
+                    <Box sx={{ width: 44, height: 44, borderRadius: '12px', backgroundColor: 'rgba(19,87,136,0.1)', color: '#135788', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Verified />
+                    </Box>
+                    <Box>
+                      <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#1a1a2e' }}>100% Quality</Typography>
+                      <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Curated with care</Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </motion.div>
+            </Grid>
+
+            {/* Right Column - Visual Banner Slider */}
+            <Grid item xs={12} md={6}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1 }}
+              >
+                <Box sx={{ 
+                  position: 'relative', 
+                  height: { xs: 350, md: 550 }, 
+                  borderRadius: '40px', 
+                  backgroundColor: '#fdf2e4', // Warm minimal background
+                  padding: { xs: 1.5, md: 2.5 },
+                  overflow: 'visible' 
+                }}>
+                  {/* Decorative Background Blob */}
+                  <Box sx={{ 
+                    position: 'absolute', top: '10%', right: '-5%', width: '100%', height: '100%', 
+                    backgroundColor: 'rgba(207,124,30,0.05)', borderRadius: '40px', zIndex: 0 
+                  }} />
+
+                  <Box sx={{ position: 'relative', zIndex: 1, height: '100%', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(13,27,46,0.1)' }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" height="100%" />
+                    ) : banners.length > 0 ? (
+                      <Box sx={{ height: '100%', position: 'relative' }}>
+                        <AnimatePresence mode="wait">
+                          <Box key={currentBanner} sx={{ position: 'absolute', inset: 0 }}>
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} style={{ height: '100%' }}>
+                              <img src={banners[currentBanner].image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </motion.div>
+                          </Box>
+                        </AnimatePresence>
+
+                        {/* Banner Navigation Overlay */}
+                        {banners.length > 1 && (
+                          <>
+                            <Box sx={{ position: 'absolute', bottom: 30, right: 30, display: 'flex', gap: 1 }}>
+                              <IconButton onClick={handlePrevBanner} sx={{ backgroundColor: 'rgba(255,255,255,0.9)', '&:hover': { backgroundColor: '#fff' } }}>
+                                <ChevronLeft />
+                              </IconButton>
+                              <IconButton onClick={handleNextBanner} sx={{ backgroundColor: 'rgba(255,255,255,0.9)', '&:hover': { backgroundColor: '#fff' } }}>
+                                <ChevronRight />
+                              </IconButton>
+                            </Box>
+                          </>
+                        )}
+
+                        {/* Floating Badge Mockup */}
+                        <Box sx={{ 
+                          position: 'absolute', top: 30, right: { xs: 10, md: -20 }, 
+                          backgroundColor: '#fff', p: 1.5, borderRadius: '16px', 
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                          display: 'flex', alignItems: 'center', gap: 1.5,
+                          zIndex: 20, whiteSpace: 'nowrap'
+                        }}>
+                          <AvatarGroup max={3} sx={{ '& .MuiAvatar-root': { width: 24, height: 24, fontSize: '0.75rem' } }}>
+                             <Avatar sx={{ width: 24, height: 24 }} src="https://i.pravatar.cc/150?u=1" />
+                             <Avatar sx={{ width: 24, height: 24 }} src="https://i.pravatar.cc/150?u=2" />
+                             <Avatar sx={{ width: 24, height: 24 }} src="https://i.pravatar.cc/150?u=3" />
+                             <Avatar sx={{ width: 24, height: 24 }} src="https://i.pravatar.cc/150?u=4" />
+                          </AvatarGroup>
+                          <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, pr: 1, color: '#1a1a2e' }}>50K+ Happy Customers</Typography>
+                        </Box>
+                      </Box>
+                    ) : (
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#135788', color: '#fff' }}>
+                        <Typography variant="h3" sx={{ fontWeight: 800 }}>Premium Choice</Typography>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </motion.div>
+            </Grid>
+          </Grid>
+        </Container>
       </Box>
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
