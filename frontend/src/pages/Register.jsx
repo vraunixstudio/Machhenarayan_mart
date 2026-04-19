@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Container, Typography, TextField, Button, Link as MuiLink, Alert } from '@mui/material';
-import { ShoppingBasket } from '@mui/icons-material';
+import { Box, Container, Typography, TextField, Button, Link as MuiLink, Alert, IconButton, InputAdornment } from '@mui/material';
+import { ShoppingBasket, Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
@@ -12,6 +12,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -48,9 +49,18 @@ const Register = () => {
               onChange={(e) => setName(e.target.value)} sx={{ mb: 2 }} required />
             <TextField fullWidth label="Email" type="email" value={email}
               onChange={(e) => setEmail(e.target.value)} sx={{ mb: 2 }} required />
-            <TextField fullWidth label="Password" type="password" value={password}
-              onChange={(e) => setPassword(e.target.value)} sx={{ mb: 2 }} required />
-            <TextField fullWidth label="Confirm Password" type="password" value={confirmPassword}
+            <TextField fullWidth label="Password" type={showPassword ? 'text' : 'password'} value={password}
+              onChange={(e) => setPassword(e.target.value)} sx={{ mb: 2 }} required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
+                      {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }} />
+            <TextField fullWidth label="Confirm Password" type={showPassword ? 'text' : 'password'} value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)} sx={{ mb: 3 }} required />
             <Button fullWidth variant="contained" type="submit" size="large" disabled={loading}
               sx={{ borderRadius: '24px', py: 1.5, mb: 2 }}>
