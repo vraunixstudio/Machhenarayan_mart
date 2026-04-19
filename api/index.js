@@ -4,12 +4,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const { handleRequest } = require('@vercel/express');
 
-const authRoutes = require('./backend/routes/auth');
-const userRoutes = require('./backend/routes/users');
-const categoryRoutes = require('./backend/routes/categories');
-const productRoutes = require('./backend/routes/products');
-const bannerRoutes = require('./backend/routes/banners');
-const uploadRoutes = require('./backend/routes/upload');
+const authRoutes = require('../backend/routes/auth');
+const userRoutes = require('../backend/routes/users');
+const categoryRoutes = require('../backend/routes/categories');
+const productRoutes = require('../backend/routes/products');
+const bannerRoutes = require('../backend/routes/banners');
+const uploadRoutes = require('../backend/routes/upload');
 
 const app = express();
 
@@ -35,9 +35,9 @@ app.get('/api/health', (req, res) => {
 
 app.post('/api/seed', async (req, res) => {
   try {
-    const Category = require('./backend/models/Category');
-    const Product = require('./backend/models/Product');
-    const Banner = require('./backend/models/Banner');
+    const Category = require('../backend/models/Category');
+    const Product = require('../backend/models/Product');
+    const Banner = require('../backend/models/Banner');
 
     await Category.deleteMany({});
     await Product.deleteMany({});
