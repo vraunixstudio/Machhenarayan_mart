@@ -9,14 +9,19 @@ import {
   CardContent,
   Button,
   IconButton,
-  Divider
+  Divider,
+  Alert
 } from '@mui/material';
-import { Add, Remove, Delete, ShoppingCart } from '@mui/icons-material';
+import { Add, Remove, Delete, ShoppingCart, Lock } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 
 const Cart = () => {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
+
+  const handleCheckout = () => {
+    alert('Payment integration coming soon! We will notify you when available.');
+  };
 
   if (cart.length === 0) {
     return (
@@ -120,8 +125,17 @@ const Cart = () => {
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>Total</Typography>
                   <Typography variant="h6" color="primary.main" sx={{ fontWeight: 700 }}>₹{cartTotal}</Typography>
                 </Box>
-                <Button variant="contained" fullWidth size="large">
-                  Proceed to Checkout
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  <Typography variant="body2">Payment coming soon!</Typography>
+                </Alert>
+                <Button 
+                  variant="contained" 
+                  fullWidth 
+                  size="large"
+                  onClick={handleCheckout}
+                  startIcon={<Lock />}
+                >
+                  Coming Soon
                 </Button>
                 <Button
                   variant="outlined"
