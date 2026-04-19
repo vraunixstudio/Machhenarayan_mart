@@ -4,6 +4,7 @@ import { Box, Typography, IconButton } from '@mui/material';
 import { Add, FavoriteBorder } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
