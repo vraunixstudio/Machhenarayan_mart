@@ -34,7 +34,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', db: dbState, uriSet, timestamp: new Date().toISOString() });
 });
 
-app.post('/api/seed', async (req, res) => {
+app.all('/api/seed', async (req, res) => {
   try {
     const Category = require('./models/Category');
     const Product = require('./models/Product');
