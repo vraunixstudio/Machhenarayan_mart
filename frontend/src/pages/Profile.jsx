@@ -10,7 +10,7 @@ import { authAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
-  const { user, login } = useAuth(); // We'll use login to 'refresh' or just a manual update
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -31,11 +31,8 @@ const Profile = () => {
       if (res.data.success) {
         // Update local storage and context
         localStorage.setItem('user', JSON.stringify(res.data.user));
-        // We need a way to refresh user state in AuthContext without re-login
-        // For now, reload or dispatch custom event. 
-        // Better: I'll add 'setUser' to AuthContext in the next step.
+        setUser(res.data.user); // Update state without reload
         toast.success('Profile updated successfully!');
-        window.location.reload(); // Simple refresh to sync state
       }
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to update profile');

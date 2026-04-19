@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Box, Container, Typography, Grid, Button, Skeleton, IconButton
+  Box, Container, Typography, Grid, Button, Skeleton, IconButton, Chip
 } from '@mui/material';
 import {
-  KeyboardArrowRight, LocalShipping, Verified, ChevronLeft, ChevronRight
+  KeyboardArrowRight, ChevronLeft, ChevronRight
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { bannerAPI, productAPI, categoryAPI } from '../services/api';
@@ -159,11 +159,9 @@ const Home = () => {
                                     </Typography>
                                   </motion.div>
                                 </Box>
-                              )}
-                                  </Box>
-                                </motion.div>
-                              </Box>
-                            </AnimatePresence>
+                              </motion.div>
+                            </Box>
+                          </AnimatePresence>
                       {banners.length > 1 && (
                         <>
                           <IconButton

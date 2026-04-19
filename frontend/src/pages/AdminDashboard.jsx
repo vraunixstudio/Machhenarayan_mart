@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Container, Typography, Grid, Button } from '@mui/material';
-import { ShoppingBasket, Category, People, Article, LocalShipping } from '@mui/icons-material';
+import { ShoppingBasket, Category, People, Article, LocalShipping, ViewCarousel } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { productAPI, categoryAPI, userAPI, bannerAPI, orderAPI, reviewAPI, messageAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -46,6 +46,7 @@ const AdminDashboard = () => {
     { title: 'Total Orders', value: stats.orders, icon: <LocalShipping sx={{ fontSize: 32 }} />, link: '/admin/orders', color: '#cf7c1e', bg: 'rgba(207,124,30,0.1)' },
     { title: 'Products', value: stats.products, icon: <ShoppingBasket sx={{ fontSize: 32 }} />, link: '/admin/products', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
     { title: 'Categories', value: stats.categories, icon: <Category sx={{ fontSize: 32 }} />, link: '/admin/categories', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
+    { title: 'Banners', value: stats.banners, icon: <ViewCarousel sx={{ fontSize: 32 }} />, link: '/admin/banners', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
     { title: 'Users', value: stats.users, icon: <People sx={{ fontSize: 32 }} />, link: '/admin/users', color: '#64748b', bg: '#f1f5f9' },
     { title: 'Reviews', value: stats.reviews, icon: <motion.div whileHover={{ scale: 1.2 }}>⭐</motion.div>, link: '/admin/reviews', color: '#cf7c1e', bg: 'rgba(207,124,30,0.05)' },
     { title: 'Inquiries', value: stats.messages, icon: <motion.div whileHover={{ scale: 1.2 }}>✉️</motion.div>, link: '/admin/messages', color: '#135788', bg: 'rgba(19,87,136,0.05)' }
