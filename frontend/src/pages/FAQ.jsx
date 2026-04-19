@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import { ExpandMore, HelpOutline } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
 const faqs = [
@@ -13,27 +13,33 @@ const faqs = [
 
 const FAQ = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 600, textAlign: 'center' }}>
-          Frequently Asked Questions
-        </Typography>
+    <Box sx={{ py: { xs: 5, md: 8 } }}>
+      <Container maxWidth="md">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <Box sx={{ textAlign: 'center', mb: 5 }}>
+            <Box sx={{ display: 'inline-flex', p: 2, borderRadius: '50%', backgroundColor: '#f8fafc', mb: 2 }}>
+              <HelpOutline sx={{ fontSize: 32, color: '#cf7c1e' }} />
+            </Box>
+            <Typography variant="h1">Frequently Asked Questions</Typography>
+          </Box>
 
-        {faqs.map((faq, index) => (
-          <Accordion key={index} sx={{ mb: 1 }}>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography sx={{ fontWeight: 500 }}>{faq.q}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography color="text.secondary">{faq.a}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </motion.div>
-    </Container>
+          {faqs.map((faq, i) => (
+            <Accordion key={i} sx={{
+              mb: 1.5, borderRadius: '12px !important', border: '1px solid #f1f5f9',
+              boxShadow: 'none', '&:before': { display: 'none' },
+              '&.Mui-expanded': { boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }
+            }}>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{faq.q}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography sx={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6 }}>{faq.a}</Typography>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 

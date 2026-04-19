@@ -1,47 +1,41 @@
 import { Box, Container, Typography } from '@mui/material';
+import { Gavel } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+
+const sections = [
+  { title: '1. Acceptance of Terms', body: 'By accessing and using this website, you accept and agree to be bound by the terms.' },
+  { title: '2. Privacy Policy', body: 'We are committed to protecting your privacy. Your personal information is secure with us.' },
+  { title: '3. User Account', body: 'You are responsible for maintaining the confidentiality of your account credentials.' },
+  { title: '4. Product Information', body: 'We strive to provide accurate product information. Prices subject to change without notice.' },
+  { title: '5. Ordering', body: 'Orders are subject to availability. We reserve the right to refuse any order.' }
+];
 
 const Terms = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
-          Terms & Conditions
-        </Typography>
+    <Box sx={{ py: { xs: 5, md: 8 } }}>
+      <Container maxWidth="md">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <Box sx={{ textAlign: 'center', mb: 5 }}>
+            <Box sx={{ display: 'inline-flex', p: 2, borderRadius: '50%', backgroundColor: '#f8fafc', mb: 2 }}>
+              <Gavel sx={{ fontSize: 32, color: '#135788' }} />
+            </Box>
+            <Typography variant="h1">Terms & Conditions</Typography>
+          </Box>
 
-        <Typography variant="body1" sx={{ mb: 2 }}>
-          By using Machhenarayan Mart, you agree to these terms.
-        </Typography>
-
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>1. Acceptance of Terms</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          By accessing and using this website, you accept and agree to be bound by the terms.
-        </Typography>
-
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>2. Privacy Policy</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          We are committed to protecting your privacy. Your personal information is secure with us.
-        </Typography>
-
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>3. User Account</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          You are responsible for maintaining the confidentiality of your account credentials.
-        </Typography>
-
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>4. Product Information</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          We strive to provide accurate product information. Prices subject to change without notice.
-        </Typography>
-
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>5. Ordering</Typography>
-        <Typography variant="body2" color="text.secondary">
-          Orders are subject to availability. We reserve the right to refuse any order.
-        </Typography>
-      </motion.div>
-    </Container>
+          <Box sx={{ p: { xs: 3, md: 4 }, borderRadius: '16px', border: '1px solid #f1f5f9' }}>
+            <Typography sx={{ color: '#64748b', mb: 4 }}>
+              By using Machhenarayan Mart, you agree to these terms.
+            </Typography>
+            {sections.map((s, i) => (
+              <Box key={i} sx={{ mb: 3 }}>
+                <Typography variant="h5" sx={{ mb: 1 }}>{s.title}</Typography>
+                <Typography sx={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.7 }}>{s.body}</Typography>
+              </Box>
+            ))}
+          </Box>
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 

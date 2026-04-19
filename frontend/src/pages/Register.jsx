@@ -1,23 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Link as MuiLink,
-  Alert
-} from '@mui/material';
+import { Box, Container, Typography, TextField, Button, Link as MuiLink, Alert } from '@mui/material';
+import { ShoppingBasket } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,106 +18,52 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-
+    if (password !== confirmPassword) { setError('Passwords do not match'); return; }
+    if (password.length < 6) { setError('Password must be at least 6 characters'); return; }
     setLoading(true);
     const result = await register(name, email, password);
-    if (result.success) {
-      navigate('/');
-    } else {
-      setError(result.error);
-    }
+    if (result.success) { navigate('/'); }
+    else { setError(result.error); }
     setLoading(false);
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Card sx={{ p: 2 }}>
-          <CardContent>
-            <Typography variant="h4" sx={{ mb: 3, fontWeight: 600, textAlign: 'center' }}>
-              Register
-            </Typography>
-
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-
-            <form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                label="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                margin="normal"
-                required
-              />
-              <TextField
-                fullWidth
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                margin="normal"
-                required
-              />
-              <TextField
-                fullWidth
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                margin="normal"
-                required
-              />
-              <TextField
-                fullWidth
-                label="Confirm Password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                margin="normal"
-                required
-              />
-              <Button
-                fullWidth
-                variant="contained"
-                type="submit"
-                size="large"
-                disabled={loading}
-                sx={{ mt: 3 }}
-              >
-                {loading ? 'Creating Account...' : 'Register'}
-              </Button>
-            </form>
-
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
-              <Typography variant="body2">
-                Already have an account?{' '}
-                <MuiLink component={Link} to="/login">
-                  Login
-                </MuiLink>
-              </Typography>
+    <Box sx={{ minHeight: '70vh', display: 'flex', alignItems: 'center', py: 6 }}>
+      <Container maxWidth="xs">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Box sx={{ display: 'inline-flex', p: 1.5, borderRadius: '14px', backgroundColor: '#cf7c1e', mb: 2 }}>
+              <ShoppingBasket sx={{ fontSize: 28, color: '#fff' }} />
             </Box>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </Container>
+            <Typography variant="h2" sx={{ mb: 0.5 }}>Create account</Typography>
+            <Typography sx={{ color: '#94a3b8' }}>Join Machhenarayan Mart</Typography>
+          </Box>
+
+          {error && <Alert severity="error" sx={{ mb: 2, borderRadius: '12px' }}>{error}</Alert>}
+
+          <Box component="form" onSubmit={handleSubmit} sx={{
+            p: { xs: 3, md: 4 }, borderRadius: '20px', border: '1px solid #f1f5f9', backgroundColor: '#fff'
+          }}>
+            <TextField fullWidth label="Full Name" value={name}
+              onChange={(e) => setName(e.target.value)} sx={{ mb: 2 }} required />
+            <TextField fullWidth label="Email" type="email" value={email}
+              onChange={(e) => setEmail(e.target.value)} sx={{ mb: 2 }} required />
+            <TextField fullWidth label="Password" type="password" value={password}
+              onChange={(e) => setPassword(e.target.value)} sx={{ mb: 2 }} required />
+            <TextField fullWidth label="Confirm Password" type="password" value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)} sx={{ mb: 3 }} required />
+            <Button fullWidth variant="contained" type="submit" size="large" disabled={loading}
+              sx={{ borderRadius: '24px', py: 1.5, mb: 2 }}>
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </Button>
+            <Typography sx={{ textAlign: 'center', fontSize: '0.8125rem', color: '#64748b' }}>
+              Already have an account?{' '}
+              <MuiLink component={Link} to="/login" sx={{ color: '#135788', fontWeight: 600 }}>Sign In</MuiLink>
+            </Typography>
+          </Box>
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 

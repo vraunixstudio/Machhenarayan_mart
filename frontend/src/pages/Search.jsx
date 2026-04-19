@@ -1,27 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Skeleton,
-  TextField,
-  InputAdornment,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Slider,
-  Button,
-  Chip,
-  Paper
+  Box, Container, Typography, Grid, Skeleton, TextField, InputAdornment,
+  FormControl, InputLabel, Select, MenuItem, Slider, Button, Chip, IconButton
 } from '@mui/material';
-import {
-  Search,
-  FilterList,
-  Clear
-} from '@mui/icons-material';
+import { Search, FilterList, Clear } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { productAPI, categoryAPI } from '../services/api';
 import ProductCard from '../components/ProductCard';
@@ -41,386 +24,140 @@ const SearchPage = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-        const response = await categoryAPI.getCategories();
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+      try { const res = await categoryAPI.getCategories(); setCategories(res.data.categories); } catch (e) { console.error(e); }
     };
-
     fetchCategories();
   }, []);
 
   useEffect(() => {
-    if (!initialQuery) {
-      setHasSearched(false);
-      return;
-    }
-
+    if (!initialQuery) { setHasSearched(false); return; }
     const searchProducts = async () => {
       try {
         setLoading(true);
-        const params = {
-          q: initialQuery,
-          category: initialCategory || undefined,
-          minPrice: priceRange[0],
-          maxPrice: priceRange[1]
-        };
-        const response = await productAPI.searchProducts(params);
-        setProducts(response.data.products);
+        const res = await productAPI.searchProducts({ q: initialQuery, category: initialCategory || undefined, minPrice: priceRange[0], maxPrice: priceRange[1] });
+        setProducts(res.data.products);
         setHasSearched(true);
-      } catch (error) {
-        console.error('Error searching products:', error);
-      } finally {
-        setLoading(false);
-      }
+      } catch (e) { console.error(e); } finally { setLoading(false); }
     };
-
     searchProducts();
   }, [initialQuery, initialCategory, priceRange]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      setSearchParams({
-        q: searchQuery,
-        ...(category && { category })
-      });
-      setSearchQuery(searchQuery);
-    }
+    if (searchQuery.trim()) setSearchParams({ q: searchQuery, ...(category && { category }) });
   };
 
   const handleClear = () => {
-    setSearchQuery('');
-    setCategory('');
-    setPriceRange([0, 5000]);
-    setSearchParams({});
-    setProducts([]);
-    setHasSearched(false);
+    setSearchQuery(''); setCategory(''); setPriceRange([0, 5000]);
+    setSearchParams({}); setProducts([]); setHasSearched(false);
   };
-
-  const handleCategoryChange = (value) => {
-    setCategory(value);
-    if (initialQuery) {
-      setSearchParams({
-        q: initialQuery,
-        ...(value && { category: value })
-      });
-    }
-  };
-
-  const activeFiltersCount = (category ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < 5000 ? 1 : 0);
 
   return (
-    <Box sx={{ py: { xs: 3, md: 6 } }}>
-      <Container maxWidth="xl">
-        {/* Search Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
+    <Box sx={{ py: { xs: 5, md: 8 } }}>
+      <Container maxWidth="lg">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          {/* Search bar */}
           <Box sx={{ mb: 5 }}>
             <form onSubmit={handleSearch}>
-              <TextField
-                fullWidth
-                size="large"
-                placeholder="Search for fresh groceries, fruits, vegetables..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+              <TextField fullWidth placeholder="Search for groceries, fruits, vegetables..."
+                value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search sx={{ color: 'text.secondary' }} />
-                    </InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start"><Search sx={{ color: '#94a3b8' }} /></InputAdornment>,
                   endAdornment: searchQuery && (
                     <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setSearchQuery('')}
-                        size="small"
-                      >
-                        <Clear />
-                      </IconButton>
+                      <IconButton size="small" onClick={() => setSearchQuery('')}><Clear /></IconButton>
                     </InputAdornment>
                   )
                 }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    borderRadius: 3,
-                    fontSize: { xs: '1rem', md: '1.1rem' },
-                    backgroundColor: 'white',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-                    '&:hover': {
-                      boxShadow: '0 6px 24px rgba(0,0,0,0.1)'
-                    },
-                    '&.Mui-focused': {
-                      boxShadow: '0 8px 32px rgba(15, 92, 138, 0.15)'
-                    }
+                    borderRadius: '16px', backgroundColor: '#f8fafc',
+                    '&.Mui-focused': { boxShadow: '0 4px 16px rgba(19,87,136,0.1)' }
                   }
                 }}
               />
             </form>
           </Box>
-        </motion.div>
 
-        {/* Filters */}
-        {hasSearched && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-          >
-            <Paper
-              elevation={0}
-              sx={{
-                p: 3,
-                mb: 4,
-                borderRadius: 3,
-                backgroundColor: 'grey.50',
-                border: '1px solid',
-                borderColor: 'divider'
-              }}
-            >
+          {/* Filters */}
+          {hasSearched && (
+            <Box sx={{ p: 3, mb: 4, borderRadius: '16px', border: '1px solid #f1f5f9', backgroundColor: '#fafbfc' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <FilterList sx={{ color: 'primary.main' }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                  Filters
-                </Typography>
-                {activeFiltersCount > 0 && (
-                  <Chip
-                    label={`${activeFiltersCount} active`}
-                    size="small"
-                    sx={{
-                      backgroundColor: 'primary.main',
-                      color: 'white',
-                      fontWeight: 600
-                    }}
-                  />
-                )}
+                <FilterList sx={{ color: '#135788', fontSize: 20 }} />
+                <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>Filters</Typography>
               </Box>
-
               <Grid container spacing={3} alignItems="center">
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={4}>
                   <FormControl fullWidth size="small">
-                    <InputLabel id="category-label">Category</InputLabel>
-                    <Select
-                      labelId="category-label"
-                      value={category}
-                      label="Category"
-                      onChange={(e) => handleCategoryChange(e.target.value)}
-                    >
-                      <MenuItem value="">All Categories</MenuItem>
-                      {categories.map((cat) => (
-                        <MenuItem key={cat._id} value={cat.slug}>
-                          {cat.name}
-                        </MenuItem>
-                      ))}
+                    <InputLabel>Category</InputLabel>
+                    <Select value={category} label="Category" onChange={(e) => {
+                      setCategory(e.target.value);
+                      if (initialQuery) setSearchParams({ q: initialQuery, ...(e.target.value && { category: e.target.value }) });
+                    }}>
+                      <MenuItem value="">All</MenuItem>
+                      {categories.map((c) => <MenuItem key={c._id} value={c.slug}>{c.name}</MenuItem>)}
                     </Select>
                   </FormControl>
                 </Grid>
-
-                <Grid item xs={12} sm={6} md={6}>
-                  <Box>
-                    <Typography variant="body2" sx={{ mb: 1, fontWeight: 500 }}>
-                      Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}
-                    </Typography>
-                    <Slider
-                      value={priceRange}
-                      onChange={(e, newValue) => {
-                        setPriceRange(newValue);
-                        if (initialQuery) {
-                          setSearchParams({
-                            q: initialQuery,
-                            ...(category && { category }),
-                            minPrice: newValue[0],
-                            maxPrice: newValue[1]
-                          });
-                        }
-                      }}
-                      valueLabelDisplay="auto"
-                      min={0}
-                      max={5000}
-                      step={50}
-                      sx={{
-                        '& .MuiSlider-thumb': {
-                          width: 20,
-                          height: 20
-                        }
-                      }}
-                    />
-                  </Box>
+                <Grid item xs={12} sm={5}>
+                  <Typography sx={{ fontSize: '0.75rem', mb: 1, color: '#64748b' }}>Price: ₹{priceRange[0]} - ₹{priceRange[1]}</Typography>
+                  <Slider value={priceRange} onChange={(e, v) => setPriceRange(v)} min={0} max={5000} step={50}
+                    sx={{ '& .MuiSlider-thumb': { width: 16, height: 16 } }} />
                 </Grid>
-
-                <Grid item xs={12} md={3}>
-                  <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
-                    {(category || priceRange[0] > 0 || priceRange[1] < 5000) && (
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<Clear />}
-                        onClick={handleClear}
-                        sx={{ borderRadius: 2 }}
-                      >
-                        Clear All
-                      </Button>
-                    )}
-                  </Box>
+                <Grid item xs={12} sm={3} sx={{ textAlign: 'right' }}>
+                  {(category || priceRange[0] > 0 || priceRange[1] < 5000) && (
+                    <Button size="small" startIcon={<Clear />} onClick={handleClear} sx={{ borderRadius: '20px' }}>Clear</Button>
+                  )}
                 </Grid>
               </Grid>
-            </Paper>
-          </motion.div>
-        )}
+            </Box>
+          )}
 
-        {/* Results */}
-        {hasSearched && (
-          <>
-            {loading ? (
-              <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+          {/* Results */}
+          {hasSearched && (
+            loading ? (
+              <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
                 {Array.from({ length: 8 }).map((_, i) => (
                   <Grid item xs={6} sm={4} md={3} key={i}>
-                    <Skeleton
-                      variant="rectangular"
-                      sx={{
-                        pt: '100%',
-                        borderRadius: 3
-                      }}
-                    />
-                    <Skeleton width="80%" sx={{ mt: 2 }} />
-                    <Skeleton width="60%" />
+                    <Skeleton variant="rounded" height={280} sx={{ borderRadius: '16px' }} />
                   </Grid>
                 ))}
               </Grid>
             ) : products.length > 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Results Count */}
-                <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography variant="body1" color="text.secondary">
-                    Found <strong>{products.length}</strong> product{products.length !== 1 ? 's' : ''} for "{initialQuery}"
-                  </Typography>
-                </Box>
-
-                {/* Grid */}
-                <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
-                  {products.map((product, index) => (
-                    <Grid item xs={6} sm={4} md={3} key={product._id}>
-                      <ProductCard product={product} index={index} showQuickAdd />
+              <>
+                <Typography sx={{ mb: 3, color: '#64748b' }}>
+                  Found <strong>{products.length}</strong> result{products.length !== 1 ? 's' : ''} for "{initialQuery}"
+                </Typography>
+                <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
+                  {products.map((p, i) => (
+                    <Grid item xs={6} sm={4} md={3} key={p._id}>
+                      <ProductCard product={p} index={i} showQuickAdd />
                     </Grid>
                   ))}
                 </Grid>
-              </motion.div>
+              </>
             ) : (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Box
-                  sx={{
-                    textAlign: 'center',
-                    py: { xs: 8, md: 12 },
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: 700,
-                      mb: 2,
-                      color: 'text.primary'
-                    }}
-                  >
-                    No products found
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'text.secondary',
-                      mb: 4,
-                      maxWidth: 500
-                    }}
-                  >
-                    We couldn't find any products matching your search. Try adjusting your filters or search terms.
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={handleClear}
-                    sx={{
-                      px: 4,
-                      py: 1.5,
-                      fontWeight: 600
-                    }}
-                  >
-                    Clear Filters
-                  </Button>
-                </Box>
-              </motion.div>
-            )}
-          </>
-        )}
-
-        {/* Initial State */}
-        {!hasSearched && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Box
-              sx={{
-                textAlign: 'center',
-                py: { xs: 10, md: 16 },
-                px: 4
-              }}
-            >
-              <Box
-                sx={{
-                  width: 120,
-                  height: 120,
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(15, 92, 138, 0.08)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mx: 'auto',
-                  mb: 4
-                }}
-              >
-                <Search sx={{ fontSize: 48, color: 'primary.main' }} />
+              <Box sx={{ textAlign: 'center', py: 8 }}>
+                <Typography variant="h3" sx={{ mb: 1 }}>No products found</Typography>
+                <Typography sx={{ color: '#64748b', mb: 4 }}>Try different keywords or filters.</Typography>
+                <Button variant="contained" onClick={handleClear} sx={{ borderRadius: '24px' }}>Clear Filters</Button>
               </Box>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontWeight: 700,
-                  mb: 2,
-                  fontSize: { xs: '1.8rem', md: '2.5rem' }
-                }}
-              >
-                Search Our Products
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: 'text.secondary',
-                  maxWidth: 600,
-                  mx: 'auto',
-                  lineHeight: 1.6,
-                  fontSize: '1.1rem'
-                }}
-              >
-                Find fresh fruits, vegetables, dairy products, and more. Enter keywords to search through our catalog.
+            )
+          )}
+
+          {/* Initial state */}
+          {!hasSearched && (
+            <Box sx={{ textAlign: 'center', py: 10 }}>
+              <Box sx={{ display: 'inline-flex', p: 3, borderRadius: '50%', backgroundColor: 'rgba(19,87,136,0.08)', mb: 3 }}>
+                <Search sx={{ fontSize: 40, color: '#135788' }} />
+              </Box>
+              <Typography variant="h2" sx={{ mb: 1.5 }}>Search Our Products</Typography>
+              <Typography sx={{ color: '#64748b', maxWidth: 500, mx: 'auto' }}>
+                Find fresh fruits, vegetables, dairy products, and more.
               </Typography>
             </Box>
-          </motion.div>
-        )}
+          )}
+        </motion.div>
       </Container>
     </Box>
   );

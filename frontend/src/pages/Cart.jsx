@@ -1,17 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  Button,
-  IconButton,
-  Divider,
-  Alert
-} from '@mui/material';
+import { Box, Container, Typography, Grid, Button, IconButton, Divider, Alert } from '@mui/material';
 import { Add, Remove, Delete, ShoppingCart, Lock } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
@@ -19,138 +7,98 @@ import { useCart } from '../context/CartContext';
 const Cart = () => {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
 
-  const handleCheckout = () => {
-    alert('Payment integration coming soon! We will notify you when available.');
-  };
-
   if (cart.length === 0) {
     return (
-      <Container maxWidth="md" sx={{ py: 8 }}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <Box sx={{ textAlign: 'center' }}>
-            <ShoppingCart sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
-            <Typography variant="h4" sx={{ mb: 2 }}>Your cart is empty</Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Add some products to get started!
-            </Typography>
-            <Button variant="contained" component={Link} to="/">
-              Continue Shopping
-            </Button>
-          </Box>
-        </motion.div>
-      </Container>
+      <Box sx={{ minHeight: '60vh', display: 'flex', alignItems: 'center' }}>
+        <Container maxWidth="sm">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Box sx={{ textAlign: 'center' }}>
+              <Box sx={{ display: 'inline-flex', p: 3, borderRadius: '50%', backgroundColor: '#f8fafc', mb: 3 }}>
+                <ShoppingCart sx={{ fontSize: 48, color: '#94a3b8' }} />
+              </Box>
+              <Typography variant="h2" sx={{ mb: 1 }}>Your cart is empty</Typography>
+              <Typography sx={{ color: '#64748b', mb: 4 }}>Add some products to get started!</Typography>
+              <Button variant="contained" component={Link} to="/categories" sx={{ borderRadius: '24px', px: 4 }}>
+                Continue Shopping
+              </Button>
+            </Box>
+          </motion.div>
+        </Container>
+      </Box>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
-          Shopping Cart ({cartCount} items)
-        </Typography>
+    <Box sx={{ py: { xs: 4, md: 6 } }}>
+      <Container maxWidth="lg">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <Typography variant="h2" sx={{ mb: 4 }}>Shopping Cart ({cartCount} items)</Typography>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            {cart.map((item) => (
-              <Card key={item.productId} sx={{ mb: 2 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={4} sm={3}>
-                    <CardMedia
-                      component="img"
-                      height="120"
-                      image={item.image || 'https://via.placeholder.com/150'}
-                      alt={item.name}
-                      sx={{ objectFit: 'cover' }}
-                    />
-                  </Grid>
-                  <Grid item xs={8} sm={9}>
-                    <CardContent>
-                      <Typography variant="h6" sx={{ fontWeight: 500 }}>
-                        {item.name}
-                      </Typography>
-                      <Typography variant="h6" color="primary.main" sx={{ fontWeight: 600, my: 1 }}>
-                        ₹{item.price * item.quantity}
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <IconButton
-                          size="small"
-                          onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                        >
-                          <Remove />
-                        </IconButton>
-                        <Typography>{item.quantity}</Typography>
-                        <IconButton
-                          size="small"
-                          onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                        >
-                          <Add />
-                        </IconButton>
-                        <IconButton
-                          color="error"
-                          onClick={() => removeFromCart(item.productId)}
-                          sx={{ ml: 2 }}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </Box>
-                    </CardContent>
-                  </Grid>
-                </Grid>
-              </Card>
-            ))}
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={{ position: 'sticky', top: 100 }}>
-              <CardContent>
-                <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
-                  Order Summary
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography>Subtotal</Typography>
-                  <Typography>₹{cartTotal}</Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={8}>
+              {cart.map((item) => (
+                <Box key={item.productId} sx={{
+                  display: 'flex', gap: { xs: 2, md: 3 }, mb: 2, p: 2,
+                  borderRadius: '16px', border: '1px solid #f1f5f9',
+                  transition: 'all 0.2s ease', '&:hover': { borderColor: '#e2e8f0' }
+                }}>
+                  <Box sx={{
+                    width: { xs: 80, md: 100 }, height: { xs: 80, md: 100 }, flexShrink: 0,
+                    borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f8fafc'
+                  }}>
+                    <img src={item.image || 'https://placehold.co/100x100/f8fafc/94a3b8?text=Item'} alt={item.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </Box>
+                  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', mb: 0.5 }}>{item.name}</Typography>
+                    <Typography sx={{ fontWeight: 700, color: '#135788', fontSize: '1rem' }}>₹{item.price * item.quantity}</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                      <IconButton size="small" onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                        sx={{ width: 28, height: 28, border: '1px solid #e2e8f0' }}><Remove sx={{ fontSize: 16 }} /></IconButton>
+                      <Typography sx={{ fontWeight: 600, fontSize: '0.8125rem', minWidth: 24, textAlign: 'center' }}>{item.quantity}</Typography>
+                      <IconButton size="small" onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                        sx={{ width: 28, height: 28, border: '1px solid #e2e8f0' }}><Add sx={{ fontSize: 16 }} /></IconButton>
+                      <IconButton size="small" color="error" onClick={() => removeFromCart(item.productId)} sx={{ ml: 1 }}>
+                        <Delete sx={{ fontSize: 18 }} />
+                      </IconButton>
+                    </Box>
+                  </Box>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography>Shipping</Typography>
-                  <Typography>Free</Typography>
+              ))}
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Box sx={{
+                position: 'sticky', top: 88, p: 3, borderRadius: '20px',
+                border: '1px solid #f1f5f9', backgroundColor: '#fff'
+              }}>
+                <Typography variant="h4" sx={{ mb: 3 }}>Order Summary</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+                  <Typography sx={{ color: '#64748b' }}>Subtotal</Typography>
+                  <Typography sx={{ fontWeight: 500 }}>₹{cartTotal}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+                  <Typography sx={{ color: '#64748b' }}>Shipping</Typography>
+                  <Typography sx={{ fontWeight: 500, color: '#2E7D32' }}>Free</Typography>
                 </Box>
                 <Divider sx={{ my: 2 }} />
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>Total</Typography>
-                  <Typography variant="h6" color="primary.main" sx={{ fontWeight: 700 }}>₹{cartTotal}</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                  <Typography sx={{ fontWeight: 700 }}>Total</Typography>
+                  <Typography sx={{ fontWeight: 800, color: '#135788', fontSize: '1.25rem' }}>₹{cartTotal}</Typography>
                 </Box>
-                <Alert severity="info" sx={{ mb: 2 }}>
-                  <Typography variant="body2">Payment coming soon!</Typography>
+                <Alert severity="info" sx={{ mb: 2, borderRadius: '12px', fontSize: '0.8125rem' }}>
+                  Payment integration coming soon!
                 </Alert>
-                <Button 
-                  variant="contained" 
-                  fullWidth 
-                  size="large"
-                  onClick={handleCheckout}
-                  startIcon={<Lock />}
-                >
-                  Coming Soon
-                </Button>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  sx={{ mt: 2 }}
-                  onClick={clearCart}
-                >
-                  Clear Cart
-                </Button>
-              </CardContent>
-            </Card>
+                <Button fullWidth variant="contained" size="large" startIcon={<Lock />}
+                  sx={{ borderRadius: '24px', py: 1.5, mb: 2 }}>Coming Soon</Button>
+                <Button fullWidth variant="outlined" onClick={clearCart}
+                  sx={{ borderRadius: '24px' }}>Clear Cart</Button>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </motion.div>
-    </Container>
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 
