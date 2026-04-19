@@ -74,4 +74,27 @@ export const wishlistAPI = {
   removeFromWishlist: (productId) => api.delete(`/wishlist/${productId}`)
 };
 
+export const reviewAPI = {
+  getProductReviews: (productId) => api.get(`/reviews/product/${productId}`),
+  createReview: (data) => api.post('/reviews', data),
+  getAllReviews: () => api.get('/reviews'),
+  deleteReview: (id) => api.delete(`/reviews/${id}`)
+};
+
+export const messageAPI = {
+  sendMessage: (data) => api.post('/messages', data),
+  getMessages: () => api.get('/messages'),
+  markAsRead: (id) => api.put(`/messages/${id}/read`),
+  deleteMessage: (id) => api.delete(`/messages/${id}`)
+};
+
+export const uploadAPI = {
+  uploadImage: (formData) => api.post('/upload/image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  uploadImages: (formData) => api.post('/upload/images', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+};
+
 export default api;

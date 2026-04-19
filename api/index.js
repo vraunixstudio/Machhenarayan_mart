@@ -10,6 +10,8 @@ const categoryRoutes = require('../backend/routes/categories');
 const productRoutes = require('../backend/routes/products');
 const bannerRoutes = require('../backend/routes/banners');
 const uploadRoutes = require('../backend/routes/upload');
+const reviewRoutes = require('../backend/routes/reviews');
+const messageRoutes = require('../backend/routes/messages');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

@@ -8,26 +8,30 @@ import { useAuth } from '../context/AuthContext';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, banners: 0, orders: 0 });
+  const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, banners: 0, orders: 0, reviews: 0, messages: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const [productsRes, categoriesRes, usersRes, bannersRes, ordersRes] = await Promise.all([
+        const [productsRes, categoriesRes, usersRes, bannersRes, ordersRes, reviewsRes, messagesRes] = await Promise.all([
           productAPI.getProducts({ limit: 1 }),
           categoryAPI.getCategories(),
           userAPI.getUsers(),
           bannerAPI.getBanners(),
-          orderAPI.getAllOrders()
+          orderAPI.getAllOrders(),
+          reviewAPI.getAllReviews(),
+          messageAPI.getMessages()
         ]);
         setStats({
           products: productsRes.data.total || 0,
           categories: categoriesRes.data.count || categoriesRes.data.categories?.length || 0,
           users: usersRes.data.count || usersRes.data.users?.length || 0,
           banners: bannersRes.data.count || bannersRes.data.banners?.length || 0,
-          orders: ordersRes.data.orders?.length || 0
+          orders: ordersRes.data.orders?.length || 0,
+          reviews: reviewsRes.data?.length || 0,
+          messages: messagesRes.data?.length || 0
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -43,7 +47,8 @@ const AdminDashboard = () => {
     { title: 'Products', value: stats.products, icon: <ShoppingBasket sx={{ fontSize: 32 }} />, link: '/admin/products', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
     { title: 'Categories', value: stats.categories, icon: <Category sx={{ fontSize: 32 }} />, link: '/admin/categories', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
     { title: 'Users', value: stats.users, icon: <People sx={{ fontSize: 32 }} />, link: '/admin/users', color: '#64748b', bg: '#f1f5f9' },
-    { title: 'Banners', value: stats.banners, icon: <Article sx={{ fontSize: 32 }} />, link: '/admin/banners', color: '#64748b', bg: '#f1f5f9' }
+    { title: 'Reviews', value: stats.reviews, icon: <motion.div whileHover={{ scale: 1.2 }}>⭐</motion.div>, link: '/admin/reviews', color: '#cf7c1e', bg: 'rgba(207,124,30,0.05)' },
+    { title: 'Inquiries', value: stats.messages, icon: <motion.div whileHover={{ scale: 1.2 }}>✉️</motion.div>, link: '/admin/messages', color: '#135788', bg: 'rgba(19,87,136,0.05)' }
   ];
 
   return (

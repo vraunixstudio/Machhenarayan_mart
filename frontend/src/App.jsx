@@ -24,6 +24,8 @@ import ManageCategories from './pages/ManageCategories';
 import ManageBanners from './pages/ManageBanners';
 import ManageUsers from './pages/ManageUsers';
 import ManageOrders from './pages/ManageOrders';
+import ManageReviews from './pages/ManageReviews';
+import ManageMessages from './pages/ManageMessages';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
 
@@ -116,6 +118,22 @@ function App() {
           element={
             <AdminRoute>
               <ManageOrders />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="admin/reviews"
+          element={
+            <AdminRoute>
+              <ManageReviews />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="admin/messages"
+          element={
+            <AdminRoute>
+              <ManageMessages />
             </AdminRoute>
           }
         />

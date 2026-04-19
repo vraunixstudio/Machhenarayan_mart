@@ -11,18 +11,24 @@ const contactInfo = [
   { icon: <AccessTime />, label: 'Store Hours', value: 'Mon - Sun: 7:00 AM - 9:00 PM' }
 ];
 
+import { messageAPI } from '../services/api';
+
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSending(true);
-    setTimeout(() => {
-      toast.success('Message sent successfully!');
-      setFormData({ name: '', email: '', message: '' });
+    try {
+      setSending(true);
+      await messageAPI.sendMessage(formData);
+      toast.success('Message sent successfully! We will get back to you soon.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Failed to send message. Please try again.');
+    } finally {
       setSending(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -55,6 +61,8 @@ const Contact = () => {
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })} sx={{ mb: 2.5 }} required />
                   <TextField fullWidth label="Email" name="email" type="email" value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })} sx={{ mb: 2.5 }} required />
+                  <TextField fullWidth label="Subject" name="subject" value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })} sx={{ mb: 2.5 }} />
                   <TextField fullWidth label="Message" name="message" value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })} multiline rows={4} sx={{ mb: 3 }} required />
                   <Button fullWidth variant="contained" type="submit" size="large" disabled={sending}
