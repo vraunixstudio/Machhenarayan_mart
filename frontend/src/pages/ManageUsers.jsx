@@ -21,10 +21,16 @@ import Delete from '@mui/icons-material/Delete';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { userAPI } from '../services/api';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { fetchUsers(); }, []);
 
@@ -50,15 +56,23 @@ const ManageUsers = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Delete this user?')) {
-      try {
-        await userAPI.deleteUser(id);
-        toast.success('User removed');
-        fetchUsers();
-      } catch (error) {
-        toast.error('Failed to delete user');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await userAPI.deleteUser(itemToDelete);
+      toast.success('User removed');
+      setConfirmOpen(false);
+      setItemToDelete(null);
+      fetchUsers();
+    } catch (error) {
+      toast.error('Failed to delete user');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -95,7 +109,7 @@ const ManageUsers = () => {
                     <Button size="small" variant="outlined" startIcon={user.role === 'admin' ? <ArrowDownward /> : <ArrowUpward />} onClick={() => handlePromote(user._id)} sx={{ borderRadius: '24px', mr: 1 }}>
                       {user.role === 'admin' ? 'Demote' : 'Promote'}
                     </Button>
-                    <IconButton size="small" color="error" onClick={() => handleDelete(user._id)} sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
+                    <IconButton size="small" color="error" onClick={() => handleDeleteRequest(user._id)} sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
                       <Delete fontSize="small" />
                     </IconButton>
                   </TableCell>
@@ -104,6 +118,15 @@ const ManageUsers = () => {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <ConfirmDialog 
+          open={confirmOpen}
+          title="Delete User"
+          message="Are you sure you want to delete this user? This action will permanently remove their access."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmOpen(false)}
+          loading={deleting}
+        />
       </motion.div>
     </Container>
   );

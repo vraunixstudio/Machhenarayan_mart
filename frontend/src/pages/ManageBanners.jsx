@@ -33,6 +33,7 @@ import Close from '@mui/icons-material/Close';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { bannerAPI, uploadAPI } from '../services/api';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageBanners = () => {
   const [banners, setBanners] = useState([]);
@@ -40,6 +41,11 @@ const ManageBanners = () => {
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [editingBanner, setEditingBanner] = useState(null);
+  
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '', subtitle: '', image: '', link: '', 
@@ -122,15 +128,23 @@ const ManageBanners = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Delete this banner?')) {
-      try {
-        await bannerAPI.deleteBanner(id);
-        toast.success('Banner deleted');
-        fetchBanners();
-      } catch (err) {
-        toast.error('Delete failed');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await bannerAPI.deleteBanner(itemToDelete);
+      toast.success('Banner deleted');
+      setConfirmOpen(false);
+      setItemToDelete(null);
+      fetchBanners();
+    } catch (err) {
+      toast.error('Delete failed');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -175,7 +189,7 @@ const ManageBanners = () => {
                   </TableCell>
                   <TableCell align="right">
                     <IconButton size="small" onClick={() => handleOpen(banner)} sx={{ mr: 1 }}><Edit fontSize="small" /></IconButton>
-                    <IconButton size="small" color="error" onClick={() => handleDelete(banner._id)} sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
+                    <IconButton size="small" color="error" onClick={() => handleDeleteRequest(banner._id)} sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -221,6 +235,15 @@ const ManageBanners = () => {
             <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: '24px', px: 4 }}>{editingBanner ? 'Update' : 'Create'}</Button>
           </DialogActions>
         </Dialog>
+
+        <ConfirmDialog 
+          open={confirmOpen}
+          title="Delete Banner"
+          message="Are you sure you want to delete this banner? This will remove it from the website immediately."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmOpen(false)}
+          loading={deleting}
+        />
       </motion.div>
     </Container>
   );

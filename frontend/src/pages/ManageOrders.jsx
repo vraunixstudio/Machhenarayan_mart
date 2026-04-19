@@ -18,12 +18,17 @@ import Delete from '@mui/icons-material/Delete';
 
 import { motion } from 'framer-motion';
 import { orderAPI } from '../services/api';
-import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchOrders = async () => {
     try {
@@ -50,15 +55,23 @@ const ManageOrders = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this order record?')) {
-      try {
-        await orderAPI.deleteOrder(id);
-        toast.success('Order removed');
-        setOrders(prev => prev.filter(o => o._id !== id));
-      } catch (err) {
-        toast.error('Failed to delete order');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await orderAPI.deleteOrder(itemToDelete);
+      toast.success('Order removed');
+      setOrders(prev => prev.filter(o => o._id !== itemToDelete));
+      setConfirmOpen(false);
+      setItemToDelete(null);
+    } catch (err) {
+      toast.error('Failed to delete order');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -115,7 +128,7 @@ const ManageOrders = () => {
                         <Select size="small" value={order.status} onChange={(e) => handleStatusChange(order._id, e.target.value)} sx={{ borderRadius: '12px', minWidth: 120 }}>
                           {['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(s => (<MenuItem key={s} value={s}>{s}</MenuItem>))}
                         </Select>
-                        <IconButton size="small" color="error" onClick={() => handleDelete(order._id)}><Delete fontSize="small" /></IconButton>
+                        <IconButton size="small" color="error" onClick={() => handleDeleteRequest(order._id)}><Delete fontSize="small" /></IconButton>
                       </Box>
                     </Box>
                     <Divider sx={{ my: 2 }} />
@@ -128,6 +141,15 @@ const ManageOrders = () => {
               ))}
             </Grid>
           )}
+
+          <ConfirmDialog 
+            open={confirmOpen}
+            title="Remove Order Record"
+            message="Are you sure you want to remove this order from the system? This action is permanent."
+            onConfirm={handleDeleteConfirm}
+            onCancel={() => setConfirmOpen(false)}
+            loading={deleting}
+          />
         </motion.div>
       </Container>
     </Box>

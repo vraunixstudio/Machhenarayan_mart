@@ -8,12 +8,19 @@ import { Add, Edit, Delete } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { categoryAPI } from '../services/api';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageCategories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
+  
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
   const [formData, setFormData] = useState({ name: '', description: '', isActive: true });
 
   useEffect(() => { fetchCategories(); }, []);
@@ -64,15 +71,23 @@ const ManageCategories = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      try {
-        await categoryAPI.deleteCategory(id);
-        toast.success('Category deleted');
-        fetchCategories();
-      } catch (error) {
-        toast.error(error.response?.data?.error || 'Delete failed. Category might have linked products.');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await categoryAPI.deleteCategory(itemToDelete);
+      toast.success('Category deleted');
+      setConfirmOpen(false);
+      setItemToDelete(null);
+      fetchCategories();
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Delete failed. Category might have linked products.');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -107,7 +122,7 @@ const ManageCategories = () => {
                   </TableCell>
                   <TableCell align="right">
                     <IconButton size="small" onClick={() => handleOpen(category)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}><Edit fontSize="small" /></IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(category._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
+                    <IconButton size="small" onClick={() => handleDeleteRequest(category._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -129,6 +144,15 @@ const ManageCategories = () => {
             <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: '24px' }}>{editingCategory ? 'Update' : 'Create'}</Button>
           </DialogActions>
         </Dialog>
+
+        <ConfirmDialog 
+          open={confirmOpen}
+          title="Delete Category"
+          message="Are you sure you want to delete this category? This action cannot be undone and may fail if products are linked to it."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmOpen(false)}
+          loading={deleting}
+        />
       </motion.div>
     </Container>
   );

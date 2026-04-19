@@ -9,12 +9,18 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { messageAPI } from '../services/api';
 import dayjs from 'dayjs';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageMessages = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [open, setOpen] = useState(false);
+
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { fetchMessages(); }, []);
 
@@ -45,15 +51,23 @@ const ManageMessages = () => {
 
   const handleClose = () => { setOpen(false); setSelectedMessage(null); };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this message?')) {
-      try {
-        await messageAPI.deleteMessage(id);
-        toast.success('Message deleted');
-        fetchMessages();
-      } catch (error) {
-        toast.error('Delete failed');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await messageAPI.deleteMessage(itemToDelete);
+      toast.success('Message deleted');
+      setConfirmOpen(false);
+      setItemToDelete(null);
+      fetchMessages();
+    } catch (error) {
+      toast.error('Delete failed');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -107,7 +121,7 @@ const ManageMessages = () => {
                     <IconButton size="small" onClick={() => handleOpen(msg)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}>
                       <Visibility fontSize="small" />
                     </IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(msg._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
+                    <IconButton size="small" onClick={() => handleDeleteRequest(msg._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
                       <Delete fontSize="small" />
                     </IconButton>
                   </TableCell>
@@ -155,6 +169,15 @@ const ManageMessages = () => {
             </>
           )}
         </Dialog>
+
+        <ConfirmDialog 
+          open={confirmOpen}
+          title="Delete Inquiry"
+          message="Are you sure you want to delete this customer inquiry? This cannot be undone."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmOpen(false)}
+          loading={deleting}
+        />
       </motion.div>
     </Container>
   );

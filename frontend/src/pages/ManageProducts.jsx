@@ -36,6 +36,7 @@ import Close from '@mui/icons-material/Close';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { productAPI, categoryAPI, uploadAPI } from '../services/api';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +45,11 @@ const ManageProducts = () => {
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const fileInputRef = useRef(null);
+  
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '', description: '', price: '', originalPrice: '', category: '',
@@ -145,15 +150,23 @@ const ManageProducts = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await productAPI.deleteProduct(id);
-        toast.success('Product deleted');
-        fetchData();
-      } catch (error) {
-        toast.error('Delete failed');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await productAPI.deleteProduct(itemToDelete);
+      toast.success('Product deleted');
+      setConfirmOpen(false);
+      setItemToDelete(null);
+      fetchData();
+    } catch (error) {
+      toast.error('Delete failed');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -194,7 +207,7 @@ const ManageProducts = () => {
                   </TableCell>
                   <TableCell align="right">
                     <IconButton size="small" onClick={() => handleOpen(p)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}><Edit fontSize="small" /></IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(p._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
+                    <IconButton size="small" onClick={() => handleDeleteRequest(p._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -247,6 +260,15 @@ const ManageProducts = () => {
             <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: '24px' }}>{editingProduct ? 'Update' : 'Create'}</Button>
           </DialogActions>
         </Dialog>
+
+        <ConfirmDialog 
+          open={confirmOpen}
+          title="Delete Product"
+          message="Are you sure you want to delete this product? This action cannot be undone."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmOpen(false)}
+          loading={deleting}
+        />
       </motion.div>
     </Container>
   );

@@ -8,10 +8,16 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { reviewAPI } from '../services/api';
 import dayjs from 'dayjs';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const ManageReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Confirm Dialog State
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { fetchReviews(); }, []);
 
@@ -27,15 +33,23 @@ const ManageReviews = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this review?')) {
-      try {
-        await reviewAPI.deleteReview(id);
-        toast.success('Review deleted');
-        fetchReviews();
-      } catch (error) {
-        toast.error('Delete failed');
-      }
+  const handleDeleteRequest = (id) => {
+    setItemToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setDeleting(true);
+      await reviewAPI.deleteReview(itemToDelete);
+      toast.success('Review deleted');
+      setConfirmOpen(false);
+      setItemToDelete(null);
+      fetchReviews();
+    } catch (error) {
+      toast.error('Delete failed');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -88,7 +102,7 @@ const ManageReviews = () => {
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton size="small" onClick={() => handleDelete(review._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
+                    <IconButton size="small" onClick={() => handleDeleteRequest(review._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
                       <Delete fontSize="small" />
                     </IconButton>
                   </TableCell>
@@ -104,6 +118,15 @@ const ManageReviews = () => {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <ConfirmDialog 
+          open={confirmOpen}
+          title="Delete Review"
+          message="Are you sure you want to delete this review? This action will remove the customer's feedback permanently."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmOpen(false)}
+          loading={deleting}
+        />
       </motion.div>
     </Container>
   );
