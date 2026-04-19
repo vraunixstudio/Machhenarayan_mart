@@ -17,31 +17,19 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
-);
-
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
-  logout: () => api.post('/auth/logout'),
-  getMe: () => api.get('/auth/me')
+  getProfile: () => api.get('/auth/profile'),
+  updateProfile: (data) => api.put('/auth/profile', data),
+  changePassword: (data) => api.put('/auth/password', data)
 };
 
 export const userAPI = {
   getUsers: () => api.get('/users'),
   getUser: (id) => api.get(`/users/${id}`),
   updateUser: (id, data) => api.put(`/users/${id}`, data),
-  deleteUser: (id) => api.delete(`/users/${id}`),
-  promoteUser: (id) => api.put(`/users/${id}/promote`)
+  deleteUser: (id) => api.delete(`/users/${id}`)
 };
 
 export const categoryAPI = {
@@ -55,10 +43,10 @@ export const categoryAPI = {
 
 export const productAPI = {
   getProducts: (params) => api.get('/products', { params }),
-  getFeaturedProducts: () => api.get('/products/featured'),
-  searchProducts: (params) => api.get('/products/search', { params }),
   getProduct: (id) => api.get(`/products/${id}`),
   getProductBySlug: (slug) => api.get(`/products/slug/${slug}`),
+  getFeaturedProducts: () => api.get('/products/featured'),
+  searchProducts: (query) => api.get('/products/search', { params: { q: query } }),
   createProduct: (data) => api.post('/products', data),
   updateProduct: (id, data) => api.put(`/products/${id}`, data),
   deleteProduct: (id) => api.delete(`/products/${id}`)
@@ -71,12 +59,6 @@ export const bannerAPI = {
   createBanner: (data) => api.post('/banners', data),
   updateBanner: (id, data) => api.put(`/banners/${id}`, data),
   deleteBanner: (id) => api.delete(`/banners/${id}`)
-};
-
-export const uploadAPI = {
-  uploadImage: (formData) => api.post('/upload/image', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  })
 };
 
 export default api;
