@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import {
   Box, Container, Typography, TextField, Button, Grid, Avatar,
-  IconButton, Paper, Divider, CircularProgress
+  IconButton, Paper, Divider, CircularProgress, Dialog, DialogTitle,
+  DialogContent, Grid as MuiGrid
 } from '@mui/material';
-import { CameraAlt, Save, Badge, Email, Phone } from '@mui/icons-material';
+import { CameraAlt, Save, Badge, Email, Phone, Close } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
@@ -12,12 +13,29 @@ import toast from 'react-hot-toast';
 const Profile = () => {
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [avatarModalOpen, setAvatarModalOpen] = useState(false);
+  
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
     avatar: user?.avatar || ''
   });
+
+  const avatars = [
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Milo',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Tigger',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Jasper',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Luna',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Oliver',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Bella',
+    'https://api.dicebear.com/7.x/bottts/svg?seed=Robo1',
+    'https://api.dicebear.com/7.x/bottts/svg?seed=Robo2',
+    'https://api.dicebear.com/7.x/pixel-art/svg?seed=P1',
+    'https://api.dicebear.com/7.x/pixel-art/svg?seed=P2'
+  ];
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,7 +69,11 @@ const Profile = () => {
                 <Avatar src={formData.avatar} sx={{ width: 100, height: 100, mb: 2, bgcolor: '#135788', fontSize: '2.5rem' }}>
                   {formData.name.charAt(0)}
                 </Avatar>
-                <IconButton sx={{ position: 'absolute', bottom: 15, right: -5, bgcolor: '#fff', border: '1px solid #e2e8f0', '&:hover': { bgcolor: '#f8fafc' } }} size="small">
+                <IconButton 
+                  onClick={() => setAvatarModalOpen(true)}
+                  sx={{ position: 'absolute', bottom: 15, right: -5, bgcolor: '#fff', border: '1px solid #e2e8f0', '&:hover': { bgcolor: '#f8fafc' }, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} 
+                  size="small"
+                >
                   <CameraAlt fontSize="small" sx={{ color: '#64748b' }} />
                 </IconButton>
               </Box>
@@ -95,6 +117,42 @@ const Profile = () => {
           </Paper>
         </motion.div>
       </Container>
+
+      {/* Avatar Selection Modal */}
+      <Dialog 
+        open={avatarModalOpen} 
+        onClose={() => setAvatarModalOpen(false)}
+        PaperProps={{ sx: { borderRadius: '24px', p: 1, maxWidth: '400px' } }}
+      >
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          Choose an Icon
+          <IconButton onClick={() => setAvatarModalOpen(false)} size="small"><Close /></IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <MuiGrid container spacing={2} sx={{ p: 1 }}>
+            {avatars.map((url, index) => (
+              <MuiGrid item xs={4} key={index}>
+                <Avatar 
+                  src={url} 
+                  onClick={() => {
+                    setFormData({ ...formData, avatar: url });
+                    setAvatarModalOpen(false);
+                  }}
+                  sx={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    aspectRatio: '1/1', 
+                    cursor: 'pointer',
+                    border: formData.avatar === url ? '3px solid #135788' : '2px solid transparent',
+                    transition: 'transform 0.2s',
+                    '&:hover': { transform: 'scale(1.1)', border: '2px solid #cf7c1e' }
+                  }}
+                />
+              </MuiGrid>
+            ))}
+          </MuiGrid>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

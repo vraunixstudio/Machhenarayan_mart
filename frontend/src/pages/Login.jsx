@@ -74,6 +74,11 @@ const Login = () => {
               sx={{ borderRadius: '24px', py: 1.5, mb: 2 }}>
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
+            <Typography sx={{ textAlign: 'center', fontSize: '0.8125rem', color: '#64748b', mb: 1.5 }}>
+              <MuiLink component={Link} to="/forgotpassword" sx={{ color: '#135788', fontWeight: 500, textDecoration: 'none' }}>
+                Forgot password?
+              </MuiLink>
+            </Typography>
             <Typography sx={{ textAlign: 'center', fontSize: '0.8125rem', color: '#64748b' }}>
               Don't have an account?{' '}
               <MuiLink component={Link} to="/register" sx={{ color: '#135788', fontWeight: 600 }}>
