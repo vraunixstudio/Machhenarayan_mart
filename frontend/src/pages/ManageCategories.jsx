@@ -71,7 +71,7 @@ const ManageCategories = () => {
         toast.success('Category deleted');
         fetchCategories();
       } catch (error) {
-        toast.error('Delete failed');
+        toast.error(error.response?.data?.error || 'Delete failed. Category might have linked products.');
       }
     }
   };
