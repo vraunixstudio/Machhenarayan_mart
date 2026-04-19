@@ -99,7 +99,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || process.env.RENDER_EXTERNAL_PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 app.get('/api/test-db', async (req, res) => {
