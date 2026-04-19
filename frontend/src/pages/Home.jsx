@@ -15,7 +15,7 @@ import {
   ChevronRight,
   KeyboardArrowRight,
   LocalGroceryStore,
-  Sparkles
+  Star
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { bannerAPI, productAPI, categoryAPI } from '../services/api';
@@ -396,7 +396,7 @@ const Home = () => {
           }
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -425,7 +425,7 @@ const Home = () => {
                       display: { xs: 'none', md: 'block' }
                     }}
                   >
-                    <Sparkles sx={{ fontSize: 20, color: 'warning.main', opacity: 0.6 }} />
+                    <Star sx={{ fontSize: 20, color: 'warning.main', opacity: 0.6 }} />
                   </Box>
                   <Box
                     sx={{
