@@ -13,7 +13,10 @@ const uploadRoutes = require('./routes/upload');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://machhenarayan-martfrontend.vercel.app', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
