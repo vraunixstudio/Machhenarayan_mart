@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import OrderHistory from './pages/OrderHistory';
+import Profile from './pages/Profile';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import FAQ from './pages/FAQ';
@@ -66,6 +67,14 @@ function App() {
         <Route path="faq" element={<FAQ />} />
         <Route path="return-policy" element={<ReturnPolicy />} />
         <Route path="terms" element={<Terms />} />
+        <Route
+          path="profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="dashboard"
           element={

@@ -76,7 +76,7 @@ const Home = () => {
                   }}
                 >
                   Quality groceries,{' '}
-                  <Box component="span" sx={{ color: '#cf7c1e' }}>right at your doorstep</Box>
+                  <Box component="span" sx={{ color: '#cf7c1e' }}>handpicked for you</Box>
                 </Typography>
                 <Typography sx={{
                   fontSize: { xs: '0.9rem', md: '1rem' }, color: '#64748b',
@@ -112,6 +112,12 @@ const Home = () => {
                     <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#1a1a2e' }}>Best Values</Typography>
                     <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Prices you will love</Typography>
                   </Box>
+                  <Box>
+                    <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#135788', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      Delivery <Chip label="Coming Soon" size="small" sx={{ height: 16, fontSize: '0.6rem', fontWeight: 700, backgroundColor: 'rgba(207,124,30,0.1)', color: '#cf7c1e' }} />
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Online & Offline options</Typography>
+                  </Box>
                 </Box>
               </motion.div>
             </Grid>
@@ -129,18 +135,33 @@ const Home = () => {
                 }}>
                   {banners.length > 0 ? (
                     <>
-                      <AnimatePresence mode="wait">
-                        <motion.img
-                          key={currentBanner}
-                          src={banners[currentBanner].image}
-                          alt={banners[currentBanner].title || 'Banner'}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.6 }}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
-                        />
-                      </AnimatePresence>
+                          <AnimatePresence mode="wait">
+                              <Box key={currentBanner} sx={{ position: 'absolute', inset: 0 }}>
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ height: '100%', width: '100%' }}>
+                                  <Box component={banners[currentBanner].link ? Link : 'div'} {...(banners[currentBanner].link ? { to: banners[currentBanner].link } : {})}
+                                    sx={{ display: 'block', height: '100%', width: '100%', textDecoration: 'none', cursor: banners[currentBanner].link ? 'pointer' : 'default' }}>
+                                    <img src={banners[currentBanner].image} alt={banners[currentBanner].title || 'Banner'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              
+                              {/* Banner Text Overlay */}
+                              {(banners[currentBanner].title || banners[currentBanner].subtitle) && (
+                                <Box sx={{
+                                  position: 'absolute', inset: 0, 
+                                  background: 'linear-gradient(to right, rgba(13,27,46,0.8) 0%, rgba(13,27,46,0) 60%)',
+                                  display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                                  px: { xs: 4, md: 8 }, color: '#fff'
+                                }}>
+                                  <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
+                                    <Typography variant="h2" sx={{ color: '#fff', mb: 1, fontSize: { xs: '1.5rem', md: '2.5rem' }, maxWidth: 400 }}>
+                                      {banners[currentBanner].title}
+                                    </Typography>
+                                    <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontSize: { xs: '0.875rem', md: '1rem' }, maxWidth: 300 }}>
+                                      {banners[currentBanner].subtitle}
+                                    </Typography>
+                                  </motion.div>
+                                </Box>
+                              )}
+                            </Box>
+                          </AnimatePresence>
                       {banners.length > 1 && (
                         <>
                           <IconButton
@@ -285,7 +306,7 @@ const Home = () => {
         }} />
         <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <Typography variant="h2" sx={{ fontWeight: 800, color: '#fff', mb: 2 }}>
-            Fresh groceries delivered to you
+            Freshness and Quality Guaranteed
           </Typography>
           <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '1rem', mb: 4, maxWidth: 500, mx: 'auto' }}>
             Experience quality shopping with the freshest products at the best prices.

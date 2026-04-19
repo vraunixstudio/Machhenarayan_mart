@@ -30,6 +30,11 @@ const ShopPage = () => {
   }, []);
 
   useEffect(() => {
+    setSearchQuery(initialQuery);
+    setCategory(initialCategory);
+  }, [initialQuery, initialCategory]);
+
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
