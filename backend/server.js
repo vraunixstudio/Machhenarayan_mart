@@ -29,7 +29,8 @@ app.use('/api/banners', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  const dbState = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.json({ status: 'ok', db: dbState, timestamp: new Date().toISOString() });
 });
 
 app.post('/api/seed', async (req, res) => {
