@@ -1,10 +1,25 @@
 import { useState, useEffect } from 'react';
-import {
-  Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, IconButton, Chip, Dialog, DialogTitle, DialogContent,
-  DialogActions, Button, Divider
-} from '@mui/material';
-import { Delete, Visibility, MarkEmailRead } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+
+import Delete from '@mui/icons-material/Delete';
+import Visibility from '@mui/icons-material/Visibility';
+import MarkEmailRead from '@mui/icons-material/MarkEmailRead';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { messageAPI } from '../services/api';

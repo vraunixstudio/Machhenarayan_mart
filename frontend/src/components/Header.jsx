@@ -1,16 +1,38 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import {
-  Box, Typography, IconButton, Badge, Menu, MenuItem,
-  InputBase, Button, Drawer, List, ListItem, ListItemIcon,
-  ListItemText, Divider, useMediaQuery, useTheme, Grid
-} from '@mui/material';
-import {
-  Search, ShoppingCart, Person, FavoriteBorder,
-  Dashboard, History, ExitToApp, AdminPanelSettings,
-  Menu as MenuIcon, Close, Home, Category, Info, ContactMail,
-  ShoppingBasket
-} from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import InputBase from '@mui/material/InputBase';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import useTheme from '@mui/material/styles/useTheme';
+import Grid from '@mui/material/Grid';
+
+import Search from '@mui/icons-material/Search';
+import ShoppingCart from '@mui/icons-material/ShoppingCart';
+import Person from '@mui/icons-material/Person';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Dashboard from '@mui/icons-material/Dashboard';
+import History from '@mui/icons-material/History';
+import ExitToApp from '@mui/icons-material/ExitToApp';
+import AdminPanelSettings from '@mui/icons-material/AdminPanelSettings';
+import MenuIcon from '@mui/icons-material/Menu';
+import Close from '@mui/icons-material/Close';
+import Home from '@mui/icons-material/Home';
+import Category from '@mui/icons-material/Category';
+import Info from '@mui/icons-material/Info';
+import ContactMail from '@mui/icons-material/ContactMail';
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 

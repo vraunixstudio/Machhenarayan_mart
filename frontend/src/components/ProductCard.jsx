@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Typography, IconButton } from '@mui/material';
-import { Add, FavoriteBorder } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+
+import Add from '@mui/icons-material/Add';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';

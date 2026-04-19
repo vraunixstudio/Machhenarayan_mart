@@ -1,7 +1,18 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Container, Typography, TextField, Button, Link as MuiLink, Alert, IconButton, InputAdornment } from '@mui/material';
-import { ShoppingBasket, Visibility, VisibilityOff } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import MuiLink from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 

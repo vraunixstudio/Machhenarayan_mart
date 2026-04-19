@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
-import { Category } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Category from '@mui/icons-material/Category';
 import { motion } from 'framer-motion';
 
 const CategoryCard = ({ category, index = 0 }) => {

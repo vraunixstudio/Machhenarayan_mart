@@ -1,9 +1,19 @@
 import { useState, useEffect } from 'react';
-import {
-  Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, IconButton, Chip, Rating, Avatar
-} from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
+import Rating from '@mui/material/Rating';
+import Avatar from '@mui/material/Avatar';
+
+import Delete from '@mui/icons-material/Delete';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { reviewAPI } from '../services/api';

@@ -1,5 +1,12 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box } from '@mui/material';
-import { WarningAmber } from '@mui/icons-material';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
+import WarningAmber from '@mui/icons-material/WarningAmber';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ConfirmDialog = ({ open, title, message, onConfirm, onCancel, confirmText = 'Delete', cancelText = 'Cancel', loading = false, color = 'error' }) => {

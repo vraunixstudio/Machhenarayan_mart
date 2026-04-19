@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
-import { Box, Container, Typography, Divider } from '@mui/material';
-import {
-  ShoppingBasket, Email, Phone, LocationOn, Instagram, Facebook, Twitter
-} from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
+import Email from '@mui/icons-material/Email';
+import Phone from '@mui/icons-material/Phone';
+import LocationOn from '@mui/icons-material/LocationOn';
+import Instagram from '@mui/icons-material/Instagram';
+import Facebook from '@mui/icons-material/Facebook';
+import Twitter from '@mui/icons-material/Twitter';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
