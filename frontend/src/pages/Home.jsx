@@ -86,7 +86,7 @@ const Home = () => {
                 </Typography>
                 <Button
                   variant="contained" size="large"
-                  component={Link} to="/categories"
+                  component={Link} to="/shop"
                   endIcon={<KeyboardArrowRight />}
                   sx={{
                     backgroundColor: '#135788', borderRadius: '28px',
@@ -95,32 +95,22 @@ const Home = () => {
                     '&:hover': { backgroundColor: '#0e4268', transform: 'translateY(-1px)', boxShadow: '0 8px 24px rgba(19, 87, 136, 0.35)' }
                   }}
                 >
-                  Product catalogue
+                  Shop now
                 </Button>
 
-                {/* Feature Badges */}
-                <Box sx={{ display: 'flex', gap: 3, mt: 5, flexWrap: 'wrap' }}>
-                  <Box sx={{
-                    display: 'flex', alignItems: 'center', gap: 1.5,
-                    backgroundColor: '#f8fafc', border: '1px solid #f1f5f9',
-                    borderRadius: '14px', px: 2.5, py: 1.5
-                  }}>
-                    <LocalShipping sx={{ fontSize: 22, color: '#135788' }} />
-                    <Box>
-                      <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: '#1a1a2e' }}>Fast Delivery</Typography>
-                      <Typography sx={{ fontSize: '0.65rem', color: '#94a3b8' }}>Across the region</Typography>
-                    </Box>
+                {/* Simple Highlights */}
+                <Box sx={{ display: 'flex', gap: 4, mt: 5, flexWrap: 'wrap' }}>
+                  <Box>
+                    <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#1a1a2e' }}>Quality Products</Typography>
+                    <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Curated for your family</Typography>
                   </Box>
-                  <Box sx={{
-                    display: 'flex', alignItems: 'center', gap: 1.5,
-                    backgroundColor: '#f8fafc', border: '1px solid #f1f5f9',
-                    borderRadius: '14px', px: 2.5, py: 1.5
-                  }}>
-                    <Verified sx={{ fontSize: 22, color: '#cf7c1e' }} />
-                    <Box>
-                      <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: '#1a1a2e' }}>100% Fresh</Typography>
-                      <Typography sx={{ fontSize: '0.65rem', color: '#94a3b8' }}>Quality guaranteed</Typography>
-                    </Box>
+                  <Box>
+                    <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#1a1a2e' }}>Local Trust</Typography>
+                    <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Serving the community</Typography>
+                  </Box>
+                  <Box>
+                    <Typography sx={{ fontWeight: 800, fontSize: '0.875rem', color: '#1a1a2e' }}>Best Values</Typography>
+                    <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Prices you will love</Typography>
                   </Box>
                 </Box>
               </motion.div>
@@ -213,7 +203,7 @@ const Home = () => {
             </Box>
             <Button component={Link} to="/categories" endIcon={<KeyboardArrowRight />}
               sx={{ color: '#135788', fontWeight: 600, fontSize: '0.8125rem' }}>
-              View all
+              View all products
             </Button>
           </Box>
           <Grid container spacing={2}>
@@ -247,7 +237,7 @@ const Home = () => {
             </Box>
             <Button component={Link} to="/categories" endIcon={<KeyboardArrowRight />}
               sx={{ color: '#135788', fontWeight: 600, fontSize: '0.8125rem' }}>
-              View all
+              View all products
             </Button>
           </Box>
           <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>

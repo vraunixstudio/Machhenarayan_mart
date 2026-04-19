@@ -7,12 +7,13 @@ import {
 import { Add, Edit, Delete } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { bannerAPI } from '../services/api';
+import { bannerAPI, uploadAPI } from '../services/api';
 
 const ManageBanners = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [editingBanner, setEditingBanner] = useState(null);
   const [formData, setFormData] = useState({
     title: '', subtitle: '', image: '', link: '', position: 'hero', order: 0, isActive: true
@@ -54,7 +55,30 @@ const ManageBanners = () => {
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const data = new FormData();
+    data.append('image', file);
+
+    try {
+      setUploading(true);
+      const res = await uploadAPI.uploadImage(data);
+      setFormData({ ...formData, image: res.data.url });
+      toast.success('Banner image uploaded');
+    } catch (err) {
+      toast.error('Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async () => {
+    if (!formData.image) {
+      toast.error('Image is required');
+      return;
+    }
     try {
       if (editingBanner) {
         await bannerAPI.updateBanner(editingBanner._id, formData);
@@ -96,6 +120,7 @@ const ManageBanners = () => {
           <Table>
             <TableHead sx={{ backgroundColor: '#f8fafc' }}>
               <TableRow>
+                <TableCell sx={{ fontWeight: 600 }}>Preview</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Title</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Position</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Order</TableCell>
@@ -106,6 +131,11 @@ const ManageBanners = () => {
             <TableBody>
               {banners.map((banner) => (
                 <TableRow key={banner._id} sx={{ '&:hover': { backgroundColor: '#fdfdfd' }, transition: 'all 0.2s' }}>
+                  <TableCell>
+                    <Box sx={{ width: 80, height: 40, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#f1f5f9' }}>
+                      <img src={banner.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </Box>
+                  </TableCell>
                   <TableCell sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{banner.title || '-'}</TableCell>
                   <TableCell><Chip label={banner.position} size="small" sx={{ borderRadius: '8px' }} /></TableCell>
                   <TableCell>{banner.order}</TableCell>
@@ -126,23 +156,51 @@ const ManageBanners = () => {
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: '20px', p: 1 } }}>
           <DialogTitle sx={{ fontWeight: 700 }}>{editingBanner ? 'Edit Banner' : 'Add Banner'}</DialogTitle>
           <DialogContent>
-            <TextField fullWidth label="Title" name="title" value={formData.title} onChange={handleChange} margin="normal" size="small" />
-            <TextField fullWidth label="Subtitle" name="subtitle" value={formData.subtitle} onChange={handleChange} margin="normal" size="small" />
-            <TextField fullWidth label="Image URL" name="image" value={formData.image} onChange={handleChange} margin="normal" size="small" required />
-            <TextField fullWidth label="Link" name="link" value={formData.link} onChange={handleChange} margin="normal" size="small" />
-            <TextField fullWidth select label="Position" name="position" value={formData.position} onChange={handleChange} margin="normal" size="small">
-              <MenuItem value="hero">Hero</MenuItem>
-              <MenuItem value="promo">Promo</MenuItem>
-              <MenuItem value="sidebar">Sidebar</MenuItem>
-            </TextField>
-            <TextField fullWidth label="Order" name="order" type="number" value={formData.order} onChange={handleChange} margin="normal" size="small" />
+            <Box sx={{ mb: 3, mt: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ width: '100%', height: 180, borderRadius: '12px', overflow: 'hidden', border: '1px solid #f1f5f9', backgroundColor: '#f8fafc', position: 'relative' }}>
+                {formData.image ? (
+                  <img src={formData.image} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <PhotoCamera sx={{ fontSize: 48, color: '#e2e8f0' }} />
+                  </Box>
+                )}
+                {uploading && (
+                  <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <CircularProgress size={24} />
+                  </Box>
+                )}
+              </Box>
+              <Button component="label" variant="outlined" startIcon={<PhotoCamera />} sx={{ borderRadius: '20px' }}>
+                Upload Banner Image
+                <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+              </Button>
+            </Box>
+
+            <TextField fullWidth label="Title (Optional)" name="title" value={formData.title} onChange={handleChange} margin="normal" size="small" />
+            <TextField fullWidth label="Subtitle (Optional)" name="subtitle" value={formData.subtitle} onChange={handleChange} margin="normal" size="small" />
+            <TextField fullWidth label="Link (e.g., /categories)" name="link" value={formData.link} onChange={handleChange} margin="normal" size="small" />
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField fullWidth select label="Position" name="position" value={formData.position} onChange={handleChange} margin="normal" size="small">
+                  <MenuItem value="hero">Hero</MenuItem>
+                  <MenuItem value="promo">Promo</MenuItem>
+                  <MenuItem value="sidebar">Sidebar</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField fullWidth label="Display Order" name="order" type="number" value={formData.order} onChange={handleChange} margin="normal" size="small" />
+              </Grid>
+            </Grid>
             <Box sx={{ mt: 2 }}>
               <FormControlLabel control={<Switch checked={formData.isActive} onChange={handleChange} name="isActive" color="primary" />} label="Active Status" />
             </Box>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
             <Button onClick={handleClose} sx={{ borderRadius: '24px', color: '#64748b' }}>Cancel</Button>
-            <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: '24px' }}>{editingBanner ? 'Update' : 'Create'}</Button>
+            <Button onClick={handleSubmit} variant="contained" disabled={uploading} sx={{ borderRadius: '24px' }}>
+              {editingBanner ? 'Update' : 'Create'}
+            </Button>
           </DialogActions>
         </Dialog>
       </motion.div>

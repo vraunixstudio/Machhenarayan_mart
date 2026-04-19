@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Categories from './pages/Categories';
 import CategoryProducts from './pages/CategoryProducts';
 import ProductDetail from './pages/ProductDetail';
-import Search from './pages/Search';
+import Shop from './pages/Shop';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -54,7 +54,8 @@ function App() {
         <Route path="categories" element={<Categories />} />
         <Route path="category/:slug" element={<CategoryProducts />} />
         <Route path="product/:slug" element={<ProductDetail />} />
-        <Route path="search" element={<Search />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="search" element={<Navigate to="/shop" replace />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="about" element={<About />} />

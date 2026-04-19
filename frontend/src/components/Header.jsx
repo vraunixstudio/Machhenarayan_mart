@@ -14,6 +14,8 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
+import { productAPI } from '../services/api';
+
 const Header = () => {
   const { cartCount } = useCart();
   const navigate = useNavigate();
@@ -25,13 +27,43 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const fetchRecommendations = async (q) => {
+    if (q.length < 2) {
+      setRecommendations([]);
+      setShowDropdown(false);
+      return;
+    }
+    try {
+      const res = await productAPI.getProducts({ search: q, limit: 5 });
+      setRecommendations(res.data.products || []);
+      setShowDropdown(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    const q = e.target.value;
+    setSearchQuery(q);
+    fetchRecommendations(q);
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      navigate(`/shop?q=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
+      setShowDropdown(false);
     }
+  };
+
+  const handleSelectRecommendation = (slug) => {
+    navigate(`/product/${slug}`);
+    setSearchQuery('');
+    setShowDropdown(false);
   };
 
   const handleLogout = async () => {
@@ -41,7 +73,7 @@ const Header = () => {
   };
 
   const navLinks = [
-    { label: 'Catalogue', path: '/categories', icon: <Category fontSize="small" /> },
+    { label: 'Shop', path: '/shop', icon: <Category fontSize="small" /> },
     { label: 'About', path: '/about', icon: <Info fontSize="small" /> },
     { label: 'Contact', path: '/contact', icon: <ContactMail fontSize="small" /> }
   ];
@@ -121,20 +153,51 @@ const Header = () => {
               sx={{
                 display: { xs: 'none', sm: 'flex' }, alignItems: 'center',
                 backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '24px',
-                px: 1.5, height: 40, width: 180,
+                px: 1.5, height: 40, width: 180, position: 'relative',
                 transition: 'all 0.3s ease',
                 '&:focus-within': {
-                  backgroundColor: 'rgba(255,255,255,0.12)', width: 240
+                  backgroundColor: 'rgba(255,255,255,0.12)', width: 280
                 }
               }}
             >
               <Search sx={{ fontSize: 18, color: 'rgba(255,255,255,0.4)', mr: 1 }} />
               <InputBase
-                placeholder="Search"
+                placeholder="Search products..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+                onFocus={() => searchQuery.length >= 2 && setShowDropdown(true)}
                 sx={{ flex: 1, color: '#fff', fontSize: '0.8125rem', '& ::placeholder': { color: 'rgba(255,255,255,0.4)' } }}
               />
+
+              {/* Recommendation Dropdown */}
+              {showDropdown && recommendations.length > 0 && (
+                <Box sx={{
+                  position: 'absolute', top: 'calc(100% + 8px)', left: 0, right: 0,
+                  bgcolor: '#fff', borderRadius: '16px', py: 1,
+                  boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
+                  zIndex: 1400, overflow: 'hidden'
+                }}>
+                  {recommendations.map((item) => (
+                    <Box key={item._id} onClick={() => handleSelectRecommendation(item.slug)}
+                      sx={{
+                        display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1,
+                        cursor: 'pointer', '&:hover': { bgcolor: '#f8fafc' }
+                      }}>
+                      <Box sx={{ width: 36, height: 36, borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
+                        <img src={item.images?.[0] || 'https://placehold.co/40x40'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </Box>
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Typography noWrap sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#1a1a2e' }}>{item.name}</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#135788', fontWeight: 700 }}>₹{item.price}</Typography>
+                      </Box>
+                    </Box>
+                  ))}
+                  <Button fullWidth onClick={handleSearch} sx={{ py: 1, fontSize: '0.75rem', color: '#64748b', justifyContent: 'center' }}>
+                    View all results
+                  </Button>
+                </Box>
+              )}
             </Box>
 
             {/* Wishlist */}
@@ -229,13 +292,42 @@ const Header = () => {
             <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#fff' }}><Close /></IconButton>
           </Box>
 
-          {/* Mobile search */}
-          <Box component="form" onSubmit={(e) => { handleSearch(e); setDrawerOpen(false); }}
-            sx={{ display: 'flex', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 3, px: 2, py: 1, mb: 3 }}>
-            <Search sx={{ fontSize: 18, color: 'rgba(255,255,255,0.4)', mr: 1 }} />
-            <InputBase placeholder="Search products..." value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ flex: 1, color: '#fff', fontSize: '0.875rem' }} />
+          {/* Mobile search with recommendations */}
+          <Box
+            component="form" onSubmit={(e) => { handleSearch(e); setDrawerOpen(false); }}
+            sx={{ position: 'relative', mb: 3 }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '12px', px: 2, py: 1 }}>
+              <Search sx={{ fontSize: 18, color: 'rgba(255,255,255,0.4)', mr: 1 }} />
+              <InputBase
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onFocus={() => searchQuery.length >= 2 && setShowDropdown(true)}
+                sx={{ flex: 1, color: '#fff', fontSize: '0.875rem' }}
+              />
+            </Box>
+
+            {showDropdown && recommendations.length > 0 && (
+              <Box sx={{
+                position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+                bgcolor: '#fff', borderRadius: '12px', overflow: 'hidden',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.2)', zIndex: 1200
+              }}>
+                {recommendations.map((item) => (
+                  <Box key={item._id} onClick={() => { handleSelectRecommendation(item.slug); setDrawerOpen(false); }}
+                    sx={{
+                      display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1,
+                      cursor: 'pointer', '&:hover': { bgcolor: '#f1f5f9' }
+                    }}>
+                    <Box sx={{ width: 32, height: 32, borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
+                      <img src={item.images?.[0] || 'https://placehold.co/32x32'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </Box>
+                    <Typography noWrap sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#1a1a2e' }}>{item.name}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
           </Box>
 
           <List sx={{ mb: 2 }}>
