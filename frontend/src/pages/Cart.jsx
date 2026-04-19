@@ -154,9 +154,37 @@ const Cart = () => {
                       </Typography>
 
                       {orderError && <Alert severity="error" sx={{ mb: 2, borderRadius: '12px' }}>{orderError}</Alert>}
-                      <Alert severity="info" icon={<LocalShipping />} sx={{ mb: 3, borderRadius: '12px', fontSize: '0.8125rem' }}>
-                        Cash on Delivery only
-                      </Alert>
+                      
+                      <Box sx={{ mb: 3 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>Select Payment Method</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          <Box sx={{ 
+                            p: 2, borderRadius: '12px', border: '1.5px solid #135788', bgcolor: 'rgba(19,87,136,0.02)',
+                            display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer'
+                          }}>
+                            <LocalShipping sx={{ color: '#135788' }} />
+                            <Box>
+                              <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>Cash on Delivery</Typography>
+                              <Typography variant="caption" sx={{ color: '#64748b' }}>Pay when you receive your order</Typography>
+                            </Box>
+                          </Box>
+
+                          <Box sx={{ 
+                            p: 2, borderRadius: '12px', border: '1.5px solid #f1f5f9', opacity: 0.6,
+                            display: 'flex', alignItems: 'center', gap: 2, bgcolor: '#f8fafc', position: 'relative'
+                          }}>
+                            <Lock sx={{ color: '#94a3b8' }} />
+                            <Box>
+                              <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>Online Payment</Typography>
+                              <Typography variant="caption" sx={{ color: '#64748b' }}>Credit Card / UPI / Wallets</Typography>
+                            </Box>
+                            <Chip label="Coming Soon" size="small" sx={{ 
+                              position: 'absolute', top: 12, right: 12, height: 20, 
+                              fontSize: '0.65rem', fontWeight: 700, bgcolor: '#f1f5f9' 
+                            }} />
+                          </Box>
+                        </Box>
+                      </Box>
 
                       <form onSubmit={handlePlaceOrder}>
                         <TextField fullWidth size="small" label="Full Address" required value={shipping.address}
