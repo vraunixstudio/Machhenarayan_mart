@@ -5,20 +5,18 @@ import Footer from './Footer';
 
 const Layout = () => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh'
-      }}
-    >
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#0d1b2e' }}>
       <Header />
       <Box
         component="main"
         sx={{
           flex: 1,
-          pt: { xs: 7, md: 8 },
-          pb: 4
+          backgroundColor: '#ffffff',
+          borderRadius: { xs: '24px 24px 0 0', md: '32px 32px 0 0' },
+          mt: { xs: '64px', md: '72px' },
+          overflow: 'hidden',
+          position: 'relative',
+          zIndex: 1
         }}
       >
         <Outlet />

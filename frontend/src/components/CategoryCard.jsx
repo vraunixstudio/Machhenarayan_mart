@@ -1,165 +1,62 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Skeleton
-} from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { Category } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
 const CategoryCard = ({ category, index = 0 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.05,
-        ease: [0.16, 1, 0.3, 1]
-      }}
+      transition={{ duration: 0.35, delay: index * 0.05, ease: [0.25, 1, 0.5, 1] }}
     >
-      <Card
+      <Box
         component={Link}
         to={`/category/${category.slug}`}
         sx={{
-          textDecoration: 'none',
-          position: 'relative',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          borderRadius: 3,
-          overflow: 'hidden',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5,
+          textDecoration: 'none', p: 2.5,
+          borderRadius: '16px', backgroundColor: '#f8fafc',
+          border: '1px solid #f1f5f9',
+          transition: 'all 0.3s ease',
           cursor: 'pointer',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           '&:hover': {
-            transform: 'translateY(-8px)',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.12)',
-            '& .category-overlay': {
-              opacity: 1
-            },
-            '& .category-image': {
-              transform: 'scale(1.08)'
-            }
-          }
+            backgroundColor: '#135788', color: '#fff',
+            boxShadow: '0 8px 24px rgba(19, 87, 136, 0.2)',
+            transform: 'translateY(-2px)',
+            '& .cat-icon': { color: '#fff', backgroundColor: 'rgba(255,255,255,0.15)' },
+            '& .cat-label': { color: '#fff' }
+          },
+          '&:active': { transform: 'scale(0.97)' }
         }}
       >
-        {/* Image Container */}
         <Box
+          className="cat-icon"
           sx={{
-            position: 'relative',
-            paddingTop: '100%',
-            overflow: 'hidden',
-            backgroundColor: '#F0F4F8'
+            width: 56, height: 56, borderRadius: '14px',
+            backgroundColor: 'rgba(19, 87, 136, 0.08)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#135788', transition: 'all 0.3s ease',
+            overflow: 'hidden'
           }}
         >
-          {!imageLoaded && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#E2E8F0'
-              }}
-            >
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  backgroundColor: '#CBD5E0',
-                  animation: 'pulse 1.5s infinite'
-                }}
-              />
-            </Box>
+          {category.image ? (
+            <Box component="img" src={category.image}
+              sx={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '14px' }} />
+          ) : (
+            <Category sx={{ fontSize: 26 }} />
           )}
-
-          <CardMedia
-            component="img"
-            image={category.image || 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&q=80'}
-            alt={category.name}
-            className="category-image"
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: imageLoaded ? 1 : 0,
-              transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease'
-            }}
-            onLoad={() => setImageLoaded(true)}
-          />
-
-          {/* Gradient Overlay */}
-          <Box
-            className="category-overlay"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '70%',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)',
-              opacity: 0.8,
-              transition: 'opacity 0.3s ease'
-            }}
-          />
         </Box>
-
-        {/* Content */}
-        <CardContent
+        <Typography
+          className="cat-label"
           sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            p: 2,
-            color: 'white',
-            zIndex: 1
+            fontSize: '0.8125rem', fontWeight: 600, color: '#1a1a2e',
+            textAlign: 'center', lineHeight: 1.2, transition: 'color 0.3s ease'
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-              fontSize: '1.1rem',
-              lineHeight: 1.2,
-              textShadow: '0 2px 4px rgba(0,0,0,0.3)'
-            }}
-          >
-            {category.name}
-          </Typography>
-
-          {category.description && (
-            <Typography
-              variant="body2"
-              sx={{
-                opacity: 0.9,
-                fontSize: '0.85rem',
-                mt: 0.5,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden'
-              }}
-            >
-              {category.description}
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
+          {category.name}
+        </Typography>
+      </Box>
     </motion.div>
   );
 };

@@ -1,187 +1,109 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  Button,
-  InputBase,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  useMediaQuery,
-  useTheme,
-  Badge,
-  Divider
+  Box, Typography, IconButton, Badge, Menu, MenuItem,
+  InputBase, Button, Drawer, List, ListItem, ListItemIcon,
+  ListItemText, Divider, useMediaQuery, useTheme
 } from '@mui/material';
 import {
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  ShoppingBasket,
-  Dashboard,
-  Person,
-  ExitToApp,
-  AdminPanelSettings,
-  Close as CloseIcon,
-  ShoppingCart,
-  Home,
-  Category,
-  Info,
-  ContactMail,
-  FavoriteBorder,
-  History
+  Search, ShoppingCart, Person, FavoriteBorder,
+  Dashboard, History, ExitToApp, AdminPanelSettings,
+  Menu as MenuIcon, Close, Home, Category, Info, ContactMail,
+  ShoppingBasket
 } from '@mui/icons-material';
-import { alpha } from '@mui/material/styles';
-import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
 const Header = () => {
   const { cartCount } = useCart();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchFocused, setSearchFocused] = useState(false);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
-      setSearchFocused(false);
     }
   };
 
   const handleLogout = async () => {
-    handleMenuClose();
+    setAnchorEl(null);
     await logout();
     navigate('/');
   };
 
   const navLinks = [
-    { label: 'Home', path: '/', icon: <Home sx={{ fontSize: 20 }} /> },
-    { label: 'Categories', path: '/categories', icon: <Category sx={{ fontSize: 20 }} /> },
-    { label: 'About', path: '/about', icon: <Info sx={{ fontSize: 20 }} /> },
-    { label: 'Contact', path: '/contact', icon: <ContactMail sx={{ fontSize: 20 }} /> }
+    { label: 'Catalogue', path: '/categories', icon: <Category fontSize="small" /> },
+    { label: 'About', path: '/about', icon: <Info fontSize="small" /> },
+    { label: 'Contact', path: '/contact', icon: <ContactMail fontSize="small" /> }
   ];
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        elevation={0}
+      {/* Fixed Header on dark navy background */}
+      <Box
         sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
-          backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          color: 'text.primary'
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1100,
+          backgroundColor: '#0d1b2e',
+          height: { xs: 64, md: 72 }
         }}
       >
-        <Toolbar
+        <Box
           sx={{
-            justifyContent: 'space-between',
-            px: { xs: 2, md: 4 },
-            py: { xs: 0.5, md: 1 }
+            maxWidth: '1280px', mx: 'auto', height: '100%',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            px: { xs: 2, md: 4 }, gap: 2
           }}
         >
           {/* Logo */}
           <Box
-            component={Link}
-            to="/"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.5,
-              textDecoration: 'none',
-              color: 'primary.main'
-            }}
+            component={Link} to="/"
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', flexShrink: 0 }}
           >
-            <Box
-              sx={{
-                backgroundColor: 'primary.main',
-                borderRadius: 2,
-                p: 0.75,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'transform 0.2s ease',
-                '&:hover': {
-                  transform: 'scale(1.05) rotate(5deg)'
-                }
-              }}
-            >
-              <ShoppingBasket sx={{ fontSize: 24, color: 'white' }} />
+            <Box sx={{
+              backgroundColor: '#cf7c1e', borderRadius: '10px', width: 36, height: 36,
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <ShoppingBasket sx={{ fontSize: 20, color: '#fff' }} />
             </Box>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 800,
-                fontSize: { xs: '1.3rem', md: '1.5rem' },
-                letterSpacing: '-0.02em',
-                display: { xs: 'none', sm: 'block' }
-              }}
-            >
-              Machhenarayan
-            </Typography>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', color: '#fff', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+                Machhenarayan
+              </Typography>
+              <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                mart
+              </Typography>
+            </Box>
           </Box>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation Pills */}
           {!isMobile && (
-            <Box
-              component="nav"
-              sx={{ display: 'flex', gap: 1 }}
-            >
+            <Box sx={{
+              display: 'flex', alignItems: 'center',
+              backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '28px',
+              p: '4px', gap: '2px'
+            }}>
               {navLinks.map((link) => (
                 <Button
                   key={link.path}
-                  component={Link}
-                  to={link.path}
+                  component={Link} to={link.path}
                   startIcon={link.icon}
                   sx={{
-                    color: location.pathname === link.path ? 'primary.main' : 'text.primary',
-                    fontWeight: location.pathname === link.path ? 600 : 400,
-                    position: 'relative',
-                    py: 1,
-                    px: 2,
-                    borderRadius: 2,
-                    transition: 'all 0.2s ease',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 4,
-                      left: '50%',
-                      transform: location.pathname === link.path ? 'translateX(-50%)' : 'translateX(-50%) scaleX(0)',
-                      width: location.pathname === link.path ? '70%' : '0%',
-                      height: 2,
-                      backgroundColor: 'primary.main',
-                      transition: 'transform 0.3s ease'
-                    },
+                    borderRadius: '24px', px: 2.5, py: 0.8,
+                    color: location.pathname === link.path ? '#fff' : 'rgba(255,255,255,0.6)',
+                    backgroundColor: location.pathname === link.path ? '#135788' : 'transparent',
+                    fontSize: '0.8125rem', fontWeight: 500,
                     '&:hover': {
-                      backgroundColor: 'rgba(15, 92, 138, 0.04)',
-                      '&::after': {
-                        transform: 'translateX(-50%) scaleX(1)'
-                      }
+                      backgroundColor: location.pathname === link.path ? '#135788' : 'rgba(255,255,255,0.06)',
+                      color: '#fff'
                     }
                   }}
                 >
@@ -191,465 +113,162 @@ const Header = () => {
             </Box>
           )}
 
-          {/* Actions */}
+          {/* Right Actions */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {/* Search */}
             <Box
-              component="form"
-              onSubmit={handleSearch}
+              component="form" onSubmit={handleSearch}
               sx={{
-                position: 'relative',
-                display: { xs: 'none', sm: 'block' },
+                display: { xs: 'none', sm: 'flex' }, alignItems: 'center',
+                backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '24px',
+                px: 1.5, height: 40, width: 180,
                 transition: 'all 0.3s ease',
-                width: searchFocused ? 320 : 200,
+                '&:focus-within': {
+                  backgroundColor: 'rgba(255,255,255,0.12)', width: 240
+                }
               }}
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
             >
+              <Search sx={{ fontSize: 18, color: 'rgba(255,255,255,0.4)', mr: 1 }} />
               <InputBase
-                placeholder="Search products..."
+                placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                sx={{
-                  pl: 3,
-                  pr: 10,
-                  py: { xs: 0.75, md: 1 },
-                  width: '100%',
-                  backgroundColor: alpha(theme.palette.primary.main, 0.06),
-                  borderRadius: 3,
-                  fontSize: { xs: '0.9rem', md: '0.95rem' },
-                  transition: 'all 0.3s ease',
-                  border: '1px solid transparent',
-                  '&:focus': {
-                    backgroundColor: 'white',
-                    borderColor: 'primary.main',
-                    boxShadow: `0 0 0 4px ${alpha(theme.palette.primary.main, 0.1)}`
-                  }
-                }}
+                sx={{ flex: 1, color: '#fff', fontSize: '0.8125rem', '& ::placeholder': { color: 'rgba(255,255,255,0.4)' } }}
               />
-              <IconButton
-                type="submit"
-                sx={{
-                  position: 'absolute',
-                  right: 4,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: 'text.secondary',
-                  '&:hover': {
-                    color: 'primary.main'
-                  }
-                }}
-              >
-                <SearchIcon />
-              </IconButton>
             </Box>
 
-            {/* Mobile Search Icon */}
+            {/* Wishlist */}
             <IconButton
-              sx={{ display: { xs: 'flex', sm: 'none' } }}
-              onClick={() => navigate('/search')}
+              component={Link} to="/wishlist"
+              sx={{
+                color: 'rgba(255,255,255,0.6)', width: 40, height: 40,
+                backgroundColor: '#cf7c1e', borderRadius: '50%',
+                '&:hover': { backgroundColor: '#a86318' }
+              }}
             >
-              <SearchIcon />
+              <FavoriteBorder sx={{ fontSize: 18, color: '#fff' }} />
             </IconButton>
 
             {/* Cart */}
             <IconButton
-              component={Link}
-              to="/cart"
+              component={Link} to="/cart"
               sx={{
-                position: 'relative',
-                p: 1,
-                borderRadius: 2,
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  backgroundColor: alpha(theme.palette.primary.main, 0.08),
-                  transform: 'scale(1.05)'
-                }
+                color: 'rgba(255,255,255,0.6)', width: 40, height: 40,
+                backgroundColor: '#cf7c1e', borderRadius: '50%',
+                '&:hover': { backgroundColor: '#a86318' }
               }}
             >
-              <Badge
-                badgeContent={cartCount}
-                color="error"
-                sx={{
-                  '& .MuiBadge-badge': {
-                    fontSize: '0.7rem',
-                    minWidth: 20,
-                    height: 20,
-                    borderRadius: '10px'
-                  }
-                }}
-              >
-                <ShoppingCart sx={{ fontSize: 24 }} />
+              <Badge badgeContent={cartCount} color="error"
+                sx={{ '& .MuiBadge-badge': { fontSize: '0.65rem', minWidth: 16, height: 16 } }}>
+                <ShoppingCart sx={{ fontSize: 18, color: '#fff' }} />
               </Badge>
             </IconButton>
 
-            {/* User Menu */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {isAuthenticated ? (
-                <>
-                  <IconButton
-                    component={Link}
-                    to="/wishlist"
-                    sx={{
-                      display: { xs: 'none', md: 'flex' },
-                      color: 'text.secondary',
-                      borderRadius: 2,
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.error.main, 0.08),
-                        color: 'error.main'
-                      }
-                    }}
-                  >
-                    <FavoriteBorder />
-                  </IconButton>
-                  <IconButton
-                    component={Link}
-                    to="/dashboard"
-                    sx={{
-                      display: { xs: 'none', md: 'flex' },
-                      color: 'text.secondary',
-                      borderRadius: 2,
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.primary.main, 0.08),
-                        color: 'primary.main'
-                      }
-                    }}
-                  >
-                    <History />
-                  </IconButton>
-                  <IconButton
-                    onClick={handleMenuOpen}
-                    sx={{
-                      backgroundColor: alpha(theme.palette.primary.main, 0.08),
-                      color: 'primary.main',
-                      borderRadius: 2,
-                      p: 0.5,
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.primary.main, 0.15),
-                        transform: 'scale(1.05)'
-                      }
-                    }}
-                  >
-                    <Person />
-                  </IconButton>
-                </>
-              ) : (
-                <Button
-                  variant="contained"
-                  size="small"
-                  component={Link}
-                  to="/login"
-                  sx={{
-                    backgroundColor: 'primary.main',
-                    color: 'white',
-                    fontWeight: 600,
-                    borderRadius: 3,
-                    py: 1,
-                    px: 3,
-                    boxShadow: '0 4px 12px rgba(15, 92, 138, 0.3)',
-                    '&:hover': {
-                      backgroundColor: 'primary.dark',
-                      boxShadow: '0 6px 20px rgba(15, 92, 138, 0.4)',
-                      transform: 'translateY(-1px)'
-                    }
-                  }}
-                >
-                  Login
-                </Button>
-              )}
-            </Box>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      {/* User Dropdown Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-        PaperProps={{
-          sx: {
-            mt: 1.5,
-            minWidth: 180,
-            borderRadius: 3,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-            overflow: 'hidden'
-          }
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-      >
-        {isAuthenticated ? (
-          <>
-            <Box sx={{ px: 2, py: 1.5, borderBottom: 1, borderColor: 'divider' }}>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Signed in as
-              </Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, truncate: 1 }}>
-                {user?.name || user?.email}
-              </Typography>
-            </Box>
-            <MenuItem
-              component={Link}
-              to="/dashboard"
-              onClick={handleMenuClose}
-              sx={{ py: 1.5 }}
-            >
-              <ListItemIcon>
-                <Dashboard fontSize="small" />
-              </ListItemIcon>
-              Dashboard
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/wishlist"
-              onClick={handleMenuClose}
-              sx={{ py: 1.5 }}
-            >
-              <ListItemIcon>
-                <FavoriteBorder fontSize="small" />
-              </ListItemIcon>
-              Wishlist
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/orders"
-              onClick={handleMenuClose}
-              sx={{ py: 1.5 }}
-            >
-              <ListItemIcon>
-                <History fontSize="small" />
-              </ListItemIcon>
-              Order History
-            </MenuItem>
-            {isAdmin && (
-              <MenuItem
-                component={Link}
-                to="/admin"
-                onClick={handleMenuClose}
-                sx={{ py: 1.5 }}
-              >
-                <ListItemIcon>
-                  <AdminPanelSettings fontSize="small" />
-                </ListItemIcon>
-                Admin Panel
-              </MenuItem>
-            )}
-            <Divider />
-            <MenuItem
-              onClick={handleLogout}
+            {/* User */}
+            <IconButton
+              onClick={isAuthenticated ? (e) => setAnchorEl(e.currentTarget) : () => navigate('/login')}
               sx={{
-                py: 1.5,
-                color: 'error.main',
-                '&:hover': {
-                  backgroundColor: alpha(theme.palette.error.main, 0.08)
-                }
+                color: 'rgba(255,255,255,0.6)', width: 40, height: 40,
+                backgroundColor: '#cf7c1e', borderRadius: '50%',
+                '&:hover': { backgroundColor: '#a86318' }
               }}
             >
-              <ListItemIcon>
-                <ExitToApp fontSize="small" color="error" />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </>
-        ) : (
-          <>
-            <MenuItem
-              component={Link}
-              to="/login"
-              onClick={handleMenuClose}
-              sx={{ py: 1.5 }}
-            >
-              <ListItemIcon>
-                <Person fontSize="small" />
-              </ListItemIcon>
-              Login
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/register"
-              onClick={handleMenuClose}
-              sx={{ py: 1.5 }}
-            >
-              <ListItemIcon>
-                <Person fontSize="small" />
-              </ListItemIcon>
-              Create Account
-            </MenuItem>
-          </>
+              <Person sx={{ fontSize: 18, color: '#fff' }} />
+            </IconButton>
+
+            {/* Mobile hamburger */}
+            {isMobile && (
+              <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#fff' }}>
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Box>
+        </Box>
+      </Box>
+
+      {/* User Dropdown */}
+      <Menu
+        anchorEl={anchorEl} open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        PaperProps={{ sx: { mt: 1, minWidth: 200, borderRadius: 3, boxShadow: '0 12px 40px rgba(0,0,0,0.12)', p: 0.5 } }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        {isAuthenticated && (
+          <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #f1f5f9' }}>
+            <Typography sx={{ fontSize: '0.75rem', color: '#94a3b8' }}>Signed in as</Typography>
+            <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{user?.name || user?.email}</Typography>
+          </Box>
         )}
+        <MenuItem component={Link} to="/dashboard" onClick={() => setAnchorEl(null)} sx={{ borderRadius: 2, fontSize: '0.8125rem', mt: 0.5 }}>
+          <Dashboard sx={{ fontSize: 18, mr: 1.5, color: '#64748b' }} /> Dashboard
+        </MenuItem>
+        <MenuItem component={Link} to="/orders" onClick={() => setAnchorEl(null)} sx={{ borderRadius: 2, fontSize: '0.8125rem' }}>
+          <History sx={{ fontSize: 18, mr: 1.5, color: '#64748b' }} /> Orders
+        </MenuItem>
+        {isAdmin && (
+          <MenuItem component={Link} to="/admin" onClick={() => setAnchorEl(null)} sx={{ borderRadius: 2, fontSize: '0.8125rem' }}>
+            <AdminPanelSettings sx={{ fontSize: 18, mr: 1.5, color: '#64748b' }} /> Admin Panel
+          </MenuItem>
+        )}
+        <Divider sx={{ my: 0.5 }} />
+        <MenuItem onClick={handleLogout} sx={{ borderRadius: 2, fontSize: '0.8125rem', color: '#D32F2F' }}>
+          <ExitToApp sx={{ fontSize: 18, mr: 1.5 }} /> Logout
+        </MenuItem>
       </Menu>
 
       {/* Mobile Drawer */}
       <Drawer
-        anchor="left"
-        open={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        PaperProps={{
-          sx: {
-            width: 300,
-            borderRadius: '0 16px 16px 0',
-            boxShadow: '4px 0 32px rgba(0,0,0,0.12)'
-          }
-        }}
+        anchor="right" open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        PaperProps={{ sx: { width: 280, backgroundColor: '#0d1b2e', color: '#fff', borderRadius: '24px 0 0 24px' } }}
       >
         <Box sx={{ p: 3 }}>
-          {/* Close Button */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-            <IconButton onClick={() => setMobileMenuOpen(false)}>
-              <CloseIcon />
-            </IconButton>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+            <Typography sx={{ fontWeight: 700, fontSize: '1.1rem' }}>Menu</Typography>
+            <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#fff' }}><Close /></IconButton>
           </Box>
 
-          {/* Mobile Search */}
-          <Box
-            component="form"
-            onSubmit={handleSearch}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              p: 2,
-              mb: 3,
-              backgroundColor: alpha(theme.palette.primary.main, 0.06),
-              borderRadius: 3
-            }}
-          >
-            <InputBase
-              placeholder="Search products..."
-              value={searchQuery}
+          {/* Mobile search */}
+          <Box component="form" onSubmit={(e) => { handleSearch(e); setDrawerOpen(false); }}
+            sx={{ display: 'flex', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 3, px: 2, py: 1, mb: 3 }}>
+            <Search sx={{ fontSize: 18, color: 'rgba(255,255,255,0.4)', mr: 1 }} />
+            <InputBase placeholder="Search products..." value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ flex: 1, pl: 1 }}
-            />
-            <IconButton type="submit">
-              <SearchIcon />
-            </IconButton>
+              sx={{ flex: 1, color: '#fff', fontSize: '0.875rem' }} />
           </Box>
 
-          {/* Navigation Links */}
-          <List>
-            {navLinks.map((link) => (
-              <ListItem
-                key={link.path}
-                component={Link}
-                to={link.path}
-                onClick={() => setMobileMenuOpen(false)}
+          <List sx={{ mb: 2 }}>
+            {[{ label: 'Home', path: '/', icon: <Home /> }, ...navLinks].map((link) => (
+              <ListItem key={link.path} component={Link} to={link.path}
+                onClick={() => setDrawerOpen(false)}
                 sx={{
-                  py: 1.5,
-                  px: 2,
-                  mb: 0.5,
-                  borderRadius: 2,
-                  color: location.pathname === link.path ? 'primary.main' : 'text.primary',
-                  backgroundColor: location.pathname === link.path ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                  fontWeight: location.pathname === link.path ? 600 : 400,
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.06)
-                  }
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 40 }}>
+                  borderRadius: 2, mb: 0.5, py: 1.5,
+                  backgroundColor: location.pathname === link.path ? 'rgba(19,87,136,0.2)' : 'transparent',
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                }}>
+                <ListItemIcon sx={{ minWidth: 36, color: location.pathname === link.path ? '#cf7c1e' : 'rgba(255,255,255,0.5)' }}>
                   {link.icon}
                 </ListItemIcon>
-                <ListItemText primary={link.label} />
+                <ListItemText primary={link.label} primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: location.pathname === link.path ? 600 : 400 }} />
               </ListItem>
             ))}
           </List>
 
-          {/* Mobile User Actions */}
-          <Box sx={{ mt: 4, pt: 3, borderTop: 1, borderColor: 'divider' }}>
-            {isAuthenticated ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Typography
-                  variant="body2"
-                  sx={{ px: 2, color: 'text.secondary', mb: 1 }}
-                >
-                  Signed in as
-                </Typography>
-                <Typography
-                  variant="subtitle2"
-                  sx={{ px: 2, mb: 2, fontWeight: 600 }}
-                >
-                  {user?.name || user?.email}
-                </Typography>
-                <ListItem
-                  component={Link}
-                  to="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  sx={{ borderRadius: 2, mb: 0.5 }}
-                >
-                  <ListItemIcon><Dashboard /></ListItemIcon>
-                  Dashboard
-                </ListItem>
-                <ListItem
-                  component={Link}
-                  to="/wishlist"
-                  onClick={() => setMobileMenuOpen(false)}
-                  sx={{ borderRadius: 2, mb: 0.5 }}
-                >
-                  <ListItemIcon><FavoriteBorder /></ListItemIcon>
-                  Wishlist
-                </ListItem>
-                <ListItem
-                  component={Link}
-                  to="/orders"
-                  onClick={() => setMobileMenuOpen(false)}
-                  sx={{ borderRadius: 2, mb: 0.5 }}
-                >
-                  <ListItemIcon><History /></ListItemIcon>
-                  Order History
-                </ListItem>
-                {isAdmin && (
-                  <ListItem
-                    component={Link}
-                    to="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    sx={{ borderRadius: 2, mb: 0.5 }}
-                  >
-                    <ListItemIcon><AdminPanelSettings /></ListItemIcon>
-                    Admin Panel
-                  </ListItem>
-                )}
-                <Divider sx={{ my: 1 }} />
-                <ListItem
-                  onClick={() => {
-                    handleLogout();
-                    setMobileMenuOpen(false);
-                  }}
-                  sx={{
-                    borderRadius: 2,
-                    color: 'error.main',
-                    mt: 1
-                  }}
-                >
-                  <ListItemIcon>
-                    <ExitToApp color="error" />
-                  </ListItemIcon>
-                  Logout
-                </ListItem>
-              </Box>
-            ) : (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <ListItem
-                  component={Link}
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  sx={{ borderRadius: 2 }}
-                >
-                  <ListItemIcon><Person /></ListItemIcon>
-                  Login
-                </ListItem>
-                <ListItem
-                  component={Link}
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  sx={{ borderRadius: 2 }}
-                >
-                  <ListItemIcon><Person /></ListItemIcon>
-                  Register
-                </ListItem>
-              </Box>
-            )}
-          </Box>
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', my: 2 }} />
+
+          {isAuthenticated ? (
+            <Button fullWidth variant="outlined" onClick={() => { handleLogout(); setDrawerOpen(false); }}
+              sx={{ borderColor: 'rgba(255,255,255,0.2)', color: '#fff', borderRadius: 3 }}>
+              Logout
+            </Button>
+          ) : (
+            <Button fullWidth variant="contained" component={Link} to="/login"
+              onClick={() => setDrawerOpen(false)}
+              sx={{ borderRadius: 3, backgroundColor: '#135788' }}>
+              Login
+            </Button>
+          )}
         </Box>
       </Drawer>
     </>

@@ -1,119 +1,53 @@
 import { Link } from 'react-router-dom';
-import { Box, Container, Typography, Divider, useTheme } from '@mui/material';
+import { Box, Container, Typography, Divider } from '@mui/material';
 import {
-  ShoppingBasket,
-  Email,
-  Phone,
-  LocationOn,
-  Instagram,
-  Facebook,
-  Twitter
+  ShoppingBasket, Email, Phone, LocationOn, Instagram, Facebook, Twitter
 } from '@mui/icons-material';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const theme = useTheme();
+
+  const linkStyle = {
+    color: 'rgba(255,255,255,0.5)', fontSize: '0.8125rem',
+    textDecoration: 'none', transition: 'color 0.2s ease',
+    display: 'block', py: 0.5
+  };
 
   return (
-    <Box
-      component="footer"
-      sx={{
-        backgroundColor: '#0A1628',
-        color: 'white',
-        pt: { xs: 8, md: 10 },
-        pb: 4,
-        mt: 'auto',
-        position: 'relative',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 4,
-          background: 'linear-gradient(90deg, #0F5C8A 0%, #1E88E5 50%, #0F5C8A 100%)'
-        }
-      }}
-    >
+    <Box component="footer" sx={{ backgroundColor: '#0d1b2e', color: '#fff', pt: { xs: 6, md: 8 }, pb: 4 }}>
       <Container maxWidth="lg">
-        {/* Main Footer Content */}
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: {
-              xs: '1fr',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(4, 1fr)'
-            },
-            gap: { xs: 5, md: 6 }
-          }}
-        >
-          {/* Brand Column */}
-          <Box sx={{ gridColumn: { md: 'span 1' } }}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1.5,
-                mb: 2.5
-              }}
-            >
-              <Box
-                sx={{
-                  backgroundColor: 'primary.main',
-                  borderRadius: 2,
-                  p: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <ShoppingBasket sx={{ fontSize: 22, color: 'white' }} />
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr 1fr', md: '2fr 1fr 1fr 1.5fr' },
+          gap: { xs: 4, md: 6 }
+        }}>
+          {/* Brand */}
+          <Box sx={{ gridColumn: { xs: 'span 2', md: 'span 1' } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Box sx={{
+                backgroundColor: '#cf7c1e', borderRadius: '10px', width: 36, height: 36,
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <ShoppingBasket sx={{ fontSize: 20, color: '#fff' }} />
               </Box>
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 800,
-                  fontSize: '1.4rem',
-                  letterSpacing: '-0.02em'
-                }}
-              >
-                Machhenarayan
-              </Typography>
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: '1.125rem', lineHeight: 1.1 }}>Machhenarayan</Typography>
+                <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>mart</Typography>
+              </Box>
             </Box>
-            <Typography
-              variant="body2"
-              sx={{
-                opacity: 0.7,
-                lineHeight: 1.6,
-                mb: 3,
-                fontSize: '0.95rem'
-              }}
-            >
-              Your trusted destination for fresh groceries and quality essentials delivered to your doorstep.
+            <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8125rem', lineHeight: 1.6, mb: 3 }}>
+              Your trusted destination for fresh groceries and quality essentials.
             </Typography>
-            {/* Social Icons */}
-            <Box sx={{ display: 'flex', gap: 1.5 }}>
-              {[Instagram, Facebook, Twitter].map((Icon, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      backgroundColor: 'primary.main',
-                      transform: 'translateY(-2px)'
-                    }
-                  }}
-                >
-                  <Icon sx={{ fontSize: 18 }} />
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {[Instagram, Facebook, Twitter].map((Icon, i) => (
+                <Box key={i} sx={{
+                  width: 34, height: 34, borderRadius: '50%',
+                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.2s ease',
+                  '&:hover': { backgroundColor: '#cf7c1e' }
+                }}>
+                  <Icon sx={{ fontSize: 16 }} />
                 </Box>
               ))}
             </Box>
@@ -121,237 +55,57 @@ const Footer = () => {
 
           {/* Quick Links */}
           <Box>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontWeight: 700,
-                mb: 2.5,
-                fontSize: '1rem',
-                letterSpacing: '0.02em'
-              }}
-            >
-              Quick Links
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.2 }}>
-              <Link
-                to="/"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                Home
-              </Link>
-              <Link
-                to="/categories"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                Shop
-              </Link>
-              <Link
-                to="/about"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                About Us
-              </Link>
-              <Link
-                to="/contact"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                Contact
-              </Link>
-            </Box>
+            <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', mb: 2, color: 'rgba(255,255,255,0.8)' }}>Quick Links</Typography>
+            {[
+              { label: 'Home', path: '/' }, { label: 'Catalogue', path: '/categories' },
+              { label: 'About Us', path: '/about' }, { label: 'Contact', path: '/contact' }
+            ].map((l) => (
+              <Typography key={l.path} component={Link} to={l.path}
+                sx={{ ...linkStyle, '&:hover': { color: '#cf7c1e' } }}>
+                {l.label}
+              </Typography>
+            ))}
           </Box>
 
-          {/* Customer Service */}
+          {/* Support */}
           <Box>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontWeight: 700,
-                mb: 2.5,
-                fontSize: '1rem',
-                letterSpacing: '0.02em'
-              }}
-            >
-              Customer Service
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.2 }}>
-              <Link
-                to="/faq"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                FAQs
-              </Link>
-              <Link
-                to="/return-policy"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                Returns
-              </Link>
-              <Link
-                to="/terms"
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.95rem',
-                  transition: 'color 0.2s ease',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                Terms of Service
-              </Link>
-            </Box>
+            <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', mb: 2, color: 'rgba(255,255,255,0.8)' }}>Support</Typography>
+            {[
+              { label: 'FAQs', path: '/faq' }, { label: 'Return Policy', path: '/return-policy' },
+              { label: 'Terms', path: '/terms' }
+            ].map((l) => (
+              <Typography key={l.path} component={Link} to={l.path}
+                sx={{ ...linkStyle, '&:hover': { color: '#cf7c1e' } }}>
+                {l.label}
+              </Typography>
+            ))}
           </Box>
 
-          {/* Contact Info */}
+          {/* Contact */}
           <Box>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontWeight: 700,
-                mb: 2.5,
-                fontSize: '1rem',
-                letterSpacing: '0.02em'
-              }}
-            >
-              Get in Touch
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <LocationOn sx={{ fontSize: 18, opacity: 0.7 }} />
-                <Typography
-                  variant="body2"
-                  sx={{
-                    opacity: 0.8,
-                    fontSize: '0.95rem',
-                    lineHeight: 1.4
-                  }}
-                >
-                  Machhenarayan Market, District
-                </Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', mb: 2, color: 'rgba(255,255,255,0.8)' }}>Contact</Typography>
+            {[
+              { icon: <LocationOn sx={{ fontSize: 16 }} />, text: 'Machhenarayan Market' },
+              { icon: <Phone sx={{ fontSize: 16 }} />, text: '+977 9800000000' },
+              { icon: <Email sx={{ fontSize: 16 }} />, text: 'info@machhenarayanmart.com' }
+            ].map((item, i) => (
+              <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                <Box sx={{ color: '#cf7c1e' }}>{item.icon}</Box>
+                <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8125rem' }}>{item.text}</Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Phone sx={{ fontSize: 18, opacity: 0.7 }} />
-                <Typography
-                  variant="body2"
-                  sx={{
-                    opacity: 0.8,
-                    fontSize: '0.95rem'
-                  }}
-                >
-                  +91 1234567890
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Email sx={{ fontSize: 18, opacity: 0.7 }} />
-                <Typography
-                  variant="body2"
-                  sx={{
-                    opacity: 0.8,
-                    fontSize: '0.95rem'
-                  }}
-                >
-                  info@machhenarayanmart.com
-                </Typography>
-              </Box>
-            </Box>
+            ))}
           </Box>
         </Box>
 
-        {/* Bottom Bar */}
-        <Divider
-          sx={{
-            my: 5,
-            borderColor: 'rgba(255,255,255,0.08)'
-          }}
-        />
+        <Divider sx={{ borderColor: 'rgba(255,255,255,0.06)', my: 4 }} />
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 2
-          }}
-        >
-          <Typography
-            variant="body2"
-            sx={{
-              opacity: 0.5,
-              fontSize: '0.85rem'
-            }}
-          >
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
+          <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>
             © {currentYear} Machhenarayan Mart. All rights reserved.
           </Typography>
           <Box sx={{ display: 'flex', gap: 3 }}>
-            <Link
-              to="/terms"
-              style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: '0.85rem',
-                textDecoration: 'none',
-                transition: 'opacity 0.2s ease'
-              }}
-              onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
-              onMouseOut={(e) => e.currentTarget.style.opacity = '0.5'}
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              to="/return-policy"
-              style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: '0.85rem',
-                textDecoration: 'none',
-                transition: 'opacity 0.2s ease'
-              }}
-              onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
-              onMouseOut={(e) => e.currentTarget.style.opacity = '0.5'}
-            >
-              Terms
-            </Link>
+            <Typography component={Link} to="/terms" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', '&:hover': { color: 'rgba(255,255,255,0.6)' } }}>Privacy</Typography>
+            <Typography component={Link} to="/return-policy" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', '&:hover': { color: 'rgba(255,255,255,0.6)' } }}>Terms</Typography>
           </Box>
         </Box>
       </Container>
