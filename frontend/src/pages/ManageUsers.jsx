@@ -1,20 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
-  Box,
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  Paper,
-  IconButton,
-  Chip
+  Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Button, Chip
 } from '@mui/material';
-import { ArrowUpward, ArrowDownward, Delete } from '@mui/icons-material';
+import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { userAPI } from '../services/api';
 
@@ -22,9 +12,7 @@ const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  useEffect(() => { fetchUsers(); }, []);
 
   const fetchUsers = async () => {
     try {
@@ -41,63 +29,53 @@ const ManageUsers = () => {
   const handlePromote = async (id) => {
     try {
       await userAPI.promoteUser(id);
-      toast.success('User role updated successfully!');
+      toast.success('User role updated');
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Operation failed');
+      toast.error('Operation failed');
     }
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
-        Manage Users
-      </Typography>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h3">Manage Users</Typography>
+        </Box>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Role</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableHead>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user._id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <Chip
-                    label={user.role}
-                    color={user.role === 'admin' ? 'primary' : 'default'}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell>
-                  {user.isActive ? (
-                    <Chip label="Active" color="success" size="small" />
-                  ) : (
-                    <Chip label="Inactive" color="error" size="small" />
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    size="small"
-                    startIcon={
-                      user.role === 'admin' ? <ArrowDownward /> : <ArrowUpward />
-                    }
-                    onClick={() => handlePromote(user._id)}
-                  >
-                    {user.role === 'admin' ? 'Demote' : 'Promote'}
-                  </Button>
-                </TableCell>
+        <TableContainer sx={{ borderRadius: '16px', border: '1px solid #f1f5f9', backgroundColor: '#fff', boxShadow: 'none' }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: '#f8fafc' }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 600 }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Role</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user._id} sx={{ '&:hover': { backgroundColor: '#fdfdfd' }, transition: 'all 0.2s' }}>
+                  <TableCell sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{user.name}</TableCell>
+                  <TableCell sx={{ color: '#64748b' }}>{user.email}</TableCell>
+                  <TableCell>
+                    <Chip label={user.role} color={user.role === 'admin' ? 'primary' : 'default'} size="small" sx={{ borderRadius: '8px', fontWeight: 600, textTransform: 'capitalize' }} />
+                  </TableCell>
+                  <TableCell>
+                    <Chip label={user.isActive ? 'Active' : 'Inactive'} color={user.isActive ? 'success' : 'error'} size="small" sx={{ borderRadius: '8px', fontWeight: 600 }} />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button size="small" variant="outlined" startIcon={user.role === 'admin' ? <ArrowDownward /> : <ArrowUpward />} onClick={() => handlePromote(user._id)} sx={{ borderRadius: '24px' }}>
+                      {user.role === 'admin' ? 'Demote' : 'Promote'}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </motion.div>
     </Container>
   );
 };

@@ -61,4 +61,17 @@ export const bannerAPI = {
   deleteBanner: (id) => api.delete(`/banners/${id}`)
 };
 
+export const orderAPI = {
+  createOrder: (data) => api.post('/orders', data),
+  getMyOrders: () => api.get('/orders/myorders'),
+  getAllOrders: () => api.get('/orders'),
+  updateOrderStatus: (id, status) => api.put(`/orders/${id}/status`, { status })
+};
+
+export const wishlistAPI = {
+  getWishlist: () => api.get('/wishlist'),
+  addToWishlist: (productId) => api.post(`/wishlist/${productId}`),
+  removeFromWishlist: (productId) => api.delete(`/wishlist/${productId}`)
+};
+
 export default api;

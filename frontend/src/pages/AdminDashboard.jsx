@@ -1,49 +1,33 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  Button
-} from '@mui/material';
-import {
-  ShoppingBasket,
-  Category,
-  People,
-  Article
-} from '@mui/icons-material';
+import { Box, Container, Typography, Grid, Button } from '@mui/material';
+import { ShoppingBasket, Category, People, Article, LocalShipping } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import { productAPI, categoryAPI, userAPI, bannerAPI } from '../services/api';
+import { productAPI, categoryAPI, userAPI, bannerAPI, orderAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState({
-    products: 0,
-    categories: 0,
-    users: 0,
-    banners: 0
-  });
+  const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, banners: 0, orders: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const [productsRes, categoriesRes, usersRes, bannersRes] = await Promise.all([
+        const [productsRes, categoriesRes, usersRes, bannersRes, ordersRes] = await Promise.all([
           productAPI.getProducts({ limit: 1 }),
           categoryAPI.getCategories(),
           userAPI.getUsers(),
-          bannerAPI.getBanners()
+          bannerAPI.getBanners(),
+          orderAPI.getAllOrders()
         ]);
         setStats({
           products: productsRes.data.total || 0,
-          categories: categoriesRes.data.count || 0,
-          users: usersRes.data.count || 0,
-          banners: bannersRes.data.count || 0
+          categories: categoriesRes.data.count || categoriesRes.data.categories?.length || 0,
+          users: usersRes.data.count || usersRes.data.users?.length || 0,
+          banners: bannersRes.data.count || bannersRes.data.banners?.length || 0,
+          orders: ordersRes.data.orders?.length || 0
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -51,117 +35,63 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-
     fetchStats();
   }, []);
 
   const statCards = [
-    { title: 'Products', value: stats.products, icon: <ShoppingBasket />, link: '/admin/products', color: '#4CAF50' },
-    { title: 'Categories', value: stats.categories, icon: <Category />, link: '/admin/categories', color: '#2196F3' },
-    { title: 'Users', value: stats.users, icon: <People />, link: '/admin/users', color: '#FF9800' },
-    { title: 'Banners', value: stats.banners, icon: <Article />, link: '/admin/banners', color: '#9C27B0' }
+    { title: 'Total Orders', value: stats.orders, icon: <LocalShipping sx={{ fontSize: 32 }} />, link: '/admin/orders', color: '#cf7c1e', bg: 'rgba(207,124,30,0.1)' },
+    { title: 'Products', value: stats.products, icon: <ShoppingBasket sx={{ fontSize: 32 }} />, link: '/admin/products', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
+    { title: 'Categories', value: stats.categories, icon: <Category sx={{ fontSize: 32 }} />, link: '/admin/categories', color: '#135788', bg: 'rgba(19,87,136,0.1)' },
+    { title: 'Users', value: stats.users, icon: <People sx={{ fontSize: 32 }} />, link: '/admin/users', color: '#64748b', bg: '#f1f5f9' },
+    { title: 'Banners', value: stats.banners, icon: <Article sx={{ fontSize: 32 }} />, link: '/admin/banners', color: '#64748b', bg: '#f1f5f9' }
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
-          Admin Dashboard
-        </Typography>
-
-        <Typography variant="body1" sx={{ mb: 3 }}>
-          Welcome, {user?.name}!
-        </Typography>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <Box sx={{ mb: 5, p: { xs: 3, md: 4 }, borderRadius: '20px', backgroundColor: '#135788', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+          <Box sx={{ position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: '50%', backgroundColor: 'rgba(207,124,30,0.15)' }} />
+          <Typography variant="h2" sx={{ color: '#fff', mb: 1, position: 'relative', zIndex: 1 }}>
+            Admin Dashboard
+          </Typography>
+          <Typography sx={{ color: 'rgba(255,255,255,0.8)', position: 'relative', zIndex: 1 }}>
+            Welcome back, {user?.name}! Here's what's happening today.
+          </Typography>
+        </Box>
 
         <Grid container spacing={3}>
           {statCards.map((stat, index) => (
-            <Grid item xs={6} md={3} key={index}>
-              <Card
-                component={Link}
-                to={stat.link}
-                sx={{
-                  textDecoration: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Box
-                    sx={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: '50%',
-                      bgcolor: stat.color,
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      mx: 'auto',
-                      mb: 2
-                    }}
-                  >
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Box component={Link} to={stat.link} sx={{
+                display: 'block', textDecoration: 'none', p: 3, borderRadius: '16px', border: '1px solid #f1f5f9',
+                backgroundColor: '#fff', transition: 'all 0.3s ease',
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }
+              }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                  <Box sx={{ width: 64, height: 64, borderRadius: '16px', backgroundColor: stat.bg, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {stat.icon}
                   </Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant="h2" sx={{ fontWeight: 800, color: '#1a1a2e' }}>
                     {loading ? '...' : stat.value}
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {stat.title}
-                  </Typography>
-                </CardContent>
-              </Card>
+                </Box>
+                <Typography sx={{ color: '#64748b', fontWeight: 600 }}>{stat.title}</Typography>
+              </Box>
             </Grid>
           ))}
         </Grid>
 
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
-            Quick Actions
-          </Typography>
+        <Box sx={{ mt: 6, p: { xs: 3, md: 4 }, borderRadius: '16px', backgroundColor: '#f8fafc' }}>
+          <Typography variant="h4" sx={{ mb: 3 }}>Quick Actions</Typography>
           <Grid container spacing={2}>
-            <Grid item xs={6} sm={3}>
-              <Button
-                variant="contained"
-                fullWidth
-                component={Link}
-                to="/admin/products"
-              >
-                Manage Products
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <Button
-                variant="contained"
-                fullWidth
-                component={Link}
-                to="/admin/categories"
-              >
-                Manage Categories
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <Button
-                variant="contained"
-                fullWidth
-                component={Link}
-                to="/admin/banners"
-              >
-                Manage Banners
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <Button
-                variant="contained"
-                fullWidth
-                component={Link}
-                to="/admin/users"
-              >
-                Manage Users
-              </Button>
-            </Grid>
+            {statCards.map((stat, index) => (
+              <Grid item xs={12} sm={4} md={2.4} key={index}>
+                <Button variant="contained" fullWidth component={Link} to={stat.link}
+                  sx={{ borderRadius: '24px', py: 1.5, '&:hover': { boxShadow: '0 4px 16px rgba(19,87,136,0.3)' } }}>
+                  Manage {stat.title.replace('Total ', '')}
+                </Button>
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </motion.div>

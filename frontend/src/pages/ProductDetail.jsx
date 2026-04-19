@@ -10,6 +10,7 @@ import {
 import { motion } from 'framer-motion';
 import { productAPI } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const ProductDetail = () => {
@@ -18,8 +19,10 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const { addToCart } = useCart();
+  const { wishlistIds, toggleWishlist } = useAuth();
+  
+  const isWishlisted = product ? wishlistIds.includes(product._id) : false;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,6 +44,10 @@ const ProductDetail = () => {
     toast.success(`Added to cart`, {
       style: { borderRadius: '12px', background: '#135788', color: '#fff', fontSize: '13px' }
     });
+  };
+
+  const handleWishlist = () => {
+    toggleWishlist(product);
   };
 
   if (loading) {
@@ -96,9 +103,10 @@ const ProductDetail = () => {
                   color: '#fff', fontWeight: 700, fontSize: '0.75rem', px: 1.5, py: 0.5, borderRadius: '10px'
                 }}>-{discountPercent}%</Box>
               )}
-              <IconButton onClick={() => setIsWishlisted(!isWishlisted)} sx={{
-                position: 'absolute', top: 16, right: 16, backgroundColor: 'rgba(255,255,255,0.9)',
-                width: 42, height: 42, '&:hover': { backgroundColor: '#fff' }
+              <IconButton onClick={handleWishlist} sx={{
+                position: 'absolute', top: 16, right: 16, backgroundColor: isWishlisted ? '#fff' : 'rgba(255,255,255,0.9)',
+                color: isWishlisted ? '#D32F2F' : 'inherit',
+                width: 42, height: 42, '&:hover': { backgroundColor: '#fff', color: '#D32F2F' }
               }}>
                 {isWishlisted ? <Favorite sx={{ color: '#D32F2F' }} /> : <FavoriteBorder />}
               </IconButton>

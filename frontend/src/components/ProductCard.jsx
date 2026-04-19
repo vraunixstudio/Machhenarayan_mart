@@ -10,7 +10,9 @@ const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
   const { addToCart } = useCart();
+  const { wishlistIds, toggleWishlist } = useAuth();
 
+  const isWished = wishlistIds?.includes(product._id);
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -23,6 +25,12 @@ const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
     toast.success(`Added to cart`, {
       style: { borderRadius: '12px', background: '#135788', color: '#fff', fontSize: '13px', padding: '8px 16px' }
     });
+  };
+
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product);
   };
 
   return (
@@ -73,13 +81,14 @@ const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
 
           {/* Wishlist */}
           <IconButton
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            onClick={handleWishlist}
             size="small"
             sx={{
               position: 'absolute', top: 10, right: 10,
-              backgroundColor: 'rgba(255,255,255,0.9)',
+              backgroundColor: isWished ? '#fff' : 'rgba(255,255,255,0.9)',
+              color: isWished ? '#D32F2F' : 'inherit',
               width: 32, height: 32,
-              opacity: hovered ? 1 : 0,
+              opacity: (hovered || isWished) ? 1 : 0,
               transition: 'opacity 0.2s ease',
               '&:hover': { backgroundColor: '#fff', color: '#D32F2F' }
             }}

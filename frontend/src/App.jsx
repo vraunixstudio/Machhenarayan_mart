@@ -23,6 +23,7 @@ import ManageProducts from './pages/ManageProducts';
 import ManageCategories from './pages/ManageCategories';
 import ManageBanners from './pages/ManageBanners';
 import ManageUsers from './pages/ManageUsers';
+import ManageOrders from './pages/ManageOrders';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
 
@@ -107,6 +108,14 @@ function App() {
           element={
             <AdminRoute>
               <ManageUsers />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="admin/orders"
+          element={
+            <AdminRoute>
+              <ManageOrders />
             </AdminRoute>
           }
         />
