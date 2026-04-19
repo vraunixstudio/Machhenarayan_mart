@@ -12,6 +12,8 @@ const bannerRoutes = require('./routes/banners');
 const uploadRoutes = require('./routes/upload');
 const orderRoutes = require('./routes/orders');
 const wishlistRoutes = require('./routes/wishlist');
+const reviewRoutes = require('./routes/reviews');
+const messageRoutes = require('./routes/messages');
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use('/api/banners', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.get('/api/health', (req, res) => {
   const dbState = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
