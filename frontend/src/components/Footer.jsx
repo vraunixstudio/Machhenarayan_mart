@@ -94,7 +94,7 @@ const Footer = () => {
             <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', mb: 2, color: 'rgba(255,255,255,0.8)' }}>Contact</Typography>
             {[
               { icon: <LocationOn sx={{ fontSize: 16 }} />, text: 'Machhenarayan Market' },
-              { icon: <Phone sx={{ fontSize: 16 }} />, text: '+977 9800000000' },
+              { icon: <Phone sx={{ fontSize: 16 }} />, text: '+977 982-3207452' },
               { icon: <Email sx={{ fontSize: 16 }} />, text: 'info@machhenarayanmart.com' }
             ].map((item, i) => (
               <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
