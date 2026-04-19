@@ -52,29 +52,66 @@ const Home = () => {
     if (banners.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentBanner((prev) => (prev + 1) % banners.length);
-    }, 5000);
+    }, 8000); // Slower interval for slow motion feel
     return () => clearInterval(interval);
   }, [banners.length]);
 
   const handlePrevBanner = () => setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
   const handleNextBanner = () => setCurrentBanner((prev) => (prev + 1) % banners.length);
 
-  // Animation variants for Card Shuffle effect
-  const shuffleVariants = {
-    initial: { x: 300, opacity: 0, scale: 0.8, rotate: 10 },
+  // PREMIUM FLOATING SWOOP ANIMATION (Slow-Motion)
+  const swoopVariants = {
+    initial: { 
+      opacity: 0, 
+      x: 350, 
+      y: -350, 
+      scale: 0.3, 
+      rotate: 45,
+      filter: 'blur(15px)'
+    },
     animate: { 
-      x: 0, opacity: 1, scale: 1, rotate: 0,
-      transition: { type: "spring", stiffness: 260, damping: 20 }
+      opacity: 1, 
+      x: 0, 
+      y: 0, 
+      scale: 1, 
+      rotate: 0,
+      filter: 'blur(0px)',
+      transition: { 
+        duration: 3.5, // SUPER SLOW MOTION
+        ease: [0.16, 1, 0.3, 1], // Smooth professional curve
+        opacity: { duration: 2 }
+      }
     },
     exit: { 
-      x: -300, opacity: 0, scale: 0.8, rotate: -10,
-      transition: { duration: 0.4 }
+      opacity: 0, 
+      x: -150, 
+      y: 150, 
+      scale: 0.8, 
+      rotate: -20,
+      filter: 'blur(10px)',
+      transition: { 
+        duration: 2.5,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  // Secondary Floating Animation (Once settled)
+  const idleVariants = {
+    animate: {
+      y: [0, -25, 0],
+      rotate: [0, 2, -2, 0],
+      transition: {
+        duration: 6,
+        repeat: Infinity,
+        ease: "linear"
+      }
     }
   };
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#fff' }}>
-      {/* HERO SECTION */}
+      {/* HERO SECTION - CLEAN MINIMALIST */}
       <Box sx={{ 
         position: 'relative', overflow: 'hidden', 
         pt: { xs: 4, md: 10 }, pb: { xs: 8, md: 12 }, 
@@ -82,9 +119,9 @@ const Home = () => {
       }}>
         <Container maxWidth="lg">
           <Grid container spacing={6} alignItems="center">
-            {/* Left Column */}
+            {/* Left Column - Content */}
             <Grid item xs={12} md={6}>
-              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.5, ease: "easeOut" }}>
                 <Typography variant="h1" sx={{ fontWeight: 900, fontSize: { xs: '2.5rem', md: '4rem' }, color: '#1a1a2e', lineHeight: 1.1, mb: 3 }}>
                   Freshness and <Box component="span" sx={{ color: '#135788' }}>Quality</Box> right at your side
                 </Typography>
@@ -96,11 +133,11 @@ const Home = () => {
                 </Button>
                 
                 <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-                  <Box sx={{ p: 2.5, borderRadius: '20px', backgroundColor: '#fff', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 2, flex: '1 1 200px' }}>
+                  <Box sx={{ p: 2.5, borderRadius: '20px', display: 'flex', alignItems: 'center', gap: 2, flex: '1 1 200px' }}>
                     <Box sx={{ width: 44, height: 44, borderRadius: '12px', backgroundColor: 'rgba(207,124,30,0.1)', color: '#cf7c1e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><LocalShipping /></Box>
                     <Box><Typography sx={{ fontWeight: 800, fontSize: '0.875rem' }}>Fast Delivery</Typography><Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Across the community</Typography></Box>
                   </Box>
-                  <Box sx={{ p: 2.5, borderRadius: '20px', backgroundColor: '#fff', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 2, flex: '1 1 200px' }}>
+                  <Box sx={{ p: 2.5, borderRadius: '20px', display: 'flex', alignItems: 'center', gap: 2, flex: '1 1 200px' }}>
                     <Box sx={{ width: 44, height: 44, borderRadius: '12px', backgroundColor: 'rgba(19,87,136,0.1)', color: '#135788', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Verified /></Box>
                     <Box><Typography sx={{ fontWeight: 800, fontSize: '0.875rem' }}>100% Quality</Typography><Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>Curated with care</Typography></Box>
                   </Box>
@@ -108,38 +145,58 @@ const Home = () => {
               </motion.div>
             </Grid>
 
-            {/* Right Column - Slider */}
-            <Grid item xs={12} md={6}>
-              <Box sx={{ position: 'relative', height: { xs: 350, md: 550 }, borderRadius: '40px', backgroundColor: '#fdf2e4', padding: { xs: 1.5, md: 2.5 }, overflow: 'visible' }}>
-                <Box sx={{ position: 'absolute', top: '10%', right: '-5%', width: '100%', height: '100%', backgroundColor: 'rgba(207,124,30,0.1)', borderRadius: '40px', zIndex: 0 }} />
-                <Box sx={{ position: 'relative', zIndex: 1, height: '100%', borderRadius: '32px', overflow: 'hidden', backgroundColor: '#fff', boxShadow: '0 20px 60px rgba(13,27,46,0.1)' }}>
+            {/* Right Column - FLOATING PNG SWOOP */}
+            <Grid item xs={12} md={6} sx={{ position: 'relative', height: { xs: 400, md: 600 }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {/* Decorative Soft Background Orb */}
+                <Box sx={{ position: 'absolute', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(207,124,30,0.05) 0%, rgba(19,87,136,0.05) 100%)', filter: 'blur(100px)', zIndex: 0 }} />
+                
+                <AnimatePresence mode="wait">
                   {loading ? (
-                    <Skeleton variant="rectangular" height="100%" />
+                    <Box key="skeleton" sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Skeleton variant="circular" width={300} height={300} />
+                    </Box>
                   ) : banners.length > 0 ? (
-                    <Box sx={{ height: '100%', position: 'relative' }}>
-                      <AnimatePresence mode="wait">
-                        <Box key={currentBanner} sx={{ position: 'absolute', inset: 0 }}>
-                          <motion.div variants={shuffleVariants} initial="initial" animate="animate" exit="exit" style={{ height: '100%' }}>
-                             {banners[currentBanner]?.image && banners[currentBanner].image !== "" && (
-                                 <img src={banners[currentBanner].image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; }} />
-                             )}
-                          </motion.div>
-                        </Box>
-                      </AnimatePresence>
-                      {banners.length > 1 && (
-                        <Box sx={{ position: 'absolute', bottom: 30, right: 30, display: 'flex', gap: 1, zIndex: 30 }}>
-                          <IconButton onClick={handlePrevBanner} sx={{ backgroundColor: 'rgba(255,255,255,0.9)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', '&:hover': { backgroundColor: '#fff' } }}><ChevronLeft /></IconButton>
-                          <IconButton onClick={handleNextBanner} sx={{ backgroundColor: 'rgba(255,255,255,0.9)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', '&:hover': { backgroundColor: '#fff' } }}><ChevronRight /></IconButton>
-                        </Box>
-                      )}
-                    </Box>
+                    <motion.div
+                      key={currentBanner}
+                      variants={swoopVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      style={{ 
+                        position: 'relative', zIndex: 2, width: '100%', height: '100%', 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center' 
+                      }}
+                    >
+                      {/* Idle Floating motion wrapper */}
+                      <motion.div variants={idleVariants} animate="animate" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box
+                          component="img"
+                          src={banners[currentBanner]?.image}
+                          alt=""
+                          sx={{ 
+                            maxWidth: '100%', maxHeight: '100%', objectFit: 'contain',
+                            filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.12)) drop-shadow(0 10px 20px rgba(19,87,136,0.08))'
+                          }}
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                      </motion.div>
+                    </motion.div>
                   ) : (
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#135788', color: '#fff' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 800 }}>Premium Taste</Typography>
-                    </Box>
+                    <Typography variant="h3" sx={{ fontWeight: 800, color: '#e2e8f0' }}>Premium Taste</Typography>
                   )}
-                </Box>
-              </Box>
+                </AnimatePresence>
+
+                {/* SLIDER CONTROLS - FLOATING MINIMALIST */}
+                {banners.length > 1 && (
+                  <Box sx={{ position: 'absolute', bottom: { xs: -20, md: 0 }, right: { xs: '50%', md: 0 }, transform: { xs: 'translateX(50%)', md: 'none' }, display: 'flex', gap: 2, zIndex: 10 }}>
+                    <IconButton onClick={handlePrevBanner} sx={{ backgroundColor: 'rgba(255,255,255,0.8)', border: '1px solid #f1f5f9', backdropFilter: 'blur(8px)', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', '&:hover': { backgroundColor: '#fff', transform: 'scale(1.1)' } }}>
+                      <ChevronLeft />
+                    </IconButton>
+                    <IconButton onClick={handleNextBanner} sx={{ backgroundColor: 'rgba(255,255,255,0.8)', border: '1px solid #f1f5f9', backdropFilter: 'blur(8px)', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', '&:hover': { backgroundColor: '#fff', transform: 'scale(1.1)' } }}>
+                      <ChevronRight />
+                    </IconButton>
+                  </Box>
+                )}
             </Grid>
           </Grid>
         </Container>
