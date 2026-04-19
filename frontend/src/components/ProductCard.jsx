@@ -125,9 +125,9 @@ const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
             </Box>
           )}
 
-          <CardMedia
+          <Box
             component="img"
-            image={product.images?.[0] || 'https://via.placeholder.com/400'}
+            src={product.images?.[0] || 'https://via.placeholder.com/400'}
             alt={product.name}
             sx={{
               position: 'absolute',
@@ -138,7 +138,9 @@ const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
               objectFit: 'cover',
               opacity: imageLoaded ? 1 : 0,
               transform: isHovered ? 'scale(1.08)' : 'scale(1)',
-              transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease'
+              transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+              userSelect: 'none',
+              WebkitUserDrag: 'none'
             }}
             onLoad={() => setImageLoaded(true)}
           />

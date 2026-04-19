@@ -17,7 +17,8 @@ import {
   ListItemIcon,
   useMediaQuery,
   useTheme,
-  Badge
+  Badge,
+  Divider
 } from '@mui/material';
 import {
   Menu as MenuIcon,
