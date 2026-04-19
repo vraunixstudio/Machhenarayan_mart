@@ -29,6 +29,7 @@ const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searching, setSearching] = useState(false);
 
   const fetchRecommendations = async (q) => {
     if (q.length < 2) {
@@ -37,11 +38,14 @@ const Header = () => {
       return;
     }
     try {
+      setSearching(true);
+      setShowDropdown(true);
       const res = await productAPI.getProducts({ search: q, limit: 5 });
       setRecommendations(res.data.products || []);
-      setShowDropdown(true);
     } catch (e) {
       console.error(e);
+    } finally {
+      setSearching(false);
     }
   };
 

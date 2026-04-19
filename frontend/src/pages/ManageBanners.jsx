@@ -162,7 +162,7 @@ const ManageBanners = () => {
                   <img src={formData.image} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <PhotoCamera sx={{ fontSize: 48, color: '#e2e8f0' }} />
+                    <Add sx={{ fontSize: 48, color: '#e2e8f0' }} />
                   </Box>
                 )}
                 {uploading && (
@@ -171,7 +171,7 @@ const ManageBanners = () => {
                   </Box>
                 )}
               </Box>
-              <Button component="label" variant="outlined" startIcon={<PhotoCamera />} sx={{ borderRadius: '20px' }}>
+              <Button component="label" variant="outlined" startIcon={<Add />} sx={{ borderRadius: '20px' }}>
                 Upload Banner Image
                 <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
               </Button>

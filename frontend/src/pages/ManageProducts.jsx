@@ -234,7 +234,7 @@ const ManageProducts = () => {
                     </Box>
                   ))}
                   <Button component="label" sx={{ width: 80, height: 80, border: '2px dashed #e2e8f0', borderRadius: '8px', display: 'flex', flexDirection: 'column', color: '#94a3b8' }}>
-                    {uploading ? <CircularProgress size={20} /> : <PhotoCamera />}
+                    {uploading ? <CircularProgress size={20} /> : <Add />}
                     <Typography variant="caption" sx={{ mt: 0.5 }}>Add</Typography>
                     <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} />
                   </Button>
