@@ -1,11 +1,38 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Button, IconButton, Dialog, DialogTitle, DialogContent,
-  DialogActions, TextField, MenuItem, Select, FormControl, InputLabel,
-  Switch, FormControlLabel, Chip, Grid, CircularProgress
-} from '@mui/material';
-import { Add, Edit, Delete, PhotoCamera, Close } from '@mui/icons-material';
+// Stable Default Imports for MUI
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+
+// Icons
+import Add from '@mui/icons-material/Add';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import Close from '@mui/icons-material/Close';
+
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { productAPI, categoryAPI, uploadAPI } from '../services/api';
@@ -54,10 +81,7 @@ const ManageProducts = () => {
       });
     } else {
       setEditingProduct(null);
-      setFormData({
-        name: '', description: '', price: '', originalPrice: '', category: '',
-        inStock: true, stockQuantity: 0, isFeatured: false, isActive: true, images: []
-      });
+      setFormData({ name: '', description: '', price: '', originalPrice: '', category: '', inStock: true, stockQuantity: 0, isFeatured: false, isActive: true, images: [] });
     }
     setOpen(true);
   };
@@ -102,10 +126,7 @@ const ManageProducts = () => {
   };
 
   const removeImage = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }));
+    setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
   };
 
   const handleSubmit = async () => {
@@ -158,29 +179,22 @@ const ManageProducts = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {products.map((product) => (
-                <TableRow key={product._id} sx={{ '&:hover': { backgroundColor: '#fdfdfd' }, transition: 'all 0.2s' }}>
+              {products.map((p) => (
+                <TableRow key={p._id} sx={{ '&:hover': { backgroundColor: '#fdfdfd' }, transition: 'all 0.2s' }}>
                   <TableCell>
-                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{product.name}</Typography>
-                    {product.isFeatured && <Chip label="Featured" size="small" sx={{ height: 20, fontSize: '0.65rem', backgroundColor: 'rgba(207,124,30,0.1)', color: '#cf7c1e', fontWeight: 700, mt: 0.5 }} />}
+                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{p.name}</Typography>
+                    {p.isFeatured && <Chip label="Featured" size="small" sx={{ height: 20, fontSize: '0.65rem', backgroundColor: 'rgba(207,124,30,0.1)', color: '#cf7c1e', fontWeight: 700, mt: 0.5 }} />}
                   </TableCell>
-                  <TableCell><Chip label={product.category?.name || 'None'} size="small" sx={{ borderRadius: '8px' }} /></TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: '#135788' }}>
-                    <Box>
-                      ₹{product.price}
-                      {product.originalPrice > product.price && (
-                        <Chip label="SALE" size="small" color="error" sx={{ height: 16, fontSize: '0.6rem', ml: 1, verticalAlign: 'middle' }} />
-                      )}
-                    </Box>
-                  </TableCell>
+                  <TableCell><Chip label={p.category?.name || 'None'} size="small" sx={{ borderRadius: '8px' }} /></TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#135788' }}>₹{p.price}</TableCell>
                   <TableCell>
-                    <Chip label={product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : 'Out of stock'} size="small" 
-                      color={product.stockQuantity > 0 ? (product.stockQuantity < 10 ? 'warning' : 'success') : 'error'} 
+                    <Chip label={p.stockQuantity > 0 ? `${p.stockQuantity} in stock` : 'Out of stock'} size="small" 
+                      color={p.stockQuantity > 0 ? (p.stockQuantity < 10 ? 'warning' : 'success') : 'error'} 
                       sx={{ borderRadius: '8px', fontWeight: 600 }} />
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton size="small" onClick={() => handleOpen(product)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}><Edit fontSize="small" /></IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(product._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
+                    <IconButton size="small" onClick={() => handleOpen(p)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}><Edit fontSize="small" /></IconButton>
+                    <IconButton size="small" onClick={() => handleDelete(p._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -196,45 +210,31 @@ const ManageProducts = () => {
                 <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleChange} margin="normal" size="small" required />
                 <TextField fullWidth label="Description" name="description" value={formData.description} onChange={handleChange} margin="normal" size="small" multiline rows={4} />
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField fullWidth label="Price (₹)" name="price" type="number" value={formData.price} onChange={handleChange} margin="normal" size="small" required />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField fullWidth label="Compare-at Price (₹) - for Discount" name="originalPrice" type="number" value={formData.originalPrice} onChange={handleChange} margin="normal" size="small" helperText="Set this higher than the Price to show a discount" />
-                  </Grid>
+                  <Grid item xs={6}><TextField fullWidth label="Price (₹)" name="price" type="number" value={formData.price} onChange={handleChange} margin="normal" size="small" required /></Grid>
+                  <Grid item xs={6}><TextField fullWidth label="Stock Quantity" name="stockQuantity" type="number" value={formData.stockQuantity} onChange={handleChange} margin="normal" size="small" /></Grid>
                 </Grid>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <FormControl fullWidth margin="normal" size="small">
-                      <InputLabel>Category</InputLabel>
-                      <Select name="category" value={formData.category} label="Category" onChange={handleChange}>
-                        {categories.map((cat) => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField fullWidth label="Stock Quantity" name="stockQuantity" type="number" value={formData.stockQuantity} onChange={handleChange} margin="normal" size="small" />
-                  </Grid>
-                </Grid>
+                <FormControl fullWidth margin="normal" size="small">
+                  <InputLabel>Category</InputLabel>
+                  <Select name="category" value={formData.category} label="Category" onChange={handleChange}>
+                    {categories.map((cat) => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)}
+                  </Select>
+                </FormControl>
                 <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
                   <FormControlLabel control={<Switch checked={formData.inStock} onChange={handleChange} name="inStock" color="primary" />} label="In Stock" />
                   <FormControlLabel control={<Switch checked={formData.isFeatured} onChange={handleChange} name="isFeatured" color="secondary" />} label="Featured" />
                 </Box>
               </Grid>
-
               <Grid item xs={12} md={5}>
                 <Typography variant="subtitle2" sx={{ mt: 2, mb: 1, fontWeight: 700 }}>Product Images</Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
                   {formData.images.map((img, i) => (
                     <Box key={i} sx={{ position: 'relative', width: 80, height: 80, borderRadius: '8px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
                       <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <IconButton size="small" onClick={() => removeImage(i)} sx={{ position: 'absolute', top: 2, right: 2, backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff', '&:hover': { backgroundColor: 'rgba(0,0,0,0.7)' } }}>
-                        <Close sx={{ fontSize: 14 }} />
-                      </IconButton>
+                      <IconButton size="small" onClick={() => removeImage(i)} sx={{ position: 'absolute', top: 2, right: 2, backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff' }}><Close sx={{ fontSize: 14 }} /></IconButton>
                     </Box>
                   ))}
-                  <Button component="label" sx={{ width: 80, height: 80, border: '2px dashed #e2e8f0', borderRadius: '8px', display: 'flex', flexDirection: 'column', color: '#94a3b8' }}>
-                    {uploading ? <CircularProgress size={20} /> : <Add />}
+                  <Button component="label" sx={{ width: 80, height: 80, border: '2px dashed #e2e8f0', borderRadius: '8px', display: 'flex', flexDirection: 'column' }}>
+                    {uploading ? <CircularProgress size={20} /> : <PhotoCamera sx={{ color: '#94a3b8' }} />}
                     <Typography variant="caption" sx={{ mt: 0.5 }}>Add</Typography>
                     <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} />
                   </Button>
@@ -243,7 +243,7 @@ const ManageProducts = () => {
             </Grid>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button onClick={handleClose} sx={{ borderRadius: '24px', color: '#64748b' }}>Cancel</Button>
+            <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: '24px' }}>{editingProduct ? 'Update' : 'Create'}</Button>
           </DialogActions>
         </Dialog>

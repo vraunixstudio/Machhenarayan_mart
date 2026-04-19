@@ -1,13 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Container, Typography, Grid, Button } from '@mui/material';
-import { ShoppingBasket, Category, People, Article, LocalShipping, ViewCarousel } from '@mui/icons-material';
+// Stable Path Imports
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
+// Icons
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
+import Category from '@mui/icons-material/Category';
+import People from '@mui/icons-material/People';
+import Article from '@mui/icons-material/Article';
+import LocalShipping from '@mui/icons-material/LocalShipping';
+import ViewCarousel from '@mui/icons-material/ViewCarousel';
+
 import { motion } from 'framer-motion';
 import { productAPI, categoryAPI, userAPI, bannerAPI, orderAPI, reviewAPI, messageAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  AreaChart, Area, PieChart, Pie, Cell 
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  PieChart, Pie, Cell 
 } from 'recharts';
 
 const AdminDashboard = () => {
@@ -54,10 +67,10 @@ const AdminDashboard = () => {
   ];
 
   const chartData = [
-    { name: 'Products', value: stats.products, color: '#135788' },
-    { name: 'Categories', value: stats.categories * 10, color: '#cf7c1e' },
-    { name: 'Users', value: stats.users * 5, color: '#10b981' },
-    { name: 'Orders', value: stats.orders * 8, color: '#6366f1' },
+    { name: 'Products', value: stats.products || 10, color: '#135788' },
+    { name: 'Categories', value: (stats.categories || 2) * 5, color: '#cf7c1e' },
+    { name: 'Users', value: (stats.users || 1) * 3, color: '#10b981' },
+    { name: 'Orders', value: (stats.orders || 0) * 4, color: '#6366f1' },
   ];
 
   const COLORS = ['#135788', '#cf7c1e', '#10b981', '#6366f1', '#f59e0b'];
@@ -114,9 +127,7 @@ const AdminDashboard = () => {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
                   <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  />
+                  <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
                   <Area type="monotone" dataKey="value" stroke="#135788" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -128,16 +139,8 @@ const AdminDashboard = () => {
               <Box sx={{ flexGrow: 1 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie
-                      data={chartData}
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
+                    <Pie data={chartData} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                      {chartData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
                     </Pie>
                     <Tooltip />
                   </PieChart>
