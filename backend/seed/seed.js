@@ -125,19 +125,26 @@ const seedDatabase = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
 
-    await User.deleteMany({});
+    // await User.deleteMany({});
     await Category.deleteMany({});
     await Product.deleteMany({});
     await Banner.deleteMany({});
-    console.log('Cleared existing data');
+    console.log('Cleared existing data (except users)');
 
-    const adminUser = await User.create({
-      name: 'Admin',
-      email: 'machhenarayanmart@gmail.com',
-      password: 'admin123',
-      role: 'admin'
-    });
-    console.log('Created admin user');
+    const adminEmail = 'machhenarayanmart@gmail.com';
+    const existingAdmin = await User.findOne({ email: adminEmail });
+
+    if (!existingAdmin) {
+      await User.create({
+        name: 'Admin',
+        email: adminEmail,
+        password: 'admin123',
+        role: 'admin'
+      });
+      console.log('Created admin user');
+    } else {
+      console.log('Admin user already exists, keeping current account');
+    }
 
     const categoryDocs = {};
     for (const cat of categories) {
