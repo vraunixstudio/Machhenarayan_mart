@@ -8,9 +8,8 @@ import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 import Email from '@mui/icons-material/Email';
 import Phone from '@mui/icons-material/Phone';
 import LocationOn from '@mui/icons-material/LocationOn';
-import Instagram from '@mui/icons-material/Instagram';
 import Facebook from '@mui/icons-material/Facebook';
-import Twitter from '@mui/icons-material/Twitter';
+import WhatsApp from '@mui/icons-material/WhatsApp';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -38,15 +37,26 @@ const Footer = () => {
               Your trusted destination for fresh groceries and quality essentials.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {[Instagram, Facebook, Twitter].map((Icon, i) => (
-                <Box key={i} sx={{
-                  width: 34, height: 34, borderRadius: '50%',
-                  backgroundColor: 'rgba(255,255,255,0.06)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', transition: 'all 0.2s ease',
-                  '&:hover': { backgroundColor: '#cf7c1e' }
-                }}>
-                  <Icon sx={{ fontSize: 16 }} />
+              {[
+                { Icon: Facebook, link: 'https://www.facebook.com/machchhenarayan.mart/' },
+                { Icon: WhatsApp, link: 'https://wa.me/9779823207452' }
+              ].map((item, i) => (
+                <Box
+                  key={i}
+                  component="a"
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    width: 34, height: 34, borderRadius: '50%',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', transition: 'all 0.2s ease',
+                    color: 'inherit', textDecoration: 'none',
+                    '&:hover': { backgroundColor: '#cf7c1e' }
+                  }}
+                >
+                  <item.Icon sx={{ fontSize: 16 }} />
                 </Box>
               ))}
             </Box>
@@ -84,9 +94,9 @@ const Footer = () => {
           <Box>
             <Typography sx={{ fontWeight: 700, fontSize: '0.875rem', mb: 2, color: 'rgba(255,255,255,0.8)' }}>Contact</Typography>
             {[
-              { icon: <LocationOn sx={{ fontSize: 16 }} />, text: 'Machhenarayan Market' },
+              { icon: <LocationOn sx={{ fontSize: 16 }} />, text: 'Chandragiri Municipality' },
               { icon: <Phone sx={{ fontSize: 16 }} />, text: '+977 982-3207452' },
-              { icon: <Email sx={{ fontSize: 16 }} />, text: 'info@machhenarayanmart.com' }
+              { icon: <Email sx={{ fontSize: 16 }} />, text: 'machhenarayanmart@gmail.com' }
             ].map((item, i) => (
               <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
                 <Box sx={{ color: '#cf7c1e' }}>{item.icon}</Box>

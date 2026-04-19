@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 const contactInfo = [
-  { icon: <LocationOn />, label: 'Address', value: 'Machhenarayan Market, District' },
+  { icon: <LocationOn />, label: 'Address', value: 'Chandragiri Municipality' },
   { icon: <Phone />, label: 'Phone', value: '+977 982-3207452' },
-  { icon: <Email />, label: 'Email', value: 'info@machhenarayanmart.com' },
+  { icon: <Email />, label: 'Email', value: 'machhenarayanmart@gmail.com' },
   { icon: <AccessTime />, label: 'Store Hours', value: 'Mon - Sun: 7:00 AM - 9:00 PM' }
 ];
 
