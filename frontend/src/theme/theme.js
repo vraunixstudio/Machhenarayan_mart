@@ -39,24 +39,24 @@ const theme = createTheme({
     h1: {
       fontFamily: '"Inter", sans-serif',
       fontWeight: 700,
-      fontSize: '2rem',
+      fontSize: '1.75rem',
       letterSpacing: '-0.02em'
     },
     h2: {
       fontFamily: '"Inter", sans-serif',
       fontWeight: 600,
-      fontSize: '1.75rem',
+      fontSize: '1.5rem',
       letterSpacing: '-0.01em'
     },
     h3: {
       fontFamily: '"Inter", sans-serif',
       fontWeight: 600,
-      fontSize: '1.35rem'
+      fontSize: '1.25rem'
     },
     h4: {
       fontFamily: '"Inter", sans-serif',
       fontWeight: 600,
-      fontSize: '1.15rem'
+      fontSize: '1.1rem'
     },
     h5: {
       fontFamily: '"Inter", sans-serif',
@@ -66,29 +66,29 @@ const theme = createTheme({
     h6: {
       fontFamily: '"Inter", sans-serif',
       fontWeight: 500,
-      fontSize: '0.9rem'
+      fontSize: '0.85rem'
     },
     body1: {
-      fontSize: '0.95rem',
-      lineHeight: 1.6
+      fontSize: '0.9rem',
+      lineHeight: 1.5
     },
     body2: {
-      fontSize: '0.85rem',
-      lineHeight: 1.5
+      fontSize: '0.8rem',
+      lineHeight: 1.4
     },
     button: {
       fontFamily: '"Inter", sans-serif',
-      fontWeight: 600,
-      fontSize: '0.85rem',
-      letterSpacing: '0.02em'
+      fontWeight: 500,
+      fontSize: '0.8rem',
+      letterSpacing: '0.01em'
     },
     caption: {
-      fontSize: '0.75rem',
+      fontSize: '0.7rem',
       color: '#888'
     }
   },
   shape: {
-    borderRadius: 8
+    borderRadius: 16
   },
   shadows: [
     'none',
@@ -123,52 +123,64 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-          padding: '10px 20px',
+          borderRadius: 12,
+          padding: '8px 16px',
           fontSize: '0.85rem',
           fontWeight: 600,
-          transition: 'all 0.2s ease',
-          textTransform: 'none'
+          transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+          textTransform: 'none',
+          '&:active': {
+            transform: 'scale(0.95)'
+          }
         },
         contained: {
           boxShadow: 'none',
+          backgroundColor: '#135788',
           '&:hover': {
-            boxShadow: '0 4px 12px rgba(19, 87, 136, 0.25)',
+            boxShadow: '0 4px 12px rgba(19, 87, 136, 0.2)',
             transform: 'translateY(-1px)'
           }
         },
         containedSecondary: {
+          backgroundColor: '#cf7c1e',
           '&:hover': {
-            boxShadow: '0 4px 12px rgba(207, 124, 30, 0.25)',
+            boxShadow: '0 4px 12px rgba(207, 124, 30, 0.2)',
             transform: 'translateY(-1px)'
           }
         },
         outlined: {
-          borderWidth: '1.5px',
+          borderWidth: '1px',
           '&:hover': {
-            borderWidth: '1.5px',
+            borderWidth: '1px',
             transform: 'translateY(-1px)'
           }
         },
         sizeSmall: {
-          padding: '6px 14px',
-          fontSize: '0.8rem'
+          padding: '4px 12px',
+          fontSize: '0.75rem'
         },
         sizeLarge: {
-          padding: '12px 24px',
-          fontSize: '0.9rem'
+          padding: '10px 20px',
+          fontSize: '0.85rem'
         }
       }
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-          transition: 'all 0.2s ease',
+          borderRadius: 20,
+          boxShadow: 'none',
+          border: '1px solid rgba(0,0,0,0.05)',
+          background: 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
           '&:hover': {
-            boxShadow: '0 6px 20px rgba(0,0,0,0.10)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
             transform: 'translateY(-2px)'
+          },
+          '&:active': {
+            transform: 'scale(0.98)'
           }
         }
       }
@@ -176,13 +188,18 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 12
+          borderRadius: 20,
+          background: 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)'
         },
         elevation1: {
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+          boxShadow: 'none',
+          border: '1px solid rgba(0,0,0,0.05)'
         },
         elevation2: {
-          boxShadow: '0 2px 6px rgba(0,0,0,0.06)'
+          boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
+          border: '1px solid rgba(0,0,0,0.05)'
         }
       }
     },
@@ -190,16 +207,18 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 8,
-            backgroundColor: '#fff',
-            transition: 'all 0.2s ease',
+            borderRadius: 12,
+            backgroundColor: 'rgba(245, 245, 247, 0.8)',
+            transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
             '&:hover': {
+              backgroundColor: 'rgba(235, 235, 237, 0.9)',
               '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#135788'
+                borderColor: '#cf7c1e'
               }
             },
             '&.Mui-focused': {
-              boxShadow: '0 0 0 3px rgba(19, 87, 136, 0.1)'
+              backgroundColor: '#fff',
+              boxShadow: 'none'
             }
           }
         }
@@ -217,9 +236,12 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          transition: 'all 0.2s ease',
+          transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
           '&:hover': {
             backgroundColor: alpha('#135788', 0.08)
+          },
+          '&:active': {
+            transform: 'scale(0.92)'
           }
         }
       }
@@ -227,8 +249,11 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-          backgroundColor: '#fff',
+          boxShadow: 'none',
+          borderBottom: '1px solid rgba(0,0,0,0.05)',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
           color: '#1a1a1a'
         }
       }
