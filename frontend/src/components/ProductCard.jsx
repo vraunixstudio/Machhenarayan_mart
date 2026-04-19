@@ -74,9 +74,27 @@ const ProductCard = ({ product, index = 0, showQuickAdd = true }) => {
             <Box sx={{
               position: 'absolute', top: 10, left: 10, backgroundColor: '#D32F2F',
               color: '#fff', fontSize: '0.7rem', fontWeight: 700, px: 1, py: 0.25,
-              borderRadius: '8px'
+              borderRadius: '8px', zIndex: 2
             }}>
               -{discountPercent}%
+            </Box>
+          )}
+
+          {/* Out of Stock Overlay */}
+          {!product.inStock && (
+            <Box sx={{
+              position: 'absolute', inset: 0, 
+              backgroundColor: 'rgba(255,255,255,0.6)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              zIndex: 3, backdropFilter: 'blur(2px)'
+            }}>
+              <Typography sx={{ 
+                fontWeight: 800, color: '#64748b', fontSize: '0.75rem', 
+                textTransform: 'uppercase', letterSpacing: '0.1em',
+                px: 2, py: 1, border: '2px solid #94a3b8', borderRadius: '4px'
+              }}>
+                Out of Stock
+              </Typography>
             </Box>
           )}
 

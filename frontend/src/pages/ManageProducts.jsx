@@ -165,10 +165,18 @@ const ManageProducts = () => {
                     {product.isFeatured && <Chip label="Featured" size="small" sx={{ height: 20, fontSize: '0.65rem', backgroundColor: 'rgba(207,124,30,0.1)', color: '#cf7c1e', fontWeight: 700, mt: 0.5 }} />}
                   </TableCell>
                   <TableCell><Chip label={product.category?.name || 'None'} size="small" sx={{ borderRadius: '8px' }} /></TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: '#135788' }}>₹{product.price}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#135788' }}>
+                    <Box>
+                      ₹{product.price}
+                      {product.originalPrice > product.price && (
+                        <Chip label="SALE" size="small" color="error" sx={{ height: 16, fontSize: '0.6rem', ml: 1, verticalAlign: 'middle' }} />
+                      )}
+                    </Box>
+                  </TableCell>
                   <TableCell>
                     <Chip label={product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : 'Out of stock'} size="small" 
-                      color={product.stockQuantity > 0 ? 'success' : 'error'} sx={{ borderRadius: '8px', fontWeight: 600 }} />
+                      color={product.stockQuantity > 0 ? (product.stockQuantity < 10 ? 'warning' : 'success') : 'error'} 
+                      sx={{ borderRadius: '8px', fontWeight: 600 }} />
                   </TableCell>
                   <TableCell align="right">
                     <IconButton size="small" onClick={() => handleOpen(product)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}><Edit fontSize="small" /></IconButton>
@@ -192,7 +200,7 @@ const ManageProducts = () => {
                     <TextField fullWidth label="Price (₹)" name="price" type="number" value={formData.price} onChange={handleChange} margin="normal" size="small" required />
                   </Grid>
                   <Grid item xs={6}>
-                    <TextField fullWidth label="Original Price (₹)" name="originalPrice" type="number" value={formData.originalPrice} onChange={handleChange} margin="normal" size="small" />
+                    <TextField fullWidth label="Compare-at Price (₹) - for Discount" name="originalPrice" type="number" value={formData.originalPrice} onChange={handleChange} margin="normal" size="small" helperText="Set this higher than the Price to show a discount" />
                   </Grid>
                 </Grid>
                 <Grid container spacing={2}>

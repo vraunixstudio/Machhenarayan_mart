@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Container, Typography, Grid, Button, IconButton, Divider, TextField, Alert } from '@mui/material';
+import { Box, Container, Typography, Grid, Button, IconButton, Divider, TextField, Alert, Chip } from '@mui/material';
 import { Add, Remove, Delete, ShoppingCart, Lock, LocalShipping } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';

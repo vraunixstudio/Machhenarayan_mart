@@ -141,9 +141,26 @@ const ProductDetail = () => {
             <Typography variant="body2" sx={{ color: '#64748b' }}>({reviews.length} reviews)</Typography>
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4, bgcolor: '#f8fafc', p: 3, borderRadius: '20px', width: 'fit-content' }}>
-            <Typography sx={{ fontSize: '2.25rem', fontWeight: 800, color: '#135788' }}>₹{product.price}</Typography>
-            {hasDiscount && <Typography sx={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '1.25rem' }}>₹{product.originalPrice}</Typography>}
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, bgcolor: '#f8fafc', p: 3, borderRadius: '20px', width: 'fit-content' }}>
+              <Typography sx={{ fontSize: '2.25rem', fontWeight: 800, color: '#135788' }}>₹{product.price}</Typography>
+              {hasDiscount && <Typography sx={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '1.25rem' }}>₹{product.originalPrice}</Typography>}
+            </Box>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2 }}>
+              <Box sx={{ 
+                width: 8, height: 8, borderRadius: '50%', 
+                bgcolor: product.stockQuantity > 0 ? (product.stockQuantity < 5 ? '#f59e0b' : '#10b981') : '#ef4444' 
+              }} />
+              <Typography sx={{ 
+                fontSize: '0.875rem', fontWeight: 600,
+                color: product.stockQuantity > 0 ? (product.stockQuantity < 5 ? '#f59e0b' : '#10b981') : '#ef4444'
+              }}>
+                {product.stockQuantity > 0 
+                  ? (product.stockQuantity < 5 ? `Only ${product.stockQuantity} left in stock - order soon!` : 'In Stock')
+                  : 'Out of Stock'}
+              </Typography>
+            </Box>
           </Box>
 
           <Typography variant="h5" sx={{ mb: 1.5 }}>Description</Typography>

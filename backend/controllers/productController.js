@@ -149,7 +149,7 @@ exports.getProductBySlug = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, price, originalPrice, category, images, inStock, isFeatured } = req.body;
+    const { name, description, price, originalPrice, category, images, inStock, stockQuantity, isFeatured } = req.body;
 
     const existingProduct = await Product.findOne({ name });
     if (existingProduct) {
@@ -167,6 +167,7 @@ exports.createProduct = async (req, res) => {
       description,
       price,
       originalPrice,
+      stockQuantity: stockQuantity || 0,
       category,
       images: images || [],
       inStock: inStock !== false,
@@ -181,7 +182,7 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const { name, description, price, originalPrice, category, images, inStock, isFeatured, isActive } = req.body;
+    const { name, description, price, originalPrice, category, images, inStock, stockQuantity, isFeatured, isActive } = req.body;
     const product = await Product.findById(req.params.id);
 
     if (!product) {
@@ -195,6 +196,7 @@ exports.updateProduct = async (req, res) => {
     if (category) product.category = category;
     if (images) product.images = images;
     if (inStock !== undefined) product.inStock = inStock;
+    if (stockQuantity !== undefined) product.stockQuantity = stockQuantity;
     if (isFeatured !== undefined) product.isFeatured = isFeatured;
     if (isActive !== undefined) product.isActive = isActive;
 
