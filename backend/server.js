@@ -34,6 +34,30 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', db: dbState, uriSet, timestamp: new Date().toISOString() });
 });
 
+app.all('/api/seed-admin', async (req, res) => {
+  try {
+    const User = require('./models/User');
+    const email = 'admin@machhenarayanmart.com';
+    const existingAdmin = await User.findOne({ email });
+    
+    if (existingAdmin) {
+      return res.json({ success: true, message: 'Admin already exists', admin: { email: existingAdmin.email, role: existingAdmin.role } });
+    }
+    
+    const admin = await User.create({
+      name: 'Admin',
+      email: email,
+      password: 'admin123',
+      role: 'admin'
+    });
+    
+    res.json({ success: true, message: 'Admin created', admin: { email: admin.email, role: admin.role } });
+  } catch (error) {
+    console.error('Admin seed error:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.all('/api/seed', async (req, res) => {
   try {
     const Category = require('./models/Category');
