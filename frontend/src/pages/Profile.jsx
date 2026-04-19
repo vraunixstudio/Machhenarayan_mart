@@ -3,7 +3,7 @@ import {
   Box, Container, Typography, TextField, Button, Grid, Avatar,
   IconButton, Paper, Divider, CircularProgress
 } from '@mui/material';
-import { PhotoCamera, Save, Badge, Email, Phone } from '@mui/icons-material';
+import { CameraAlt, Save, Badge, Email, Phone } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
@@ -52,7 +52,7 @@ const Profile = () => {
                   {formData.name.charAt(0)}
                 </Avatar>
                 <IconButton sx={{ position: 'absolute', bottom: 15, right: -5, bgcolor: '#fff', border: '1px solid #e2e8f0', '&:hover': { bgcolor: '#f8fafc' } }} size="small">
-                  <PhotoCamera fontSize="small" sx={{ color: '#64748b' }} />
+                  <CameraAlt fontSize="small" sx={{ color: '#64748b' }} />
                 </IconButton>
               </Box>
               <Typography variant="h2" sx={{ mb: 1 }}>Account Settings</Typography>
