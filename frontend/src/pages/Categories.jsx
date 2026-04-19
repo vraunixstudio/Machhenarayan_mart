@@ -5,14 +5,11 @@ import {
   Container,
   Typography,
   Grid,
-  Card,
-  CardMedia,
-  CardContent,
   Skeleton
 } from '@mui/material';
-import { Category } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { categoryAPI } from '../services/api';
+import CategoryCard from '../components/CategoryCard';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -49,62 +46,72 @@ const Categories = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>
-        Shop by Category
-      </Typography>
+    <Box sx={{ py: { xs: 4, md: 8 } }}>
+      <Container maxWidth="xl">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+        >
+          {/* Section Header */}
+          <motion.div variants={itemVariants}>
+            <Box sx={{ textAlign: 'center', mb: { xs: 5, md: 8 } }}>
+              <Typography
+                variant="h2"
+                sx={{
+                  fontWeight: 800,
+                  fontSize: { xs: '2.2rem', sm: '2.8rem', md: '3.5rem' },
+                  letterSpacing: '-0.02em',
+                  background: 'linear-gradient(135deg, #0F5C8A 0%, #1E88E5 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  mb: 2
+                }}
+              >
+                Shop by Category
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: '1.2rem',
+                  color: 'text.secondary',
+                  maxWidth: 600,
+                  mx: 'auto',
+                  lineHeight: 1.6
+                }}
+              >
+                Browse through our wide selection of fresh groceries and essentials
+              </Typography>
+            </Box>
+          </motion.div>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        <Grid container spacing={3}>
-          {loading
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <Grid item xs={6} sm={4} md={3} key={i}>
-                  <Card>
-                    <Skeleton variant="rectangular" height={150} />
-                    <CardContent>
-                      <Skeleton width="60%" />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))
-            : categories.map((category) => (
-                <Grid item xs={6} sm={4} md={3} key={category._id}>
-                  <motion.div variants={itemVariants}>
-                    <Card
-                      component={Link}
-                      to={`/category/${category.slug}`}
+          {/* Grid */}
+          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+            {loading
+              ? Array.from({ length: 10 }).map((_, i) => (
+                  <Grid item xs={6} sm={4} md={3} key={i}>
+                    <Skeleton
+                      variant="rectangular"
                       sx={{
-                        textDecoration: 'none',
-                        height: '100%'
+                        pt: '100%',
+                        borderRadius: 3
                       }}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="150"
-                        image={category.image || 'https://via.placeholder.com/300'}
-                        alt={category.name}
-                        sx={{ objectFit: 'cover' }}
-                      />
-                      <CardContent>
-                        <Typography variant="h6" sx={{ fontWeight: 500 }}>
-                          {category.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {category.description}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </Grid>
-              ))}
-        </Grid>
-      </motion.div>
-    </Container>
+                    />
+                  </Grid>
+                ))
+              : categories.map((category, index) => (
+                  <Grid item xs={6} sm={4} md={3} key={category._id}>
+                    <motion.div variants={itemVariants}>
+                      <CategoryCard category={category} index={index} />
+                    </motion.div>
+                  </Grid>
+                ))
+            }
+          </Grid>
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 

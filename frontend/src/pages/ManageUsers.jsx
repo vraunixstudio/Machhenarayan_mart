@@ -8,6 +8,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TableRow,
   Button,
   Paper,
   IconButton,

@@ -69,16 +69,16 @@ app.all('/api/seed', async (req, res) => {
     await Banner.deleteMany({});
 
     const categories = await Category.insertMany([
-      { name: 'Fruits', slug: 'fruits', description: 'Fresh fruits', isActive: true, order: 1 },
-      { name: 'Vegetables', slug: 'vegetables', description: 'Fresh vegetables', isActive: true, order: 2 },
-      { name: 'Dairy', slug: 'dairy', description: 'Milk & dairy products', isActive: true, order: 3 },
-      { name: 'Bakery', slug: 'bakery', description: 'Fresh bread & pastries', isActive: true, order: 4 },
-      { name: 'Meat & Poultry', slug: 'meat-poultry', description: 'Fresh meat & chicken', isActive: true, order: 5 },
-      { name: 'Fish & Seafood', slug: 'fish-seafood', description: 'Fresh catches', isActive: true, order: 6 },
-      { name: 'Beverages', slug: 'beverages', description: 'Drinks & juices', isActive: true, order: 7 },
-      { name: 'Snacks', slug: 'snacks', description: 'Chips, cookies & crackers', isActive: true, order: 8 },
-      { name: 'Grains & Pulses', slug: 'grains-pulses', description: 'Rice, wheat & dal', isActive: true, order: 9 },
-      { name: 'Spices & Condiments', slug: 'spices-condiments', description: 'Herbs & spices', isActive: true, order: 10 }
+      { name: 'Fruits', slug: 'fruits', description: 'Fresh fruits', image: 'https://images.unsplash.com/photo-1610832958506-aa56368184cf?w=600', isActive: true, order: 1 },
+      { name: 'Vegetables', slug: 'vegetables', description: 'Fresh vegetables', image: 'https://images.unsplash.com/photo-1540420773420-3396a661769b?w=600', isActive: true, order: 2 },
+      { name: 'Dairy', slug: 'dairy', description: 'Milk & dairy products', image: 'https://images.unsplash.com/photo-1628088062851-d7af5d4a1519?w=600', isActive: true, order: 3 },
+      { name: 'Bakery', slug: 'bakery', description: 'Fresh bread & pastries', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600', isActive: true, order: 4 },
+      { name: 'Meat & Poultry', slug: 'meat-poultry', description: 'Fresh meat & chicken', image: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=600', isActive: true, order: 5 },
+      { name: 'Fish & Seafood', slug: 'fish-seafood', description: 'Fresh catches', image: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=600', isActive: true, order: 6 },
+      { name: 'Beverages', slug: 'beverages', description: 'Drinks & juices', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600', isActive: true, order: 7 },
+      { name: 'Snacks', slug: 'snacks', description: 'Chips, cookies & crackers', image: 'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=600', isActive: true, order: 8 },
+      { name: 'Grains & Pulses', slug: 'grains-pulses', description: 'Rice, wheat & dal', image: 'https://images.unsplash.com/photo-1536104968055-4d61aa56f46a?w=600', isActive: true, order: 9 },
+      { name: 'Spices & Condiments', slug: 'spices-condiments', description: 'Herbs & spices', image: 'https://images.unsplash.com/photo-1536401718316-3cb467e992b2?w=600', isActive: true, order: 10 }
     ]);
 
     const categoryMap = {};
