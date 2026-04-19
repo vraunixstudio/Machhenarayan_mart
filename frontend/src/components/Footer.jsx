@@ -31,17 +31,8 @@ const Footer = () => {
         }}>
           {/* Brand */}
           <Box sx={{ gridColumn: { xs: 'span 2', md: 'span 1' } }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <Box sx={{
-                backgroundColor: '#cf7c1e', borderRadius: '10px', width: 36, height: 36,
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
-              }}>
-                <ShoppingBasket sx={{ fontSize: 20, color: '#fff' }} />
-              </Box>
-              <Box>
-                <Typography sx={{ fontWeight: 800, fontSize: '1.125rem', lineHeight: 1.1 }}>Machhenarayan</Typography>
-                <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>mart</Typography>
-              </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <img src="/text logo.png" alt="Machhenarayan Mart" style={{ height: '48px', objectFit: 'contain' }} />
             </Box>
             <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8125rem', lineHeight: 1.6, mb: 3 }}>
               Your trusted destination for fresh groceries and quality essentials.

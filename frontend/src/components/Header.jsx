@@ -122,24 +122,8 @@ const Header = () => {
           }}
         >
           {/* Logo */}
-          <Box
-            component={Link} to="/"
-            sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', flexShrink: 0 }}
-          >
-            <Box sx={{
-              backgroundColor: '#cf7c1e', borderRadius: '10px', width: 36, height: 36,
-              display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}>
-              <ShoppingBasket sx={{ fontSize: 20, color: '#fff' }} />
-            </Box>
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', color: '#fff', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
-                Machhenarayan
-              </Typography>
-              <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                mart
-              </Typography>
-            </Box>
+          <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
+            <img src="/text logo.png" alt="Machhenarayan Mart" style={{ height: '40px', objectFit: 'contain' }} />
           </Box>
 
           {/* Desktop Navigation Pills */}
