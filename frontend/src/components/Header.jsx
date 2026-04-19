@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Box, Typography, IconButton, Badge, Menu, MenuItem,
   InputBase, Button, Drawer, List, ListItem, ListItemIcon,
-  ListItemText, Divider, useMediaQuery, useTheme
+  ListItemText, Divider, useMediaQuery, useTheme, Grid
 } from '@mui/material';
 import {
   Search, ShoppingCart, Person, FavoriteBorder,
@@ -175,31 +175,39 @@ const Header = () => {
               />
 
               {/* Recommendation Dropdown */}
-              {showDropdown && recommendations.length > 0 && (
+              {showDropdown && (
                 <Box sx={{
                   position: 'absolute', top: 'calc(100% + 8px)', left: 0, right: 0,
                   bgcolor: '#fff', borderRadius: '16px', py: 1,
                   boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
                   zIndex: 1400, overflow: 'hidden'
                 }}>
-                  {recommendations.map((item) => (
-                    <Box key={item._id} onClick={() => handleSelectRecommendation(item.slug)}
-                      sx={{
-                        display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1,
-                        cursor: 'pointer', '&:hover': { bgcolor: '#f8fafc' }
-                      }}>
-                      <Box sx={{ width: 36, height: 36, borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-                        <img src={item.images?.[0] || 'https://placehold.co/40x40'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      </Box>
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography noWrap sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#1a1a2e' }}>{item.name}</Typography>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#135788', fontWeight: 700 }}>₹{item.price}</Typography>
-                      </Box>
-                    </Box>
-                  ))}
-                  <Button fullWidth onClick={handleSearch} sx={{ py: 1, fontSize: '0.75rem', color: '#64748b', justifyContent: 'center' }}>
-                    View all results
-                  </Button>
+                  {searching ? (
+                    <Typography sx={{ py: 2, px: 2, fontSize: '0.8125rem', color: '#64748b', textAlign: 'center' }}>Searching...</Typography>
+                  ) : recommendations.length > 0 ? (
+                    <>
+                      {recommendations.map((item) => (
+                        <Box key={item._id} onClick={() => handleSelectRecommendation(item.slug)}
+                          sx={{
+                            display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1,
+                            cursor: 'pointer', '&:hover': { bgcolor: '#f8fafc' }
+                          }}>
+                          <Box sx={{ width: 36, height: 36, borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
+                            <img src={item.images?.[0] || 'https://placehold.co/40x40'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          </Box>
+                          <Box sx={{ flex: 1, minWidth: 0 }}>
+                            <Typography noWrap sx={{ fontSize: '0.8125rem', fontWeight: 600, color: '#1a1a2e' }}>{item.name}</Typography>
+                            <Typography sx={{ fontSize: '0.75rem', color: '#135788', fontWeight: 700 }}>₹{item.price}</Typography>
+                          </Box>
+                        </Box>
+                      ))}
+                      <Button fullWidth onClick={handleSearch} sx={{ py: 1, fontSize: '0.75rem', color: '#64748b', justifyContent: 'center' }}>
+                        View all results
+                      </Button>
+                    </>
+                  ) : (
+                    <Typography sx={{ py: 2, px: 2, fontSize: '0.8125rem', color: '#64748b', textAlign: 'center' }}>No products found</Typography>
+                  )}
                 </Box>
               )}
             </Box>
