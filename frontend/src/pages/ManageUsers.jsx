@@ -1,8 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Button, Chip, IconButton
-} from '@mui/material';
-import { ArrowUpward, ArrowDownward, Delete } from '@mui/icons-material';
+// MUI Default Imports
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
+
+// Icons
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import Delete from '@mui/icons-material/Delete';
+
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { userAPI } from '../services/api';
@@ -17,7 +32,7 @@ const ManageUsers = () => {
     try {
       setLoading(true);
       const response = await userAPI.getUsers();
-      setUsers(response.data.users);
+      setUsers(response.data.users || []);
     } catch (error) {
       console.error('Error fetching users:', error);
     } finally {
@@ -66,7 +81,7 @@ const ManageUsers = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map((user) => (
+              {!loading && users.map((user) => (
                 <TableRow key={user._id} sx={{ '&:hover': { backgroundColor: '#fdfdfd' }, transition: 'all 0.2s' }}>
                   <TableCell sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{user.name}</TableCell>
                   <TableCell sx={{ color: '#64748b' }}>{user.email}</TableCell>
