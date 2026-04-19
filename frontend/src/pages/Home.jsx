@@ -160,8 +160,10 @@ const Home = () => {
                                   </motion.div>
                                 </Box>
                               )}
-                            </Box>
-                          </AnimatePresence>
+                                  </Box>
+                                </motion.div>
+                              </Box>
+                            </AnimatePresence>
                       {banners.length > 1 && (
                         <>
                           <IconButton
