@@ -147,8 +147,6 @@ const Home = () => {
 
             {/* Right Column - FLOATING PNG SWOOP */}
             <Grid item xs={12} md={6} sx={{ position: 'relative', height: { xs: 400, md: 600 }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {/* Decorative Soft Background Orb */}
-                <Box sx={{ position: 'absolute', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(207,124,30,0.05) 0%, rgba(19,87,136,0.05) 100%)', filter: 'blur(100px)', zIndex: 0 }} />
                 
                 <AnimatePresence mode="wait">
                   {loading ? (

@@ -187,10 +187,11 @@ const Header = () => {
                   ) : recommendations.length > 0 ? (
                     <>
                       {recommendations.map((item) => (
-                        <Box key={item._id} onClick={() => handleSelectRecommendation(item.slug)}
+                        <Box key={item._id} component={Link} to={`/product/${item.slug}`} onClick={() => setShowDropdown(false)}
                           sx={{
                             display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1,
-                            cursor: 'pointer', '&:hover': { bgcolor: '#f8fafc' }
+                            cursor: 'pointer', '&:hover': { bgcolor: '#f8fafc' },
+                            textDecoration: 'none', color: 'inherit'
                           }}>
                           <Box sx={{ width: 36, height: 36, borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
                             <img src={item.images?.[0] || 'https://placehold.co/40x40'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -327,10 +328,11 @@ const Header = () => {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.2)', zIndex: 1200
               }}>
                 {recommendations.map((item) => (
-                  <Box key={item._id} onClick={() => { handleSelectRecommendation(item.slug); setDrawerOpen(false); }}
+                  <Box key={item._id} component={Link} to={`/product/${item.slug}`} onClick={() => { setShowDropdown(false); setDrawerOpen(false); }}
                     sx={{
                       display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1,
-                      cursor: 'pointer', '&:hover': { bgcolor: '#f1f5f9' }
+                      cursor: 'pointer', '&:hover': { bgcolor: '#f1f5f9' },
+                      textDecoration: 'none', color: 'inherit'
                     }}>
                     <Box sx={{ width: 32, height: 32, borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
                       <img src={item.images?.[0] || 'https://placehold.co/32x32'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
