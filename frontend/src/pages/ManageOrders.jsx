@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Container, Typography, Grid, Select, MenuItem, Chip, Skeleton, Divider, IconButton } from '@mui/material';
-import { Refresh, LocalShipping } from '@mui/icons-material';
+import { Refresh, LocalShipping, Delete } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { orderAPI } from '../services/api';
 import dayjs from 'dayjs';
@@ -34,6 +34,18 @@ const ManageOrders = () => {
       setOrders(prev => prev.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
     } catch (e) {
       toast.error('Failed to update status');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this order record?')) {
+      try {
+        await orderAPI.deleteOrder(id);
+        toast.success('Order removed');
+        setOrders(prev => prev.filter(o => o._id !== id));
+      } catch (err) {
+        toast.error('Failed to delete order');
+      }
     }
   };
 
@@ -105,6 +117,9 @@ const ManageOrders = () => {
                           <MenuItem key={s} value={s}>{s}</MenuItem>
                         ))}
                       </Select>
+                      <IconButton size="small" color="error" onClick={() => handleDelete(order._id)} sx={{ ml: 1, backgroundColor: 'rgba(211,47,47,0.05)' }}>
+                        <Delete fontSize="small" />
+                      </IconButton>
                     </Box>
 
                     <Divider sx={{ my: 2 }} />

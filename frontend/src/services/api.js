@@ -65,7 +65,8 @@ export const orderAPI = {
   createOrder: (data) => api.post('/orders', data),
   getMyOrders: () => api.get('/orders/myorders'),
   getAllOrders: () => api.get('/orders'),
-  updateOrderStatus: (id, status) => api.put(`/orders/${id}/status`, { status })
+  updateOrderStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
+  deleteOrder: (id) => api.delete(`/orders/${id}`)
 };
 
 export const wishlistAPI = {

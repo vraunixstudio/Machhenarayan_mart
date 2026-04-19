@@ -72,8 +72,19 @@ router.put('/:id/status', protect, admin, async (req, res) => {
     const updatedOrder = await order.save();
 
     res.json({ success: true, order: updatedOrder });
+// @route   DELETE /api/orders/:id
+// @desc    Delete an order
+// @access  Private/Admin
+router.delete('/:id', protect, admin, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
+    }
+    await order.deleteOne();
+    res.json({ success: true, message: 'Order removed' });
   } catch (error) {
-    console.error('Update order status error:', error);
+    console.error('Delete order error:', error);
     res.status(500).json({ success: false, error: 'Server error' });
   }
 });

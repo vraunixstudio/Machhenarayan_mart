@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import {
-  Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Button, Chip
+import { Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Button, Chip, IconButton
 } from '@mui/material';
-import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { ArrowUpward, ArrowDownward, Delete } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { userAPI } from '../services/api';
@@ -33,6 +32,18 @@ const ManageUsers = () => {
       fetchUsers();
     } catch (error) {
       toast.error('Operation failed');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Delete this user?')) {
+      try {
+        await userAPI.deleteUser(id);
+        toast.success('User removed');
+        fetchUsers();
+      } catch (error) {
+        toast.error('Failed to delete user');
+      }
     }
   };
 
@@ -66,9 +77,12 @@ const ManageUsers = () => {
                     <Chip label={user.isActive ? 'Active' : 'Inactive'} color={user.isActive ? 'success' : 'error'} size="small" sx={{ borderRadius: '8px', fontWeight: 600 }} />
                   </TableCell>
                   <TableCell align="right">
-                    <Button size="small" variant="outlined" startIcon={user.role === 'admin' ? <ArrowDownward /> : <ArrowUpward />} onClick={() => handlePromote(user._id)} sx={{ borderRadius: '24px' }}>
+                    <Button size="small" variant="outlined" startIcon={user.role === 'admin' ? <ArrowDownward /> : <ArrowUpward />} onClick={() => handlePromote(user._id)} sx={{ borderRadius: '24px', mr: 1 }}>
                       {user.role === 'admin' ? 'Demote' : 'Promote'}
                     </Button>
+                    <IconButton size="small" color="error" onClick={() => handleDelete(user._id)} sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}>
+                      <Delete fontSize="small" />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Box, Container, Typography, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Button, IconButton, Dialog, DialogTitle, DialogContent,
-  DialogActions, TextField, MenuItem, Switch, FormControlLabel, Chip
+  DialogActions, TextField, MenuItem, Switch, FormControlLabel, Chip, Grid, CircularProgress
 } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -25,9 +25,10 @@ const ManageBanners = () => {
     try {
       setLoading(true);
       const response = await bannerAPI.getBanners();
-      setBanners(response.data.banners);
+      setBanners(response.data.banners || []);
     } catch (error) {
       console.error('Error fetching banners:', error);
+      toast.error('Failed to load banners');
     } finally {
       setLoading(false);
     }
@@ -66,7 +67,7 @@ const ManageBanners = () => {
       setUploading(true);
       const res = await uploadAPI.uploadImage(data);
       setFormData({ ...formData, image: res.data.url });
-      toast.success('Banner image uploaded');
+      toast.success('Image uploaded successfully');
     } catch (err) {
       toast.error('Upload failed');
     } finally {
@@ -76,7 +77,7 @@ const ManageBanners = () => {
 
   const handleSubmit = async () => {
     if (!formData.image) {
-      toast.error('Image is required');
+      toast.error('Please upload an image first');
       return;
     }
     try {
@@ -95,7 +96,7 @@ const ManageBanners = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this banner?')) {
+    if (window.confirm('Delete this banner?')) {
       try {
         await bannerAPI.deleteBanner(id);
         toast.success('Banner deleted');
@@ -110,95 +111,102 @@ const ManageBanners = () => {
     <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-          <Typography variant="h3">Manage Banners</Typography>
-          <Button variant="contained" startIcon={<Add />} onClick={() => handleOpen()} sx={{ borderRadius: '24px', px: 3 }}>
+          <Typography variant="h3" sx={{ fontWeight: 800 }}>Manage Banners</Typography>
+          <Button variant="contained" startIcon={<Add />} onClick={() => handleOpen()} 
+            sx={{ borderRadius: '24px', px: 3, bgcolor: '#135788', '&:hover': { bgcolor: '#0e4268' } }}>
             Add Banner
           </Button>
         </Box>
 
-        <TableContainer sx={{ borderRadius: '16px', border: '1px solid #f1f5f9', backgroundColor: '#fff', boxShadow: 'none' }}>
+        <TableContainer sx={{ borderRadius: '20px', border: '1px solid #f1f5f9', backgroundColor: '#fff', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
           <Table>
             <TableHead sx={{ backgroundColor: '#f8fafc' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Preview</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Title</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Position</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Order</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>Actions</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Preview</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Title</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Position</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {banners.map((banner) => (
-                <TableRow key={banner._id} sx={{ '&:hover': { backgroundColor: '#fdfdfd' }, transition: 'all 0.2s' }}>
+              {loading ? (
+                <TableRow><TableCell colSpan={5} align="center" sx={{ py: 4 }}><CircularProgress size={24} /></TableCell></TableRow>
+              ) : banners.map((banner) => (
+                <TableRow key={banner._id} sx={{ '&:hover': { backgroundColor: '#fcfcfc' } }}>
                   <TableCell>
-                    <Box sx={{ width: 80, height: 40, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#f1f5f9' }}>
+                    <Box sx={{ width: 80, height: 45, borderRadius: '8px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
                       <img src={banner.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{banner.title || '-'}</TableCell>
-                  <TableCell><Chip label={banner.position} size="small" sx={{ borderRadius: '8px' }} /></TableCell>
-                  <TableCell>{banner.order}</TableCell>
                   <TableCell>
-                    <Chip label={banner.isActive ? 'Active' : 'Inactive'} size="small" 
-                      color={banner.isActive ? 'success' : 'default'} sx={{ borderRadius: '8px', fontWeight: 600 }} />
+                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{banner.title || 'No Title'}</Typography>
+                    <Typography sx={{ fontSize: '0.75rem', color: '#64748b' }}>{banner.subtitle?.substring(0, 30)}...</Typography>
+                  </TableCell>
+                  <TableCell><Chip label={banner.position} size="small" sx={{ textTransform: 'capitalize', fontWeight: 600, borderRadius: '8px' }} /></TableCell>
+                  <TableCell>
+                    <Chip label={banner.isActive ? 'Active' : 'Hidden'} color={banner.isActive ? 'success' : 'default'} size="small" sx={{ fontWeight: 600, borderRadius: '8px' }} />
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton size="small" onClick={() => handleOpen(banner)} sx={{ mr: 1, backgroundColor: '#f8fafc' }}><Edit fontSize="small" /></IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(banner._id)} color="error" sx={{ backgroundColor: 'rgba(211,47,47,0.08)' }}><Delete fontSize="small" /></IconButton>
+                    <IconButton onClick={() => handleOpen(banner)} size="small" sx={{ mr: 1, color: '#135788' }}><Edit fontSize="small" /></IconButton>
+                    <IconButton onClick={() => handleDelete(banner._id)} size="small" color="error"><Delete fontSize="small" /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}
+              {banners.length === 0 && !loading && (
+                <TableRow><TableCell colSpan={5} align="center" sx={{ py: 6, color: '#94a3b8' }}>No banners configured yet</TableCell></TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
 
-        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: '20px', p: 1 } }}>
-          <DialogTitle sx={{ fontWeight: 700 }}>{editingBanner ? 'Edit Banner' : 'Add Banner'}</DialogTitle>
+        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: '24px', p: 1 } }}>
+          <DialogTitle sx={{ fontWeight: 800 }}>{editingBanner ? 'Edit Banner' : 'New Banner'}</DialogTitle>
           <DialogContent>
-            <Box sx={{ mb: 3, mt: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-              <Box sx={{ width: '100%', height: 180, borderRadius: '12px', overflow: 'hidden', border: '1px solid #f1f5f9', backgroundColor: '#f8fafc', position: 'relative' }}>
+            <Box sx={{ my: 2, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: '100%', height: 200, borderRadius: '16px', border: '2px dashed #e2e8f0', 
+                mb: 2, overflow: 'hidden', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
                 {formData.image ? (
-                  <img src={formData.image} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={formData.image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Add sx={{ fontSize: 48, color: '#e2e8f0' }} />
-                  </Box>
+                  <Typography color="textSecondary">No image selected</Typography>
                 )}
-                {uploading && (
-                  <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress size={24} />
-                  </Box>
-                )}
+                {uploading && <CircularProgress sx={{ position: 'absolute' }} />}
               </Box>
-              <Button component="label" variant="outlined" startIcon={<Add />} sx={{ borderRadius: '20px' }}>
-                Upload Banner Image
+              <Button component="label" variant="outlined" sx={{ borderRadius: '20px' }}>
+                {formData.image ? 'Change Image' : 'Select Image'}
                 <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
               </Button>
             </Box>
 
-            <TextField fullWidth label="Title (Optional)" name="title" value={formData.title} onChange={handleChange} margin="normal" size="small" />
-            <TextField fullWidth label="Subtitle (Optional)" name="subtitle" value={formData.subtitle} onChange={handleChange} margin="normal" size="small" />
-            <TextField fullWidth label="Link (e.g., /categories)" name="link" value={formData.link} onChange={handleChange} margin="normal" size="small" />
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField fullWidth label="Main Title" name="title" value={formData.title} onChange={handleChange} margin="normal" size="small" sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }} />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField fullWidth label="Subtitle / Description" name="subtitle" value={formData.subtitle} onChange={handleChange} margin="dense" size="small" sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }} />
+              </Grid>
               <Grid item xs={6}>
-                <TextField fullWidth select label="Position" name="position" value={formData.position} onChange={handleChange} margin="normal" size="small">
-                  <MenuItem value="hero">Hero</MenuItem>
-                  <MenuItem value="promo">Promo</MenuItem>
-                  <MenuItem value="sidebar">Sidebar</MenuItem>
+                <TextField fullWidth select label="Position" name="position" value={formData.position} onChange={handleChange} margin="normal" size="small" sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }}>
+                  <MenuItem value="hero">Hero Section</MenuItem>
+                  <MenuItem value="promo">Promo Section</MenuItem>
+                  <MenuItem value="sidebar">Sidebar Ad</MenuItem>
                 </TextField>
               </Grid>
               <Grid item xs={6}>
-                <TextField fullWidth label="Display Order" name="order" type="number" value={formData.order} onChange={handleChange} margin="normal" size="small" />
+                <TextField fullWidth label="Order Index" name="order" type="number" value={formData.order} onChange={handleChange} margin="normal" size="small" sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }} />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField fullWidth label="Target Link (URL or relative path)" name="link" value={formData.link} onChange={handleChange} margin="normal" size="small" sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }} />
               </Grid>
             </Grid>
-            <Box sx={{ mt: 2 }}>
-              <FormControlLabel control={<Switch checked={formData.isActive} onChange={handleChange} name="isActive" color="primary" />} label="Active Status" />
-            </Box>
+            <FormControlLabel sx={{ mt: 2 }} control={<Switch checked={formData.isActive} onChange={handleChange} name="isActive" color="primary" />} label="Display this banner on site" />
           </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button onClick={handleClose} sx={{ borderRadius: '24px', color: '#64748b' }}>Cancel</Button>
-            <Button onClick={handleSubmit} variant="contained" disabled={uploading} sx={{ borderRadius: '24px' }}>
+          <DialogActions sx={{ p: 3 }}>
+            <Button onClick={handleClose} sx={{ color: '#64748b' }}>Cancel</Button>
+            <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: '24px', px: 4, bgcolor: '#135788' }}>
               {editingBanner ? 'Update' : 'Create'}
             </Button>
           </DialogActions>
