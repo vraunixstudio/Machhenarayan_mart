@@ -110,7 +110,7 @@ const Header = () => {
       <Box
         sx={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1100,
-          backgroundColor: '#0d1b2e',
+          backgroundColor: '#1a365d',
           height: { xs: 64, md: 72 }
         }}
       >
@@ -303,7 +303,7 @@ const Header = () => {
       <Drawer
         anchor="right" open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        PaperProps={{ sx: { width: 280, backgroundColor: '#0d1b2e', color: '#fff', borderRadius: '24px 0 0 24px' } }}
+        PaperProps={{ sx: { width: 280, backgroundColor: '#1a365d', color: '#fff', borderRadius: '24px 0 0 24px' } }}
       >
         <Box sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>

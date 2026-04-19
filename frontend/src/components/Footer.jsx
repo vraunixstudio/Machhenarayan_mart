@@ -22,7 +22,7 @@ const Footer = () => {
   };
 
   return (
-    <Box component="footer" sx={{ backgroundColor: '#0d1b2e', color: '#fff', pt: { xs: 6, md: 8 }, pb: 4 }}>
+    <Box component="footer" sx={{ backgroundColor: '#1a365d', color: '#fff', pt: { xs: 6, md: 8 }, pb: 4 }}>
       <Container maxWidth="lg">
         <Box sx={{
           display: 'grid',
