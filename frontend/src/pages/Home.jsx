@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Box, Container, Typography, Grid, Button, Skeleton, IconButton, Chip, Card, CardContent
 } from '@mui/material';
-import {
-  KeyboardArrowRight, ChevronLeft, ChevronRight
-} from '@mui/icons-material';
+import { ChevronLeft, ChevronRight, KeyboardArrowRight } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { bannerAPI, productAPI, categoryAPI } from '../services/api';
 import ProductCard from '../components/ProductCard';
@@ -47,13 +45,11 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [banners.length]);
 
-  const handlePrevBanner = () => {
-    setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
-  };
+  const handlePrevBanner = () => setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
+  const handleNextBanner = () => setCurrentBanner((prev) => (prev + 1) % banners.length);
 
-  const handleNextBanner = () => {
-    setCurrentBanner((prev) => (prev + 1) % banners.length);
-  };
+  const currentImage = banners[currentBanner]?.image;
+  const currentTitle = banners[currentBanner]?.title;
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
@@ -61,25 +57,20 @@ const Home = () => {
       <Box sx={{ height: { xs: 250, md: 350 }, position: 'relative', overflow: 'hidden', backgroundColor: '#f0f0f0' }}>
         {loading ? (
           <Skeleton variant="rectangular" height="100%" />
-        ) : banners.length > 0 ? (
+        ) : currentImage ? (
           <Box>
-            <Box
-              component="img"
-              src={banners[currentBanner]?.image}
-              alt={banners[currentBanner]?.title}
-              sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+            <Box component="img" src={currentImage} alt={currentTitle} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             {banners.length > 1 && (
-              <>
+              <Box>
                 <IconButton onClick={handlePrevBanner} sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(255,255,255,0.9)' }}>
                   <ChevronLeft />
                 </IconButton>
                 <IconButton onClick={handleNextBanner} sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(255,255,255,0.9)' }}>
                   <ChevronRight />
                 </IconButton>
-              </>
+              </Box>
             )}
-          </>
+          </Box>
         ) : (
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', bgcolor: 'primary.main', color: 'white' }}>
             <Typography variant="h4">Welcome to Machhenarayan Mart</Typography>
@@ -91,14 +82,7 @@ const Home = () => {
         {/* Categories */}
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, mt: 4 }}>Shop by Category</Typography>
         <Grid container spacing={2} sx={{ mb: 4 }}>
-          {loading ? Array.from({ length: 8 }).map((_, i) => (
-            <Grid item xs={6} sm={4} md={2.4} key={i}>
-              <Card sx={{ p: 2, textAlign: 'center' }}>
-                <Skeleton variant="circular" width={60} height={60} sx={{ mx: 'auto', mb: 1 }} />
-                <Skeleton width="80%" />
-              </Card>
-            </Grid>
-          )) : categories.slice(0, 10).map((category) => (
+          {categories.slice(0, 10).map((category) => (
             <Grid item xs={6} sm={4} md={2.4} key={category._id}>
               <CategoryCard category={category} />
             </Grid>
@@ -108,17 +92,7 @@ const Home = () => {
         {/* Featured Products */}
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>Featured Products</Typography>
         <Grid container spacing={3}>
-          {loading ? Array.from({ length: 8 }).map((_, i) => (
-            <Grid item xs={6} sm={4} md={3} key={i}>
-              <Card>
-                <Skeleton variant="rectangular" height={180} />
-                <CardContent>
-                  <Skeleton width="80%" />
-                  <Skeleton width="60%" />
-                </CardContent>
-              </Card>
-            </Grid>
-          )) : featuredProducts.slice(0, 8).map((product) => (
+          {featuredProducts.slice(0, 8).map((product) => (
             <Grid item xs={6} sm={4} md={3} key={product._id}>
               <ProductCard product={product} />
             </Grid>
