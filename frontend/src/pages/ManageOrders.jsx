@@ -136,6 +136,18 @@ const ManageOrders = () => {
                       <Typography sx={{ fontSize: '0.875rem' }}>Customer: <b>{order.user?.name || 'Guest'}</b></Typography>
                       <Typography sx={{ fontWeight: 800, color: '#135788' }}>₹{order.totalAmount}</Typography>
                     </Box>
+                    <Divider sx={{ my: 2 }} />
+                    <Box>
+                      <Typography sx={{ fontSize: '0.875rem', mb: 0.5 }}>
+                        Address: <b>{order.shippingAddress?.address || 'N/A'}</b>
+                      </Typography>
+                      <Typography sx={{ fontSize: '0.875rem', mb: 0.5 }}>
+                        City: <b>{order.shippingAddress?.city || 'N/A'}</b>
+                      </Typography>
+                      <Typography sx={{ fontSize: '0.875rem' }}>
+                        Phone: <b>{order.shippingAddress?.phone || 'N/A'}</b>
+                      </Typography>
+                    </Box>
                   </Box>
                 </Grid>
               ))}
