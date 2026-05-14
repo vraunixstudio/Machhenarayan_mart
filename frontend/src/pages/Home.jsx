@@ -212,6 +212,12 @@ const Home = () => {
           ))}
         </Grid>
 
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Button variant="outlined" component={Link} to="/categories" sx={{ borderColor: '#135788', color: '#135788', borderRadius: '30px', px: 4, py: 1.2, fontWeight: 600, '&:hover': { borderColor: '#0e4268', backgroundColor: 'rgba(19,87,136,0.04)' } }}>
+            View All Categories
+          </Button>
+        </Box>
+
         <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>Featured Selection</Typography>
         <Grid container spacing={3} sx={{ mb: 6 }}>
           {featuredProducts.slice(0, 8).map((p) => (
